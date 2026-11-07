@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Zafkiel — Tet 跨來源比對</title>
+  <link rel="stylesheet" href="./tet.css"><script defer src="./tet.js"></script>
+</head>
+<body>
+<div id="entry" class="entry-layout">
+  <aside class="vault-sidebar"><div class="brand"><span>Z</span> Zafkiel</div>
+    <h2>最近使用的資產庫　1</h2><a class="vault-open" href="#/home"><strong>我的資產庫</strong><small>overview · 磁碟 A 庫、磁碟 B 庫</small></a>
+  </aside>
+  <main class="entry-main"><section class="entry-form"><h1>開啟資產庫</h1>
+    <p>Tet 合成示範。選擇示範資料夾，進入資產首頁。</p>
+    <div class="picker"><h2>選擇資料夾</h2><small>目前位置</small><code>/Samples</code>
+      <button id="folder" aria-pressed="false">▸　我的資產庫</button></div>
+    <p id="picked" role="status">尚未選取資料夾</p><button id="enter" disabled>開啟資產庫</button>
+  </section></main>
+</div>
+<div id="workspace" hidden>
+  <header><a class="brand" href="#/home"><span>Z</span> Zafkiel</a><input type="search" placeholder="搜尋" aria-label="搜尋（此示範僅提供比對）" disabled><small>Tet · 合成示範</small></header>
+  <div class="layout"><aside><nav aria-label="資產導覽"><a href="#/home" aria-current="page">首頁</a>
+    <details><summary>標籤</summary><small>Python　課程　Orion</small></details>
+    <span aria-disabled="true">封存</span><span aria-disabled="true">垃圾桶</span><a href="#/entry">選擇資產庫</a></nav></aside>
+    <main><div class="keep" aria-disabled="true">寫記事…</div>
+    <h1 class="view-title">我的資產庫</h1><p class="nav-label">4 筆資產 · 開啟卡片檢視來源，或勾選講義與一份候選進行比對。</p>
+    <div id="bulk" hidden><span id="selection-count"></span><button id="bulk-open" disabled>檢視比對</button><button id="clear">取消選取</button></div>
+    <div id="assets" class="asset-grid"></div>
+    </main></div>
+</div>
+<dialog id="reader" aria-labelledby="asset-title"><div class="reader-sheet">
+  <div class="reader-controls"><button id="close" aria-label="關閉資產">×</button></div>
+  <h1 id="asset-title" tabindex="-1"></h1><p id="asset-path"></p>
+  <section id="asset-media" aria-label="資產素材"><h2>素材</h2>
+    <button id="material-open" class="material-open" aria-haspopup="dialog">▤　lecture.pdf <small>合成 PDF 預覽</small></button>
+  </section>
+  <div id="structural" hidden><h2>跨庫結構重疊</h2>
+    <p>兩庫登錄相同的身分，各自提供下列欄位。</p>
+    <dl><dt>Asset ID</dt><dd>cccccccc-cccc-4ccc-8ccc-cccccccccccc</dd><dt>Prim path</dt><dd>/Assets/i_cccccccccccc4ccc8ccccccccccccccc</dd></dl>
+    <table><thead><tr><th>欄位</th><th>磁碟 A 庫</th><th>磁碟 B 庫</th></tr></thead><tbody><tr><th>標題</th><td>跨庫共用資產</td><td>另一庫的貢獻</td></tr><tr><th>標籤</th><td>Orion</td><td>學習</td></tr></tbody></table>
+  </div>
+  <section id="content"><h2>跨來源內容比對</h2><label for="choices">選擇比對來源</label> <select id="choices"></select>
+    <span id="count"></span><div class="pair" id="pair"></div>
+    <h3>內容驗證</h3><p id="status" role="status"></p><button id="verify">模擬授權並驗證</button> <button id="cancel" hidden>取消驗證</button>
+    <p class="note">只保存目前的比對整理，兩庫原件分別保留。</p>
+    <footer><span id="storage" role="status">可保存目前選取與驗證結果。</span><div><button id="save">保存目前整理</button> <button id="reset">重設 Tet</button></div></footer>
+  </section>
+</div></dialog>
+<dialog id="preview" aria-labelledby="preview-title"><div class="preview-sheet">
+  <div class="preview-controls"><button id="preview-close" aria-label="關閉素材預覽">×</button></div>
+  <h2 id="preview-title" tabindex="-1">lecture.pdf · 合成預覽</h2>
+  <div class="preview-page"><strong>示範講義</strong><p>合成 PDF 素材標本</p><p>此處僅展示固定、唯讀的頁面外觀。</p></div>
+</div></dialog>
+</body></html>

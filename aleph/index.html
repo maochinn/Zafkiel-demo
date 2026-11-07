@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Zafkiel · Aleph 搜尋與索引</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="fixture.js"></script><script defer src="search.js"></script>
+</head>
+<body>
+<section id="entry" class="entry-layout">
+  <aside class="vault-sidebar"><div class="brand"><span>Z</span> Zafkiel</div>
+    <h2>最近使用的資產庫</h2><a class="vault-open" href="#/home"><strong>我的資產庫</strong><small>磁碟 A 庫、磁碟 B 庫</small></a>
+  </aside>
+  <main class="entry-main"><section class="entry-form"><h1>開啟資產庫</h1>
+    <p>搜尋與索引 · 離線合成資料示範</p>
+    <div class="folder-picker"><strong>已選擇的資產庫</strong><p>我的資產庫</p><small>磁碟 A 庫、磁碟 B 庫 · 固定示範來源</small></div>
+    <a class="primary" href="#/home">開啟資產庫</a>
+  </section></main>
+</section>
+<div id="workspace" hidden>
+<header><a class="brand" href="#/home" aria-label="Zafkiel 首頁"><span>Z</span> Zafkiel</a>
+  <label class="sr-only" for="query">搜尋資產</label><input id="query" type="search" placeholder="搜尋" maxlength="500" autocomplete="off">
+  <a class="vault-link" href="#/entry">我的資產庫</a><button disabled title="此範例僅供搜尋與檢視" aria-label="新增記事（唯讀示範）">＋</button>
+</header>
+<div class="layout"><aside><nav aria-label="資產導覽">
+  <a href="#/home" data-view="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6m-5 3h4M8.4 14.5C4 11 6.2 3 12 3s8 8 3.6 11.5c-.9.7-1.6 1.5-1.6 2.5h-4c0-1-.7-1.8-1.6-2.5Z"/></svg>首頁</a>
+  <details id="filter-panel"><summary>標籤</summary><div id="tags" class="chips"></div></details>
+  <a href="#/archive" data-view="archive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16v14H4ZM3 3h18v4H3Zm6 8h6"/></svg>封存</a>
+  <a href="#/trash" data-view="trash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></svg>垃圾桶</a>
+  <p id="filter-summary"></p><button id="clear-filters" hidden>清除篩選</button>
+</nav></aside><main>
+  <p class="status">Aleph 搜尋與索引 · 合成示範資料</p>
+  <div id="composer" class="keep"><button disabled class="capture-line" title="示範資產唯讀">寫記事… <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="1.5"/><circle cx="8" cy="8" r="1"/><path d="m4 18 5-5 3 3 3-5 5 7"/></svg></button></div>
+  <details id="tools"><summary>示範索引與查詢設定</summary><p>磁碟 A 庫與磁碟 B 庫共 <span id="size"></span> 筆登錄資產，索引名稱、描述與正文。課程包內的 intro.txt、Chapter-1/lesson.txt 與影片附屬逐字稿均不獨立列入索引。</p>
+    <span id="generation"></span> <button id="rebuild">重建索引</button><button id="save">保存目前查詢與選取</button><button id="reset">重設示範</button>
+  </details>
+  <p id="event" role="status"></p><div id="bulk" hidden><span id="selected-count"></span><button id="deselect">取消選取</button></div>
+  <p id="count" role="status"></p><div id="hits" class="asset-grid"></div>
+</main></div></div>
+<dialog id="reader" aria-labelledby="asset-title"><div class="reader-controls"><button id="close" aria-label="關閉資產"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg></button></div>
+  <h1 id="asset-title" tabindex="-1"></h1><div id="asset-tags" class="chips"></div>
+  <p id="asset-description"></p><p id="asset-body"></p>
+  <section id="asset-media" aria-label="資產素材" hidden><h2>檔案預覽（1）</h2><figure><button id="material-open" type="button" aria-haspopup="dialog"></button><figcaption id="material-name"></figcaption></figure></section>
+  <small id="asset-source"></small><code id="asset-id"></code>
+</dialog>
+<dialog id="preview" aria-labelledby="preview-title"><div class="reader-controls"><button id="preview-close" aria-label="關閉素材預覽">關閉</button></div>
+  <h2 id="preview-title"></h2><div id="preview-content"></div><p>合成素材預覽 · 固定唯讀標本</p>
+</dialog>
+</body></html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zafkiel — 我的資產庫</title><link rel="icon" href="data:,"><link rel="stylesheet" href="vav.css"><script defer src="fixture.js"></script><script defer src="vav.js"></script></head>
+<body><header><a class="brand" href="#/home"><span>Z</span> Zafkiel</a>
+<input id="search" type="search" aria-label="篩選此清單名稱" placeholder="搜尋此清單的名稱">
+<span class="demo">Vav · 合成資料示範</span><button id="new" class="icon-button" title="新增記事" aria-label="新增記事">＋</button></header>
+<div class="layout"><aside><nav aria-label="資產導覽">
+<a id="home" href="#/home"><span data-icon="note"></span>首頁</a>
+<details id="filter-panel"><summary>標籤</summary><div id="filter-tags" class="chips"></div></details>
+<a href="#/archive"><span data-icon="archive"></span>封存</a><a href="#/trash"><span data-icon="trash"></span>垃圾桶</a>
+<button class="library-files-button" data-panel="tags">標籤管理</button><button class="library-files-button" data-panel="graph">關係圖</button>
+<div class="demo-tools"><label>模擬身分 <select id="role"><option value="owner">Owner</option><option value="client">API-client</option></select></label>
+<button id="save">儲存 overview</button><button id="reset">重設示範</button><a href="index.html">返回資產庫清單</a></div>
+</nav></aside><main><div id="status"><strong id="dirty"></strong> <span id="message" role="status"></span></div>
+<section id="capture-page"><article id="composer" class="keep"><button id="open" class="capture-line" aria-expanded="false">寫記事… <span data-icon="image"></span></button>
+<div id="expanded" hidden><input id="newTitle" placeholder="標題" aria-label="標題"><textarea id="newBody" placeholder="輸入記事內容…" aria-label="記事內容"></textarea>
+<div class="toolbar"><span class="spacer"></span><button id="complete" class="close-note">關閉</button></div></div></article></section>
+<section id="bulk" class="bulk-actions" hidden><span id="count"></span><button id="clearSelection">取消選取</button></section>
+<p id="asset-count" class="nav-label"></p><div id="assets" class="asset-grid"></div></main></div>
+<dialog id="sheet"><div class="reader-sheet"><div class="reader-controls"><button id="edit" class="icon-button" title="編輯資產" aria-label="編輯資產"><span data-icon="edit"></span></button><button id="close" class="icon-button" title="關閉" aria-label="關閉檢視"><span data-icon="close"></span></button></div>
+<div id="workspace"></div><p id="notice" role="status"></p></div></dialog>
+<dialog id="material-preview" aria-labelledby="preview-title"><div class="reader-sheet">
+<div class="reader-controls"><button id="close-preview" class="icon-button" aria-label="關閉素材預覽"><span data-icon="close"></span></button></div>
+<h2 id="preview-title"></h2><div id="preview-content"></div>
+<p class="meta">固定合成素材預覽 · 唯讀</p></div></dialog></body></html>

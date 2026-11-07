@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Zafkiel · Yud 來源閱讀</title><link rel="stylesheet" href="reader.css"></head>
+<body>
+<header><a class="brand" href="#home"><span>Z</span> Zafkiel</a><input id="search" type="search" aria-label="搜尋（固定查詢）" placeholder="搜尋（固定查詢）" readonly><span>Yud · 合成資料示範</span><button disabled aria-label="新增記事">＋</button></header>
+<div class="layout"><aside><nav aria-label="資產導覽"><button id="home">▤　首頁</button><details id="filter"><summary>標籤</summary><button id="tag">Python</button></details><button disabled>▣　封存</button><button disabled>♧　垃圾桶</button></nav></aside>
+<main id="catalog"><div class="keep"><button disabled>寫記事…</button></div>
+<label for="context">傳入脈絡</label> <select id="context"></select>
+<h1 id="catalog-title" tabindex="-1">首頁</h1><p id="count"></p><div id="selection" hidden><span></span> <button id="clear">取消選取</button></div>
+<div id="sources" class="asset-grid" aria-label="固定來源結果"></div><div id="catalog-tools"></div></main></div>
+<dialog id="reader" aria-labelledby="title"><div class="reader-controls"><button id="back" aria-label="關閉資產" title="關閉資產">×</button></div><h1 id="title" tabindex="-1"></h1><div id="tags"></div><p id="metadata"></p>
+<button id="material" hidden></button><div id="article"></div><div id="reader-tools"></div></dialog>
+<dialog id="lightbox" aria-labelledby="media-title"><div class="lightbox-toolbar"><button id="media-back" aria-label="關閉素材預覽">×</button><strong id="media-title"></strong></div><main class="media-stage"><div id="preview"></div><div id="media-tools"></div></main></dialog>
+<div id="parking" hidden><div id="reading-content"><div id="content"></div><button id="capture">擷取目前定位</button></div></div>
+<section id="tools" aria-label="目前閱讀狀態"><strong>來源定位</strong><div id="ticket"></div><div class="actions"><button id="jump" disabled>依定位開啟來源</button><button id="save">保存狀態</button><button id="reset">重設示範</button></div><p id="status" role="status"></p></section>
+<script src="fixture.js"></script><script src="reader.js"></script></body></html>
