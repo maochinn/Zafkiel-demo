@@ -76,7 +76,6 @@ const drawings={
   let editing = false;
   let composerOpen = false;
   let returnFocus = '';
-  let graphTrigger = null;
   let listRoute = '#/home';
 
   function storeOverview() {
@@ -139,14 +138,13 @@ const drawings={
       listRoute=['#/archive','#/trash'].includes(hash)?hash:'#/home';
       view='list';
     }
-    if (view==='list' || view==='tags') graphTrigger=null;
     if (view==='list' && $('sheet').open) $('sheet').close();
     if (view!==previousView || selected!==previousAsset) $('notice').textContent='';
     render();
     if (view!=='list') {
       if (!$('sheet').open) $('sheet').showModal();
       $('sheet').scrollTop=0;
-      const target=view==='graph' ? graphTrigger : null;
+      const target=view==='graph' ? history.state?.vavGraphFocus : null;
       if (target) setTimeout(() => (document.querySelector('[data-graph-focus="'+CSS.escape(target)+'"]')||$('graphFilter')).focus(), 50);
       else ($('asset-title')||$('close')).focus();
     } else if (wasOpen) {
@@ -339,11 +337,12 @@ const drawings={
       e.preventDefault(); choose(b.dataset.select||b.dataset.card,e.shiftKey); return;
     }
     if(b.dataset.panel) {
-      graphTrigger=null;
       location.hash='/'+b.dataset.panel; return;
     }
     if(b.dataset.open) {
-      graphTrigger=b.dataset.graphFocus||null;
+      if(b.dataset.graphFocus) {
+        history.replaceState({...history.state, vavGraphFocus:b.dataset.graphFocus},'');
+      }
       location.hash='/assets/'+b.dataset.open; return;
     }
     if(b.dataset.filter) {
