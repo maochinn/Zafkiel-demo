@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="light">
+  <title>Chet 資產總覽 · Zafkiel 流程展示</title>
+  <style>
+    :root{font-family:system-ui,"Microsoft JhengHei",sans-serif;color:#222c27;background:#f3f2eb;line-height:1.5;--ink:#222c27;--quiet:#58635b;--line:#d7dcd1;--paper:#fffef8;--green:#1b4b3e;--tint:#e5efe7;--warn:#774719;--warn-bg:#f9eddb}
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;min-width:0}
+    button,select,input{font:inherit}
+    button,select{cursor:pointer}
+    button{color:inherit}
+    button:disabled{cursor:default}
+    button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #28816c;outline-offset:3px}
+    [hidden]{display:none!important}
+    .shell{width:min(100% - 64px,1320px);margin-inline:auto}
+    header{border-bottom:1px solid var(--line);background:var(--paper)}
+    .mast{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:70px;padding-block:9px}
+    .brand,.mast-actions,.row,.tagbar,.tools,.bulk,.token-list{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .brand{gap:13px;font-size:14px;font-weight:650;letter-spacing:.07em;color:var(--green)}
+    .mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--green);color:white;font-size:20px;line-height:1;font-weight:750;letter-spacing:0}
+    .mode{font-size:12px;color:var(--quiet);font-weight:650}
+    button,.button,select{min-height:38px;border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:7px 12px;font-weight:650;font-size:14px}
+    button:hover:not(:disabled),select:hover{border-color:#829689;background:#f1f6ef}
+    button.primary{background:var(--green);border-color:var(--green);color:#fff}
+    button.primary:hover{background:#286052;border-color:#286052}
+    button.link{padding:0;min-height:30px;border:0;background:transparent;color:var(--green);text-decoration:underline;text-underline-offset:3px}
+    button.link:hover{background:transparent;color:#112f26}
+    .hero{padding-block:42px 26px;display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+    h1,h2,h3,p{margin:0}
+    h1{font-weight:800;font-size:clamp(2.3rem,6vw,4.35rem);line-height:1.08;letter-spacing:-.062em}
+    .intro{margin-top:11px;color:var(--quiet);font-size:15px}
+    .hero-count{color:var(--quiet);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
+    .hero-count strong{font-size:27px;color:var(--green);display:block;line-height:1.1}
+    .filters{background:var(--paper);border:1px solid var(--line);padding:16px 18px;border-radius:13px;margin-bottom:18px}
+    .filters-head,.section-head,.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .filters-head{margin-bottom:12px}
+    .filters-head h2{font-size:14px}
+    .hint{font-size:13px;color:var(--quiet)}
+    .tagbar{gap:8px}
+    .filter{border-radius:99px;font-size:13px;min-height:36px;max-width:100%;overflow-wrap:anywhere}
+    .filter[aria-pressed=true]{background:var(--tint);color:#163d30;border-color:#699080}
+    .filter:disabled{background:#edede8;color:#636b64;border:1px dashed #a9afa5}
+    .dot{display:inline-block;width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#648873;margin-inline-end:6px;vertical-align:.06em}
+    .dot[data-color="1"]{background:#ba794a}.dot[data-color="2"]{background:#6766a1}.dot[data-color="3"]{background:#407d8c}.dot[data-color="4"]{background:#a26a85}
+    .filter:disabled .dot{background:#838b84}
+    .count{font-weight:500;margin-inline-start:5px;color:var(--quiet);font-variant-numeric:tabular-nums}
+    .notice{background:var(--warn-bg);border:1px solid #e4c8a2;color:#653c17;padding:10px 13px;border-radius:8px;margin-top:13px;font-size:13px;overflow-wrap:anywhere}
+    .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,340px);gap:20px;align-items:start}
+    .section-head{min-height:47px;margin-bottom:10px}
+    .section-head h2{font-size:17px}
+    .sort-label{font-size:13px;color:var(--quiet)}
+    .sort-label select{margin-inline-start:5px;color:var(--ink)}
+    .bulk{margin-bottom:10px;padding:10px 12px;border:1px solid #a8bfb1;background:var(--tint);border-radius:9px;font-size:13px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .card{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:12px;min-width:0;padding:13px 14px 12px;display:flex;flex-direction:column;min-height:154px;overflow-wrap:anywhere}
+    .card.active{border-color:#6d9180;box-shadow:inset 0 0 0 1px #6d9180}
+    .card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+    .kind{font-size:12px;color:var(--quiet);font-weight:650}
+    .check{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--quiet)}
+    input[type=checkbox]{accent-color:var(--green);width:17px;height:17px;margin:3px;cursor:pointer}
+    .asset-title{border:0;padding:0;min-height:30px;overflow-wrap:anywhere;text-align:left;background:none;color:var(--ink);font-size:17px;line-height:1.32;letter-spacing:-.01em;border-radius:4px}
+    .asset-title:hover:not(:disabled){text-decoration:underline;background:none;text-underline-offset:3px}
+    .opinion-line{display:flex;align-items:baseline;gap:5px;font-size:12px;color:var(--quiet);min-width:0;margin-top:3px;overflow-wrap:anywhere}
+    .opinion-line b{color:var(--warn);font-weight:650;flex-shrink:0}
+    .token-list{gap:5px;margin-top:auto;padding-top:9px}
+    .token{font-size:11px;font-weight:630;border-radius:99px;padding:2px 7px;background:#eef0e8;color:#405347;max-width:100%;overflow-wrap:anywhere}
+    .empty{grid-column:1/-1;padding:32px 20px;border:1px dashed #a5b2a5;border-radius:10px;background:#f7f7ef;color:var(--quiet);text-align:center;overflow-wrap:anywhere}
+    .empty strong{display:block;color:var(--ink);margin-bottom:5px}
+    .inspector{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:16px;min-width:0;overflow-wrap:anywhere}
+    .panel-head{gap:8px;flex-wrap:nowrap;align-items:start}
+    .panel-head h2{font-size:18px;line-height:1.35}
+    .subhead{font-size:12px;font-weight:700;color:var(--green);margin-bottom:5px}
+    .panel-body{margin-top:10px;display:grid;grid-template-columns:minmax(0,1fr);gap:13px}
+    .inspector .sort-label{display:grid;gap:5px}
+    .inspector .sort-label select{min-width:0;max-width:100%;margin:0;text-overflow:ellipsis}
+    .panel-body h3{font-size:14px;margin-bottom:6px}
+    .panel-body p{font-size:13px;color:var(--quiet)}
+    .opinion,.member-row{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-top:1px solid var(--line);min-width:0}
+    .opinion{align-items:start;font-size:13px}
+    .opinion span{color:var(--quiet);font-size:12px;min-width:0;text-align:right}
+    .member-row button,.manager-button{font-size:12px;min-height:32px;padding:4px 8px;flex-shrink:0}
+    .member-row label,.member-row .member-name{font-size:13px;font-weight:650;overflow-wrap:anywhere;min-width:0}
+    .member-row small{font-size:11px;color:var(--quiet);display:block}
+    .member-row button:disabled{color:#6e756e;background:#edede8}
+    .panel-message{font-size:13px;color:var(--green);background:var(--tint);border:1px solid #a8bfb1;border-radius:8px;padding:8px 10px;margin-bottom:8px;overflow-wrap:anywhere}
+    details.scenario{margin:20px 0 36px;color:var(--quiet);font-size:13px}
+    details summary{width:fit-content;cursor:pointer;color:var(--green);font-weight:650}
+    details .row{margin-top:10px}
+    dialog{width:min(calc(100% - 28px),460px);max-height:85vh;border:1px solid var(--line);border-radius:14px;background:var(--paper);color:var(--ink);padding:22px}
+    dialog::backdrop{background:#182a24aa}
+    dialog h2{font-size:21px;margin-bottom:6px}
+    dialog label{display:grid;gap:5px;margin:15px 0;font-size:14px;font-weight:650}
+    dialog input{width:100%;min-height:40px;border:1px solid #9ca99e;border-radius:8px;padding:8px 10px;background:white;color:var(--ink)}
+    dialog .row{justify-content:end}
+    .error{color:#842d24;font-size:13px;margin-bottom:12px}
+    @media(max-width:920px){.shell{width:min(100% - 40px,1320px)}.layout{grid-template-columns:minmax(0,1fr) minmax(240px,300px)}.grid{grid-template-columns:minmax(0,1fr)}}
+    @media(max-width:680px){.shell{width:calc(100% - 28px)}.mast{min-height:58px;gap:8px}.mast-actions{gap:6px}.brand{gap:7px;font-size:12px}.mark{width:28px;height:28px;font-size:17px}.mode{font-size:11px}.hero{padding-block:25px 17px;gap:12px}.hero-count{text-align:left}.hero-count strong{display:inline;margin-right:4px;font-size:19px}.filters{padding:12px}.layout{grid-template-columns:minmax(0,1fr)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.inspector{scroll-margin-top:10px}.card{padding:10px}.asset-title{font-size:16px}}
+    @media(max-width:390px){.grid{grid-template-columns:minmax(0,1fr)}.mast button{font-size:12px;padding:5px 7px}.mast .mode{display:none}.card{min-height:120px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell mast">
+      <div class="brand"><span class="mark" aria-hidden="true">C</span><span>ZAFKIEL / CHET</span></div>
+      <div class="mast-actions"><span class="mode">合成資料</span><button id="create-empty" class="primary" type="button">＋ 新建 tag</button></div>
+    </div>
+  </header>
+  <main class="shell">
+    <div class="hero">
+      <div><h1>資產總覽</h1><p class="intro">所有已登記的 tag 組合在同一個 Stage。</p></div>
+      <p class="hero-count" id="stage-count"></p>
+    </div>
+    <section class="filters" aria-labelledby="tag-label">
+      <div class="filters-head"><h2 id="tag-label">依 tag 篩選</h2><span class="hint">選多個 tag 時，資產需同時符合。</span></div>
+      <div id="tagbar" class="tagbar" aria-label="tag 篩選"></div>
+      <p id="read-status" class="notice" role="status" hidden></p>
+    </section>
+    <div class="layout">
+      <section aria-labelledby="results-title">
+        <div class="section-head">
+          <h2 id="results-title">全部資產</h2>
+          <label class="sort-label" for="sort">排序<select id="sort"><option value="asc">Stage 標題 ↑</option><option value="desc">Stage 標題 ↓</option></select></label>
+        </div>
+        <div id="bulk" class="bulk" hidden><span id="selection-count"></span><button type="button" id="create-selected">從選取建立 tag</button><button type="button" id="clear-selected" class="link">取消選取</button></div>
+        <div id="results" class="grid"></div>
+      </section>
+      <div><p id="feedback" class="panel-message" role="status" hidden></p><aside id="inspector" class="inspector" aria-label="檢視與成員管理"></aside></div>
+    </div>
+    <details class="scenario">
+      <summary>模擬情境</summary>
+      <div class="row"><button type="button" id="toggle-a">模擬「影像檔案」離線</button><button type="button" id="reset">重設 demo</button></div>
+      <p class="hint">此頁用合成資料展示操作。重新整理會重設，頁面不讀寫 USD 或本機庫。</p>
+    </details>
+  </main>
+  <dialog id="create-dialog" aria-labelledby="create-title">
+    <form id="create-form">
+      <h2 id="create-title">新建 tag</h2>
+      <p class="hint" id="create-context"></p>
+      <label>名稱<input id="tag-name" maxlength="36" autocomplete="off" required></label>
+      <p id="create-error" class="error" role="alert" hidden></p>
+      <div class="row"><button type="button" id="cancel-create">取消</button><button type="submit" class="primary">建立 tag</button></div>
+    </form>
+  </dialog>
+  <script>
+    'use strict';
+    const assets = [
+      {id:'north',kind:'照片',titles:{archive:'北堤，凌晨五點',coast:'北堤晨霧'}},
+      {id:'tide',kind:'筆記',titles:{archive:'潮位觀測筆記'}},
+      {id:'station',kind:'照片',titles:{archive:'舊測候站'}},
+      {id:'route',kind:'地圖',titles:{coast:'防波堤路線圖'}},
+      {id:'sound',kind:'錄音',titles:{archive:'岸邊環境音',coast:'岸邊環境音'}},
+      {id:'poster',kind:'文件',titles:{picks:'展覽封面提案'}},
+    ];
+    const sourceTags = [
+      {id:'archive',name:'影像檔案',color:0,members:['north','tide','station','sound']},
+      {id:'coast',name:'海岸計畫',color:1,members:['north','route','sound']},
+      {id:'picks',name:'展覽選件',color:2,members:['north','poster']},
+    ];
+    const $ = (id) => document.getElementById(id);
+    const filterBar = $('tagbar');
+    const results = $('results');
+    const inspector = $('inspector');
+    const dialog = $('create-dialog');
+    const collator = new Intl.Collator('zh-Hant');
+    const entities = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => entities[c]);
+    const assetById = new Map(assets.map((asset) => [asset.id, asset]));
+    let tags, changes, selectedTags, selectedAssets, unavailable, panel, nextTag, createMembers;
+
+    function reset() {
+      tags = sourceTags.slice();
+      changes = new Map();
+      selectedTags = new Set();
+      selectedAssets = new Set();
+      unavailable = new Set();
+      panel = {type:'asset',id:'north'};
+      nextTag = 1;
+      $('sort').value = 'asc';
+      render();
+    }
+    const tagById = (id) => tags.find((tag) => tag.id === id);
+    function hasMember(tag, id) {
+      const local = changes.get(tag.id);
+      return local?.has(id) ? local.get(id) : tag.members.includes(id);
+    }
+    const memberTags = (id) => tags.filter((tag) => !unavailable.has(tag.id) && hasMember(tag, id));
+    // The fixture models direct title opinions in this known strong-to-weak order.
+    // A real integration reads the resolved title from OpenUSD.
+    const opinions = (asset) => sourceTags.flatMap((tag) =>
+      !unavailable.has(tag.id) && Object.hasOwn(asset.titles, tag.id) ? [{tag,value:asset.titles[tag.id]}] : []);
+    const resolvedTitle = (asset) => opinions(asset)[0]?.value ?? '';
+    const displayTitle = (asset) => resolvedTitle(asset) || '來源暫不可讀';
+    const token = (tag) => `<span class="token">${esc(tag.name)}</span>`;
+    const dot = (tag) => `<span class="dot" data-color="${tag.color}" aria-hidden="true"></span>`;
+    const offlineSelected = () => [...selectedTags].filter((id) => unavailable.has(id));
+    const knownAssets = () => assets.filter((asset) => memberTags(asset.id).length);
+    function feedback(message='') {
+      $('feedback').textContent = message;
+      $('feedback').hidden = !message;
+    }
+
+    function sorted(available) {
+      const order = $('sort').value === 'desc' ? -1 : 1;
+      return available.sort((a,b) => {
+        const left = resolvedTitle(a), right = resolvedTitle(b);
+        if (!left || !right) return Number(!left)-Number(!right) || a.id.localeCompare(b.id);
+        return order*collator.compare(left,right) || a.id.localeCompare(b.id);
+      });
+    }
+    function renderCard(asset) {
+      const items = opinions(asset);
+      const conflict = new Set(items.map((item) => item.value)).size > 1;
+      const active = panel?.type === 'asset' && panel.id === asset.id;
+      return `<article class="card${active ? ' active' : ''}" data-asset-id="${asset.id}">
+        <div class="card-top"><span class="kind">${asset.kind}</span><label class="check"><input type="checkbox" data-action="select" data-id="${asset.id}" aria-label="選取 ${esc(displayTitle(asset))}" ${selectedAssets.has(asset.id) ? 'checked' : ''}>選取</label></div>
+        <h3><button class="asset-title" type="button" data-action="asset" data-id="${asset.id}" aria-pressed="${active}">${esc(displayTitle(asset))}</button></h3>
+        ${conflict ? items.map(({tag,value}) => `<p class="opinion-line"><b>${esc(tag.name)}</b><span>${esc(value)}</span></p>`).join('') : ''}
+        <div class="token-list">${memberTags(asset.id).map(token).join('')}</div>
+      </article>`;
+    }
+    function renderAssetPanel(asset) {
+      const entries = opinions(asset);
+      const conflict = new Set(entries.map((item) => item.value)).size > 1;
+      inspector.innerHTML = `<p class="subhead">資產詳情</p><div class="panel-head"><h2 id="detail-title" tabindex="-1">${esc(displayTitle(asset))}</h2><button class="manager-button" type="button" data-action="manage">管理 tag</button></div>
+        <div class="panel-body">
+          <section><h3>${conflict ? '來源意見' : 'Stage 標題'}</h3>
+          ${entries.length ? entries.map(({tag,value},i) => `<div class="opinion"><strong>${esc(value)}</strong><span>${esc(tag.name)}${i===0 ? ' · 組合值' : ''}</span></div>`).join('') : '<p>目前沒有可讀的來源意見。</p>'}</section>
+          <section><h3>資產的 tag</h3>${tags.map((tag) => {
+            const offline = unavailable.has(tag.id);
+            const member = hasMember(tag,asset.id);
+            return `<div class="member-row"><span class="member-name">${dot(tag)}${esc(tag.name)}${offline ? '<small>暫時無法讀取</small>' : ''}</span><button type="button" data-action="member" data-id="${asset.id}" data-tag="${tag.id}" aria-label="${offline ? '無法管理' : member ? '移出' : '加入'} ${esc(tag.name)}" ${offline ? 'disabled' : ''}>${offline ? '不可用' : member ? '移出' : '加入'}</button></div>`;
+          }).join('')}</section>
+        </div>`;
+    }
+    function renderTagPanel(tag) {
+      const offline = unavailable.has(tag.id);
+      const records = sorted(knownAssets());
+      inspector.innerHTML = `<p class="subhead">tag 成員</p><div class="panel-head"><h2 id="detail-title" tabindex="-1">${esc(tag.name)}</h2><button class="manager-button" type="button" data-action="overview">資產詳情</button></div>
+        <div class="panel-body"><label class="sort-label" for="manage-tag">選擇 tag<select id="manage-tag">${tags.map((item) => `<option value="${item.id}" ${item.id === tag.id ? 'selected' : ''}>${esc(item.name)}${unavailable.has(item.id) ? '（不可用）' : ''}</option>`).join('')}</select></label>
+        ${offline ? '<p>這個 tag 暫時無法讀取，成員目前無法確認。</p>' : `<section><h3>加入或移出資產</h3>${records.map((asset) => {
+          const member = hasMember(tag,asset.id);
+          return `<div class="member-row"><span class="member-name">${esc(displayTitle(asset))}</span><button type="button" data-action="member" data-id="${asset.id}" data-tag="${tag.id}" aria-label="${member ? '移出' : '加入'} ${esc(displayTitle(asset))}">${member ? '移出' : '加入'}</button></div>`;
+        }).join('') || '<p>目前沒有可管理的資產。</p>'}</section>`}</div>`;
+    }
+    function render() {
+      const focused = document.activeElement;
+      const focusKey = focused?.closest('[data-action]');
+      const key = focusKey && [focusKey.dataset.action,focusKey.dataset.id,focusKey.dataset.tag];
+      const known = knownAssets();
+      const offline = offlineSelected();
+      const shown = offline.length ? [] : sorted(known.filter((asset) => [...selectedTags].every((id) => hasMember(tagById(id),asset.id))));
+      const activeTags = [...selectedTags].map((id) => tagById(id).name);
+      const names = [...unavailable].map((id) => tagById(id).name).join('、');
+      $('stage-count').innerHTML = `<strong>${known.length}</strong>${unavailable.size ? '筆可讀 tag 的已知資產' : '筆資產在 Stage 中'}`;
+      $('results-title').textContent = activeTags.length ? `${activeTags.join(' ＋ ')}${offline.length ? ' · 已暫停' : ` · ${shown.length} 筆`}` : '全部資產';
+      filterBar.innerHTML = `<button class="filter" type="button" data-action="filter" data-id="all" aria-pressed="${!selectedTags.size}">全部資產</button>` + tags.map((tag) => {
+        const offline = unavailable.has(tag.id);
+        const total = assets.filter((asset) => hasMember(tag,asset.id)).length;
+        return `<button class="filter" type="button" data-action="filter" data-id="${tag.id}" aria-pressed="${selectedTags.has(tag.id)}" ${offline ? 'disabled aria-describedby="read-status"' : ''}>${dot(tag)}${esc(tag.name)}<span class="count">${offline ? '讀取失敗' : total}</span></button>`;
+      }).join('');
+      $('read-status').hidden = !names;
+      $('read-status').textContent = names ? `${names} 暫時無法讀取。總覽仍可查看，成員與組合值可能不完整。` : '';
+      $('bulk').hidden = !selectedAssets.size;
+      $('selection-count').textContent = `已選取 ${selectedAssets.size} 筆資產`;
+      results.innerHTML = offline.length ? '<div class="empty"><strong>這組篩選已暫停</strong>目前無法確認失聯 tag 的成員。切回「全部資產」或恢復讀取後繼續。</div>' :
+        shown.length ? shown.map(renderCard).join('') : '<div class="empty"><strong>這組篩選沒有符合的已知資產</strong>試著選擇不同的 tag，或返回全部資產。</div>';
+      if(panel?.type==='tag' && tagById(panel.id)) renderTagPanel(tagById(panel.id));
+      else {
+        const asset = known.find((item) => item.id === panel?.id) || shown[0] || known[0];
+        if(asset) renderAssetPanel(asset);
+        else inspector.innerHTML = '<h2 id="detail-title" tabindex="-1">資產詳情</h2><p class="hint">選擇一筆可讀資產查看來源與 tag。</p>';
+      }
+      $('toggle-a').textContent = unavailable.has('archive') ? '恢復「影像檔案」讀取' : '模擬「影像檔案」離線';
+      if(key) [...document.querySelectorAll('[data-action]')].find((item) =>
+        item.dataset.action === key[0] && item.dataset.id === key[1] && item.dataset.tag === key[2])?.focus({preventScroll:true});
+    }
+
+    function openCreate(ids) {
+      createMembers = [...ids];
+      $('create-form').reset();
+      $('create-error').hidden = true;
+      $('create-context').textContent = ids.length ? `建立後會收錄目前選取的 ${ids.length} 筆資產。` : '建立一個空的 tag，之後可以再加入資產。';
+      dialog.showModal();
+      $('tag-name').focus();
+    }
+    function createTag(name, ids) {
+      const tag = {id:`new-${nextTag++}`,name,color:tags.length%5,members:[...ids]};
+      tags.push(tag);
+      panel = {type:'tag',id:tag.id};
+      return tag;
+    }
+    function toggleMember(tag, asset) {
+      if(unavailable.has(tag.id)) return;
+      const member = hasMember(tag,asset.id);
+      if(member && memberTags(asset.id).length===1) {
+        feedback('未移出。本展示保留至少一個可讀 tag。');
+        return;
+      }
+      if(!changes.has(tag.id)) changes.set(tag.id,new Map());
+      changes.get(tag.id).set(asset.id,!member);
+      feedback(`${displayTitle(asset)}已${member ? '從工作環境中的 tag 移出' : '加入 tag'}「${tag.name}」。`);
+      render();
+    }
+    function focusInspector() {
+      const heading = $('detail-title');
+      heading?.focus({preventScroll:true});
+      if(matchMedia('(max-width: 680px)').matches) inspector.scrollIntoView({block:'start'});
+    }
+    document.addEventListener('click',(event) => {
+      const target = event.target.closest('button[data-action]');
+      if(!target || target.disabled) return;
+      const {action,id,tag} = target.dataset;
+      if(action==='filter') {
+        if(id==='all') selectedTags.clear();
+        else if(selectedTags.has(id)) selectedTags.delete(id);
+        else selectedTags.add(id);
+        feedback();
+        render();
+      } else if(action==='asset') {
+        panel = {type:'asset',id};
+        render();
+        focusInspector();
+      } else if(action==='manage') {
+        const next = [...selectedTags].find((entry) => !unavailable.has(entry)) || tags.find((entry) => !unavailable.has(entry.id))?.id;
+        if(next) { panel={type:'tag',id:next}; render(); focusInspector(); }
+      } else if(action==='overview') {
+        panel = {type:'asset',id:'north'};
+        render();
+        focusInspector();
+      } else if(action==='member') toggleMember(tagById(tag),assetById.get(id));
+    });
+    document.addEventListener('change',(event) => {
+      const target = event.target;
+      if(target.id==='sort') render();
+      else if(target.id==='manage-tag') { panel={type:'tag',id:target.value}; render(); $('manage-tag')?.focus(); }
+      else if(target.dataset.action==='select') {
+        if(target.checked) selectedAssets.add(target.dataset.id);
+        else selectedAssets.delete(target.dataset.id);
+        render();
+      }
+    });
+    $('create-empty').addEventListener('click',() => openCreate([]));
+    $('create-selected').addEventListener('click',() => openCreate(selectedAssets));
+    $('cancel-create').addEventListener('click',() => dialog.close());
+    $('clear-selected').addEventListener('click',() => { selectedAssets.clear(); render(); filterBar.querySelector('button')?.focus(); });
+    $('create-form').addEventListener('submit',(event) => {
+      event.preventDefault();
+      const name = $('tag-name').value.trim();
+      const exists = tags.some((tag) => tag.name.toLocaleLowerCase()===name.toLocaleLowerCase());
+      if(!name || exists) {
+        $('create-error').textContent = exists ? '已有同名 tag，請使用其他名稱。' : '請輸入 tag 名稱。';
+        $('create-error').hidden = false;
+        $('tag-name').focus();
+        return;
+      }
+      const created = createTag(name,createMembers);
+      if(createMembers.length) selectedAssets.clear();
+      dialog.close();
+      feedback(`已建立「${created.name}」，收錄 ${created.members.length} 筆資產。`);
+      render();
+      focusInspector();
+    });
+    $('toggle-a').addEventListener('click',() => {
+      if(unavailable.has('archive')) unavailable.delete('archive');
+      else unavailable.add('archive');
+      for(const id of selectedAssets) if(!memberTags(id).length) selectedAssets.delete(id);
+      feedback();
+      render();
+    });
+    $('reset').addEventListener('click',() => { feedback('已重設合成資料。'); reset(); });
+    reset();
+  </script>
+</body>
+</html>
