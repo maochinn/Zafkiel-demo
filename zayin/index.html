@@ -3,151 +3,127 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Zayin · 保存工作流程</title>
+  <meta name="robots" content="noindex">
+  <title>資產庫 · Zayin 保存示範</title>
   <style>
-    :root{font-family:"Segoe UI","Microsoft JhengHei",sans-serif;color:#18362e;background:#f2f5ef;line-height:1.55}
-    *{box-sizing:border-box}
-    body{margin:0}
-    header{background:#163c32;color:#fff;padding:27px max(20px,calc((100vw - 1160px)/2))}
-    header small{color:#b8e4cc;letter-spacing:.13em}
-    h1{font-size:clamp(25px,5vw,38px);margin:4px 0}
-    header p{margin:0;color:#d0e8dc}
-    main{max-width:1200px;margin:auto;padding:20px}
-    h2{font-size:20px;margin:0 0 10px}
-    h3{font-size:16px;margin:0 0 6px}
-    p{margin:0 0 12px}
-    .notice{border-left:4px solid #a8751c;background:#fff4d9;padding:11px 15px;margin-bottom:16px}
-    .card{background:#fff;border:1px solid #d5e0d4;border-radius:13px;padding:18px;margin-bottom:14px;min-width:0}
-    .columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:14px}
-    .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
-    .field{min-width:0;max-width:100%}
-    label{display:block;font-size:13px;font-weight:650;margin-bottom:3px}
-    input,select,button{font:inherit;color:#18362e;border:1px solid #9eb4a5;border-radius:7px;padding:8px 10px;min-height:41px;max-width:100%}
-    select{background:#fff;width:100%}
-    input[type=text]{width:212px}
-    input[type=number]{width:100px}
-    button{background:#eff5ef;cursor:pointer}
-    button.primary{background:#146647;color:#fff;border-color:#146647;font-weight:650}
-    button:disabled{opacity:.5;cursor:not-allowed}
-    :focus-visible{outline:3px solid #a96c14;outline-offset:2px}
-    summary{font-weight:650;cursor:pointer}
-    details>.controls,details>p,details>ol,details>div{margin:10px 0 0}
-    .subtle{font-size:13px;color:#4b6256}
-    .summary{margin:10px 0 0;min-height:1.55em}
-    .assets{list-style:none;margin:0;padding:0}
-    .assets li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #e2e9df}
-    .assets span{min-width:0;overflow-wrap:anywhere}
-    .assets button{flex:none}
-    .detail,.layer{margin-top:10px;background:#eef5ef;padding:10px 12px;border-radius:8px;overflow-wrap:anywhere}
-    .detail p{margin:4px 0 0}
-    .table-wrap{overflow:auto}
-    table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px;margin-top:9px}
-    td,th{text-align:left;vertical-align:top;padding:8px 6px;border-bottom:1px solid #e2e9df;overflow-wrap:anywhere}
-    th:first-child{width:30%}
-    th:nth-child(2){width:26%}
-    .verified{color:#115339}
-    .unknown{color:#714a13}
-    .unpublished,.not-attempted{color:#743824}
-    #library-status:empty{margin:0}
-    .check-status{margin-top:10px;min-height:1.55em}
-    .layer-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px}
-    .layer{margin-top:0}
-    footer{padding:5px 0 16px}
-    @media(max-width:760px){.columns{grid-template-columns:1fr}}
-    @media(max-width:410px){main{padding:12px}.card{padding:13px}.scenario-field{width:100%}table{font-size:13px}}
+    :root{color-scheme:dark;font:15px/1.55 "Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;color:#fff;background:#601818;--panel:#6d1c1c;--hover:#7a2020;--line:#b76969;--muted:#dfbcbc;--gold:#d4af37;--card:#ea9999}
+    *{box-sizing:border-box}body{margin:0}a{color:inherit}[hidden]{display:none!important}
+    button,input,select,textarea{font:inherit;max-width:100%}
+    button{min-height:42px;border:1px solid transparent;background:transparent;color:inherit;border-radius:4px;padding:7px 12px;cursor:pointer}
+    button:hover{background:var(--hover)}button:disabled{opacity:.48;cursor:default}
+    :focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+    header{min-height:64px;background:#000;display:flex;align-items:center;gap:16px;padding:9px 24px;position:sticky;top:0;z-index:2}
+    .brand{font-size:21px;font-weight:700;text-decoration:none;white-space:nowrap}.brand span{font:28px Georgia,serif;color:var(--gold);margin-right:8px}
+    #search{border:0;padding:9px 13px;width:min(46vw,580px);margin-right:auto}
+    .badge{color:var(--muted);font-size:12px;white-space:nowrap}
+    .icon-button{width:42px;border-radius:50%;color:var(--gold);font-size:25px;line-height:1}
+    .layout{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:calc(100dvh - 64px)}
+    aside{border-right:1px solid #400a0a;padding:14px 10px 18px 0;min-width:0}
+    nav a,nav button{display:block;width:100%;text-align:left;padding:12px 20px;border-radius:0 26px 26px 0;text-decoration:none;font-size:14px}
+    nav a[aria-current=page]{background:#8a2828}nav a:hover{background:var(--hover)}
+    .side-note{margin:13px 18px;color:var(--muted);font-size:12px}
+    main{min-width:0;padding:24px clamp(16px,3vw,42px) 40px}
+    .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+    h1,h2,h3,p{margin:0}h1{font-size:23px}h2{font-size:18px}h3{font-size:16px}
+    .subtle{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
+    .keep,.tool-panel{border:1px solid #000;border-top:3px solid #000;border-radius:5px;background:var(--panel);padding:14px 16px;margin-bottom:18px}
+    .keep{max-width:600px;margin:0 auto 22px;padding:0;box-shadow:0 2px 6px #0005}
+    .capture-line{cursor:pointer;color:var(--muted);padding:12px 16px}
+    .keep form{padding:0 16px 12px}
+    .field{min-width:0}.field label{display:block;color:var(--muted);font-size:12px;margin:6px 0 3px}
+    input,select,textarea{border:1px solid #000;border-radius:3px;background:var(--card);color:#260707;padding:8px;min-height:40px}
+    textarea{min-height:95px;resize:vertical}#title,#body{width:100%}#title{font-size:16px;font-weight:700}
+    .controls,.toolbar{display:flex;align-items:end;gap:8px;flex-wrap:wrap}
+    .toolbar{margin-top:10px;justify-content:space-between}.toolbar select{width:min(100%,230px)}
+    button.primary{background:var(--gold);border-color:#000;color:#000;font-weight:700}
+    button.primary:hover{background:#edc750}
+    .workspace-heading{display:flex;align-items:baseline;gap:12px;margin:0 0 10px;flex-wrap:wrap}
+    #library-status:empty{display:none}
+    .assets{list-style:none;margin:0 0 18px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:13px}
+    .assets li{min-width:0;background:var(--card);color:#400a0a;border-top:3px solid #000;border-radius:4px}
+    .assets li.empty{background:transparent;border:0;color:var(--muted)}
+    .assets button{display:block;text-align:left;width:100%;padding:13px;min-height:88px;overflow-wrap:anywhere;font-weight:700}
+    .assets button:hover,.assets button:focus-visible{background:#f0acac}
+    .assets span{display:block;color:#601818;font-size:12px;font-weight:400;margin-top:7px}
+    summary{cursor:pointer;font-weight:650}
+    .tool-panel h2{margin:0 0 9px}.tool-panel .summary,.tool-panel .check-status{margin-top:9px}
+    .tool-panel .controls,.tool-panel details{margin-top:10px}
+    .table-wrap{overflow:auto}table{width:100%;table-layout:fixed;border-collapse:collapse;margin:10px 0;font-size:13px}
+    th,td{border-bottom:1px solid var(--line);text-align:left;vertical-align:top;padding:8px 5px;overflow-wrap:anywhere}
+    th:nth-child(1){width:28%}th:nth-child(2){width:23%}
+    .verified{color:#efedba}.unknown,.unpublished,.not-attempted{color:#ffe19b}
+    .layer-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px}
+    .layer{background:var(--hover);border:1px solid var(--line);border-radius:4px;padding:8px}
+    dialog{color:#fff;background:var(--panel);border:1px solid var(--line);border-top:4px solid #000;border-radius:4px;width:min(920px,calc(100% - 24px));padding:16px 22px;overflow-wrap:anywhere}
+    dialog::backdrop{background:#000a}.reader-controls{display:flex;justify-content:end}#asset-detail p{margin:9px 0}.reader-body{white-space:pre-wrap}
+    @media(max-width:720px){.layout{display:block}aside{border:0;border-bottom:1px solid #400a0a;padding:5px 12px}nav{display:flex;gap:4px}nav a,nav button{width:auto;border-radius:4px;padding:8px 10px}.side-note{display:none}header{padding:8px 12px;gap:8px;flex-wrap:wrap}#search{order:3;width:100%;flex:1 0 100%}.badge{margin-left:auto}}
   </style>
 </head>
 <body>
   <header>
-    <small>VII ZAYIN</small>
-    <h1>資產保存與核對</h1>
-    <p>工作庫照常讀取，這一批的保存結果可以另外核對。</p>
+    <a href="#home" class="brand"><span aria-hidden="true">Z</span>Zafkiel</a>
+    <label for="search" class="sr-only">搜尋資產</label><input id="search" type="search" placeholder="搜尋">
+    <span class="badge">合成示範</span>
+    <button id="new-note" class="icon-button" type="button" aria-label="新增記事">＋</button>
   </header>
-  <main>
-    <p class="notice"><strong>合成示範。</strong> 操作只存於本頁記憶體。重新整理會重設。10 KiB 是分片示意門檻。</p>
-
-    <section class="card" aria-labelledby="scenario-heading">
-      <h2 id="scenario-heading">選擇情境</h2>
-      <div class="controls">
-        <div class="field scenario-field">
-          <label for="scenario">保存或讀取情境</label>
-          <select id="scenario">
+  <div class="layout">
+    <aside>
+      <nav aria-label="資產導覽">
+        <a href="#home" aria-current="page">首頁</a>
+        <button id="open-tools" type="button" aria-controls="demo-tools" aria-expanded="false">保存情境</button>
+      </nav>
+      <p class="side-note">示範工作庫 · 旅行資料</p>
+    </aside>
+    <main id="home">
+      <details id="composer" class="keep">
+        <summary class="capture-line">寫記事…</summary>
+        <form id="register">
+          <div class="field"><label for="title">標題（可留空）</label><input id="title" type="text" placeholder="標題" maxlength="2000"></div>
+          <div class="field"><label for="body">記事內容</label><textarea id="body" placeholder="輸入記事內容…" maxlength="8000"></textarea></div>
+          <div class="toolbar">
+            <div class="field"><label for="material">加入素材（合成）</label><select id="material"><option value="">未加入素材</option><option>照片.jpg</option><option>收據.pdf</option></select></div>
+            <button type="submit" class="primary">關閉</button>
+          </div>
+          <p id="note-status" class="subtle" role="status"></p>
+        </form>
+      </details>
+      <div class="workspace-heading"><h1>首頁</h1><p id="asset-count" class="subtle"></p></div>
+      <p id="library-status" class="subtle" role="status"></p>
+      <ul id="assets" class="assets"></ul>
+      <section id="demo-tools" class="tool-panel" aria-labelledby="scenario-heading" hidden>
+        <h2 id="scenario-heading" tabindex="-1">保存情境</h2>
+        <p class="subtle">操作只存於本頁記憶體。重新整理會重設；10 KiB 是示意門檻。</p>
+        <div class="controls">
+          <div class="field"><label for="scenario">保存或讀取情境</label><select id="scenario">
             <option value="safe">A 未確認，B 可以保存</option>
             <option value="unsafe">入口讀不到，B 暫停</option>
             <option value="lost">A 的回覆遺失，沒有 ID</option>
             <option value="source">清單可讀，改動未核對</option>
             <option value="size">按大小輪替與超大單筆</option>
-          </select>
+            <option value="before">發布前失敗</option>
+          </select></div>
+          <button id="run" class="primary" type="button">執行情境</button>
+          <button id="restore" type="button" disabled>模擬讀取恢復</button>
+          <button id="reset" type="button">重設示範</button>
         </div>
-        <button id="run" class="primary" type="button">執行情境</button>
-        <button id="restore" type="button" disabled>模擬讀取恢復</button>
-        <button id="reset" type="button">重設示範</button>
-      </div>
-      <p id="summary" class="summary subtle" role="status">選擇情境後，會從原始工作庫開始示範。</p>
-    </section>
-
-    <div class="columns">
-      <section class="card" aria-labelledby="library-heading">
-        <h2 id="library-heading">工作庫</h2>
-        <p id="library-status" class="subtle" role="status"></p>
-        <ul id="assets" class="assets"></ul>
-        <div id="asset-detail" class="detail" aria-live="polite" hidden></div>
+        <p id="summary" class="summary subtle" role="status">選擇情境後，會從原始工作庫開始示範。</p>
+        <details id="storage-details"><summary>查看保存示意</summary><p id="revision" class="subtle"></p><div id="layers" class="layer-list"></div></details>
       </section>
-
-      <section class="card" aria-labelledby="batch-heading">
+      <section id="batch-panel" class="tool-panel" aria-labelledby="batch-heading" hidden>
         <h2 id="batch-heading">本批保存與核對</h2>
-        <p class="subtle">送完後，匯入工具依此批已知的資料逐筆核對。</p>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th scope="col">項目</th><th scope="col">資產 ID</th><th scope="col">結果</th></tr></thead>
-            <tbody id="batch"></tbody>
-          </table>
-        </div>
-        <div class="controls">
-          <button id="verify" type="button" disabled>重新核對這批</button>
-        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th scope="col">項目</th><th scope="col">資產 ID</th><th scope="col">結果</th></tr></thead>
+          <tbody id="batch"></tbody>
+        </table></div>
+        <button id="verify" type="button" disabled>重新核對這批</button>
         <p id="check-status" class="check-status subtle" role="status"></p>
       </section>
-    </div>
-
-    <section class="card">
-      <details>
-        <summary>自訂單筆登記</summary>
-        <form id="register" class="controls">
-          <div class="field">
-            <label for="title">標題（可留空）</label>
-            <input id="title" type="text" value="旅行筆記" maxlength="2000">
-          </div>
-          <div class="field">
-            <label for="size">大小（示意 KiB）</label>
-            <input id="size" type="number" value="4" required min="1" max="99" step="1">
-          </div>
-          <div class="field">
-            <label for="fault">保存結果模擬</label>
-            <select id="fault">
-              <option value="normal">正常保存</option>
-              <option value="before">發布前失敗</option>
-              <option value="material">發布後讀回核對失敗</option>
-              <option value="lost">發布後回覆遺失</option>
-            </select>
-          </div>
-          <button type="submit" class="primary">建立一筆</button>
-        </form>
-      </details>
-    </section>
-
-    <section class="card">
-      <details id="storage-details">
-        <summary>查看保存示意</summary>
-        <p class="subtle">一個入口、兩筆唯讀來源資產、一個來源 tag。分片大小按情境指定。</p>
-        <div id="revision" class="subtle"></div>
-        <div id="layers" class="layer-list"></div>
-      </details>
-    </section>
-
-    <footer class="subtle">食時之城提供登記描述，Zayin 保存與核對，Chet 組合工作庫。</footer>
-  </main>
-
+    </main>
+  </div>
+  <dialog id="reader" aria-label="資產內容">
+    <div class="reader-controls"><form method="dialog"><button type="submit" aria-label="關閉資產">關閉</button></form></div>
+    <div id="asset-detail" aria-live="polite"></div>
+  </dialog>
   <script>
     const SHARD_TARGET = 10;
     const sourceAssets = [
@@ -242,7 +218,7 @@
       outcome(row, 'verified', '已讀回同一筆資產及其完整描述。');
     }
 
-    function register(label, title, size, fault = 'normal') {
+    function register(label, title, size, fault = 'normal', description = {}) {
       const row = {label, assetId: null, status: 'unknown', reason: ''};
       batch.push(row);
       if (faults.entry) {
@@ -253,8 +229,8 @@
       const asset = {
         id: 'demo-' + String(++counters.asset).padStart(4, '0'),
         title,
-        body: '這是一筆合成的登記內容。',
-        material: '照片.jpg'
+        body: description.body ?? '這是一筆合成的登記內容。',
+        material: description.material ?? '照片.jpg'
       };
       if (fault === 'before') {
         row.assetId = asset.id;
@@ -305,6 +281,9 @@
         batch.push({label: 'A · 標題修改（既有意見）', assetId: asset.id,
           revision, expected: asset, status: 'unknown'});
         message = '工作庫能組合出來源標題。核對這次修改時，較新的意見仍讀不到。';
+      } else if (scenario === 'before') {
+        register('A · 旅途照片', '旅途照片', 4, 'before');
+        message = 'A 在發布前停止，工作庫與版本維持原樣。';
       } else {
         for (const [index, size] of [4, 4, 4, 14, 3].entries()) {
           const title = '大小示例 ' + (index + 1) + '（' + size + ' KiB）';
@@ -314,6 +293,7 @@
         get('storage-details').open = true;
       }
 
+      get('search').value = '';
       get('summary').textContent = message;
       checkBatch();
       render();
@@ -322,51 +302,50 @@
     function renderLibrary() {
       const assets = currentComposition();
       const list = get('assets');
-      const detail = get('asset-detail');
-      get('library-status').textContent = assets ? '' : '目前無法開啟工作庫。';
-      list.replaceChildren();
+      const term = get('search').value.trim().toLocaleLowerCase();
+      const shown = assets ? [...assets.values()].filter(asset =>
+        [asset.title, asset.body].some(value => value.toLocaleLowerCase().includes(term))) : [];
 
-      // Keep the same controls focused when a detail is opened.
-      if (assets) {
-        for (const asset of assets.values()) {
-          const title = asset.title || '（空標題）';
-          const open = node('button', '開啟');
-          open.type = 'button';
-          open.setAttribute('aria-label', '開啟 ' + title + '（' + asset.id + '）');
-          open.addEventListener('click', () => {
-            selectedId = asset.id;
-            const selectedRows = batch.filter(row => row.assetId === selectedId);
-            selectedRows.forEach(verifyRow);
-            if (selectedRows.length) batchNote = '核對結果僅更新這次開啟的資產。';
-            renderDetail(currentComposition());
-            renderBatch();
-          });
-          const item = node('li');
-          item.append(node('span', title), open);
-          list.append(item);
-        }
+      get('library-status').textContent = assets ? '' : '目前無法開啟工作庫。';
+      get('asset-count').textContent = assets ? shown.length + ' 筆資產' : '';
+      list.replaceChildren();
+      if (assets && !shown.length) list.append(node('li', '沒有符合的資產。', 'empty'));
+
+      for (const asset of shown) {
+        const title = asset.title || '（空標題）';
+        const open = node('button', title);
+        open.type = 'button';
+        open.setAttribute('aria-label', '開啟 ' + title + '（' + asset.id + '）');
+        if (asset.body) open.append(node('span', asset.body.slice(0, 70)));
+        open.addEventListener('click', () => {
+          selectedId = asset.id;
+          const selectedRows = batch.filter(row => row.assetId === selectedId);
+          selectedRows.forEach(verifyRow);
+          if (selectedRows.length) batchNote = '核對結果僅更新這次開啟的資產。';
+          renderDetail(currentComposition());
+          get('reader').showModal();
+          renderBatch();
+        });
+        const item = node('li');
+        item.append(open);
+        list.append(item);
       }
-      renderDetail(assets);
-      detail.hidden = !selectedId;
+      if (get('reader').open) renderDetail(assets);
     }
 
     function renderDetail(assets) {
-      if (!selectedId) return;
       const asset = assets?.get(selectedId);
       const detail = get('asset-detail');
-      detail.hidden = false;
-      if (!asset || !asset.material) {
+      if (!asset || asset.material === null) {
         detail.replaceChildren(node('p', '目前無法開啟這筆資產。'));
         return;
       }
-      detail.replaceChildren(
-        node('h3', asset.title || '（空標題）'),
-        node('p', asset.body),
-        node('p', '素材：' + asset.material, 'subtle')
-      );
+      detail.replaceChildren(node('h2', asset.title || '（空標題）'), node('p', asset.body, 'reader-body'));
+      if (asset.material) detail.append(node('p', '素材：' + asset.material, 'subtle'));
     }
 
     function renderBatch() {
+      get('batch-panel').hidden = !batch.length || get('demo-tools').hidden;
       const table = get('batch');
       table.replaceChildren();
       if (!batch.length) {
@@ -410,6 +389,23 @@
       get('restore').disabled = !faults.entry && faults.shard === null && !faults.materials.size;
     }
 
+    get('search').addEventListener('input', renderLibrary);
+    get('new-note').addEventListener('click', () => {
+      get('composer').open = true;
+      get('title').focus();
+    });
+    get('reader').addEventListener('close', () => { selectedId = null; });
+    get('open-tools').addEventListener('click', () => {
+      const tool = get('demo-tools');
+      tool.hidden = !tool.hidden;
+      renderBatch();
+      get('open-tools').setAttribute('aria-expanded', String(!tool.hidden));
+      if (!tool.hidden) {
+        get('scenario-heading').focus();
+        tool.scrollIntoView({block: 'nearest'});
+      }
+    });
+    get('composer').addEventListener('toggle', () => { if (get('composer').open) get('title').focus(); });
     get('run').addEventListener('click', runScenario);
     get('restore').addEventListener('click', () => {
       faults = {entry: false, shard: null, materials: new Set()};
@@ -424,6 +420,8 @@
       resetSimulation();
       get('scenario').selectedIndex = 0;
       get('register').reset();
+      get('search').value = '';
+      get('note-status').textContent = '';
       get('summary').textContent = '選擇情境後，會從原始工作庫開始示範。';
       get('storage-details').open = false;
       render();
@@ -431,7 +429,19 @@
     get('register').addEventListener('submit', event => {
       event.preventDefault();
       const title = get('title').value;
-      register(title || '（空標題）', title, Number(get('size').value), get('fault').value);
+      register(title || '（空標題）', title, 4, 'normal', {
+        body: get('body').value,
+        material: get('material').value
+      });
+      const row = batch.at(-1);
+      if (row.status === 'verified') {
+        event.currentTarget.reset();
+        get('composer').open = false;
+        get('note-status').textContent = '';
+        get('new-note').focus();
+      } else {
+        get('note-status').textContent = row.reason;
+      }
       batchNote = '本次建立結果已更新。';
       render();
     });
