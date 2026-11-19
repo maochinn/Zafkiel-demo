@@ -36,6 +36,16 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
 .member-row button{min-height:34px;font-size:12px;flex-shrink:0;border-color:var(--line)}.asset-card .member-row button{border-color:#9b5151}.asset-card .member-row button:hover:not(:disabled){background:#f0aaaa}.tag-status{font-size:12px;margin-top:9px;color:#ffe19b;overflow-wrap:anywhere}
 .asset-card .tag-status{color:#400a0a}.tag-status:empty{display:none}.asset-card .full-body{overflow-wrap:anywhere}.asset-card.missing h2{color:#400a0a}
 .inline-note{margin:10px 0 0}.identity-note button{border-color:var(--line);min-height:36px}.entry-panel li{overflow-wrap:anywhere}.open-samples{display:inline-block;margin-top:8px;background:var(--gold);border:1px solid #000;border-radius:4px;color:#000;padding:9px 14px;font-weight:700;text-decoration:none}
+#tag-manager{scroll-margin-top:12px}#manager-rows{margin-top:9px}
+.asset-open{color:#000;min-height:28px;padding:0;text-align:left;font-weight:700;overflow-wrap:anywhere;text-decoration:underline;text-underline-offset:3px}
+.asset-open:hover{background:transparent;color:#531717}.source-actions button{min-height:34px;font-size:11px;padding:5px 8px}
+.reader-dialog{width:min(820px,calc(100% - 40px));max-height:calc(100% - 65px);margin:45px auto auto;overflow:auto;padding:20px 30px 35px;background:var(--panel);color:#fff;border:1px solid var(--line);border-top:4px solid #000;border-radius:10px;box-shadow:0 8px 25px #0004}
+.reader-dialog::backdrop{background:#0008;backdrop-filter:blur(1px)}.reader-dialog h2{font-size:25px;line-height:1.4;margin:8px 0 16px;overflow-wrap:anywhere}.reader-dialog h2:focus{outline:none}
+.reader-controls{display:flex;align-items:center;justify-content:space-between;gap:8px}.reader-controls p{margin:0}.reader-dialog .chip{border-color:var(--line);color:var(--muted)}.reader-dialog .full-body{margin-top:16px}
+.reader-preview{margin-top:18px}.reader-preview h3{font-size:15px;margin:0 0 9px}
+.reader-material{width:fit-content;max-width:100%;overflow-wrap:anywhere}.reader-material summary{display:grid;gap:4px;cursor:pointer;font-size:12px;color:var(--muted)}
+.reader-file-type{display:grid;place-items:center;width:142px;max-width:100%;height:100px;border-radius:7px;background:#260909;color:var(--gold);font-size:24px}
+@media(max-width:650px){.reader-dialog{width:calc(100% - 20px);max-height:calc(100% - 30px);margin:15px auto auto;padding:12px 18px 25px}}
 @media(max-width:650px){#source-links{width:100%}nav button.tag-filter,nav button.add-library{width:auto;min-height:40px;padding:7px 10px;border-radius:4px;font-size:12px;gap:4px}nav button.tag-filter[aria-pressed=true]{box-shadow:inset 0 -2px var(--gold)}.result-tools{width:100%}.result-tools .search-label{min-width:0}.result-tools select{width:auto}.sidebar-foot{padding-top:0}.entry-panel .intro{margin-bottom:12px}}
   </style>
 </head>
@@ -60,7 +70,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
       <section id="workspace-page" aria-labelledby="view-title">
         <div class="view-heading"><div><p class="eyebrow">多庫總覽</p><h1 id="view-title" tabindex="-1">首頁</h1></div></div>
         <p class="intro">選擇旁邊的 tag 篩選資產。選多個時，資產必須同時符合。</p>
-        <div class="view-actions"><button id="reload" type="button">重新讀取來源</button></div>
+        <div class="view-actions"><button id="reload" type="button">重新讀取來源</button><button id="add-to-tag" class="primary" type="button" aria-controls="tag-manager" aria-expanded="false" hidden>加入資產</button></div>
         <section class="keep" aria-label="建立 tag"><form id="create-form">
           <div class="selection-row"><strong id="selection-count" role="status">已選 0 筆</strong><button id="clear-selection" type="button" disabled>清除選取</button></div>
           <div class="create-row"><label for="collection-name">tag 名稱</label><input id="collection-name" maxlength="36" autocomplete="off" placeholder="例如：旅行" required><button id="create-submit" class="primary" type="submit">建立空 tag</button></div>
@@ -69,7 +79,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
         <div id="created-notice" class="created-notice" role="status" hidden><span id="created-message"></span><button id="created-link" type="button">查看這個 tag →</button></div>
         <section id="tag-manager" class="keep" aria-labelledby="manage-heading" hidden>
           <div class="selection-row"><strong id="manage-heading">管理 tag 成員</strong><button id="close-manager" type="button">關閉</button></div>
-          <label for="manage-tag">選擇 tag </label><select id="manage-tag" class="manage-select"></select><div id="manager-rows"></div><p id="manager-status" class="tag-status" role="status"></p>
+          <label for="manage-tag">目標 tag </label><select id="manage-tag" class="manage-select"></select><div id="manager-rows"></div><p id="manager-status" class="tag-status" role="status"></p>
         </section>
         <p id="membership-status" class="tag-status" role="status"></p>
         <div class="results-bar"><p id="asset-count" role="status"></p><div class="result-tools"><label class="search-label" for="search">搜尋本頁<input id="search" type="search" placeholder="名稱或標籤"></label><label class="search-label" for="sort">排序<select id="sort"><option value="asc">Stage 標題 ↑</option><option value="desc">Stage 標題 ↓</option></select></label></div></div>
@@ -79,6 +89,12 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
       <noscript>請啟用 JavaScript。</noscript>
     </main>
   </div>
+  <dialog id="asset-page" class="reader-dialog" aria-labelledby="reader-title">
+    <div class="reader-controls"><p id="reader-context" class="eyebrow"></p><button id="close-asset" type="button" aria-label="關閉資產" title="關閉資產">×</button></div>
+    <h2 id="reader-title" tabindex="-1"></h2><div class="chips" id="reader-tags"></div>
+    <section id="reader-preview" class="reader-preview" aria-labelledby="reader-preview-title"><h3 id="reader-preview-title">檔案預覽（1）</h3><details id="reader-material" class="reader-material"><summary><span id="reader-file-type" class="reader-file-type" aria-hidden="true"></span><span id="reader-material-name"></span></summary><p class="hint">合成素材的登記資料。</p></details></section>
+    <article id="reader-body" class="full-body"></article>
+  </dialog>
   <script>
   'use strict';
   const assets = [
@@ -97,7 +113,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   const $ = id => document.getElementById(id);
   const collator = new Intl.Collator('zh-Hant');
   const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let tags,changes,filters,selected,unavailable,manager,nextTag,emptyMode,created;
+  let tags,changes,filters,selected,unavailable,manager,managerMode,nextTag,emptyMode,created;
   const tagById = id => tags.find(tag=>tag.id===id);
   const hasMember = (tag,id) => changes.get(tag.id)?.get(id) ?? tag.members.includes(id);
   const memberTags = id => tags.filter(tag=>!unavailable.has(tag.id)&&hasMember(tag,id));
@@ -108,7 +124,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   const displayTitle = asset => title(asset)||'來源無法讀取';
 
   function reset() {
-    tags=[...sourceTags];changes=new Map();filters=new Set();selected=new Set();unavailable=new Set();manager=null;created=null;nextTag=1;emptyMode=false;
+    tags=[...sourceTags];changes=new Map();filters=new Set();selected=new Set();unavailable=new Set();manager=null;managerMode=null;created=null;nextTag=1;emptyMode=false;
     $('search').value='';$('sort').value='asc';$('create-form').reset();$('name-error').textContent='';$('membership-status').textContent='';$('manager-status').textContent='';
     render();
   }
@@ -135,29 +151,56 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
       return `<button class="tag-filter" type="button" data-action="filter" data-id="${tag.id}" aria-pressed="${filters.has(tag.id)}" ${offline?'disabled aria-describedby="read-status"':''}><span class="tag-label">${esc(tag.name)}</span><span class="tag-count">${count}</span></button>`;
     }).join('');
     $('registered').innerHTML=tags.map(tag=>`<li>${esc(tag.name)}${unavailable.has(tag.id)?'（讀取失敗）':''}</li>`).join('');
-    $('manage-tags').setAttribute('aria-expanded',String(Boolean(manager)));
+    $('manage-tags').setAttribute('aria-expanded',String(managerMode==='members'));
+    $('add-to-tag').hidden=![...filters].some(id=>!unavailable.has(id));
+    $('add-to-tag').setAttribute('aria-expanded',String(managerMode==='add'));
   }
   function memberButton(tag,asset,mode) {
-    const offline=unavailable.has(tag.id),member=hasMember(tag,asset.id),name=mode==='tag'?displayTitle(asset):tag.name;
-    return `<div class="member-row"><span>${esc(name)}${offline?'（暫時無法讀取）':''}</span><button type="button" data-action="member" data-mode="${mode}" data-tag="${tag.id}" data-id="${asset.id}" aria-label="${offline?'無法管理':member?'移出':'加入'} ${esc(name)}" ${offline?'disabled':''}>${offline?'不可用':member?'移出':'加入'}</button></div>`;
+    const member=hasMember(tag,asset.id),blocked=unavailable.has(tag.id)||(!member&&!title(asset));
+    const name=mode==='asset'?tag.name:displayTitle(asset);
+    return `<div class="member-row"><span>${esc(name)}${blocked?'（暫時無法讀取）':''}</span><button type="button" data-action="member" data-mode="${mode}" data-tag="${tag.id}" data-id="${asset.id}" aria-label="${blocked?'無法管理':member?'移出':'加入'} ${esc(name)}" ${blocked?'disabled':''}>${blocked?'不可用':member?'移出':'加入'}</button></div>`;
   }
   function renderManager(){
-    $('tag-manager').hidden=!manager;
-    if(!manager)return;
-    const tag=tagById(manager);
-    $('manage-tag').innerHTML=tags.map(item=>`<option value="${item.id}" ${item.id===manager?'selected':''}>${esc(item.name)}${unavailable.has(item.id)?'（不可用）':''}</option>`).join('');
-    $('manager-rows').innerHTML=unavailable.has(tag.id)?'<p class="hint">暫時無法讀取這個 tag 的成員。</p>':sorted(knownAssets()).map(asset=>memberButton(tag,asset,'tag')).join('');
+    $('tag-manager').hidden=!managerMode;
+    if(!managerMode)return;
+    const adding=managerMode==='add',tag=tagById(manager);
+    const choices=adding?tags.filter(item=>filters.has(item.id)):tags;
+    $('manage-heading').textContent=adding?'加入既有資產':'管理 tag 成員';
+    $('manage-tag').innerHTML=(adding?'<option value="" disabled>請選擇一個目標 tag</option>':'')+choices.map(item=>`<option value="${item.id}" ${adding&&unavailable.has(item.id)?'disabled':''}>${esc(item.name)}${unavailable.has(item.id)?'（不可用）':''}</option>`).join('');
+    $('manage-tag').value=manager||'';
+    let content;
+    if(!tag)content='<p class="hint">請先指定一個要加入資產的 tag。</p>';
+    else if(unavailable.has(tag.id))content='<p class="hint">暫時無法讀取這個 tag 的成員。</p>';
+    else {
+      const candidates=sorted(knownAssets().filter(asset=>!adding||(!hasMember(tag,asset.id)&&title(asset))));
+      content=(adding?'<p class="hint">可從其他已登記的 tag 加入現有資產。</p>':'')+(candidates.map(asset=>memberButton(tag,asset,adding?'add':'tag')).join('')||'<p class="hint">沒有可加入的資產。</p>');
+    }
+    $('manager-rows').innerHTML=content;
   }
   function renderCard(asset, expanded){
     const rows=opinions(asset),conflict=new Set(rows.map(item=>item.value)).size>1,tagsForAsset=memberTags(asset.id);
     return `<article class="asset-card${selected.has(asset.id)?' selected':''}${rows.length?'':' missing'}" data-asset-id="${asset.id}">
       <input class="asset-select" type="checkbox" data-action="select" data-id="${asset.id}" aria-label="選取 ${esc(displayTitle(asset))}" ${selected.has(asset.id)?'checked':''} ${rows.length?'':'disabled'}>
-      <div class="card-content"><h2>${esc(displayTitle(asset))}</h2><p class="card-caption">${rows.length?esc(asset.body):'已知成員，來源意見暫時無法讀取。'}</p>
+      <div class="card-content"><h2><button class="asset-open" type="button" data-action="open-asset" data-id="${asset.id}" aria-label="開啟 ${esc(displayTitle(asset))}">${esc(displayTitle(asset))}</button></h2><p class="card-caption">${rows.length?esc(asset.body):'已知成員，來源意見暫時無法讀取。'}</p>
       <div class="chips">${tagsForAsset.map(tag=>`<span class="chip">${esc(tag.name)}</span>`).join('')}</div>
       <p class="source-badge">${tagsForAsset.length} 個 tag${rows.length?' · 1 個素材':''}</p>
       ${conflict?`<div class="source-opinions">${rows.map(({tag,value},i)=>`<p><strong>${esc(tag.name)}${i===0?' · 組合值':''}</strong> ${esc(value)}</p>`).join('')}</div>`:''}
       ${rows.length?`<details class="asset-reader" data-asset-detail="reader" ${expanded.has(asset.id+':reader')?'open':''}><summary>閱讀內容與素材</summary><p class="full-body">${esc(asset.body)}</p><p class="card-caption">${esc(asset.material)}（示意）</p></details>`:''}
+      ${rows.length?`<div class="source-actions">${rows.map(({tag})=>`<button type="button" data-action="open-asset" data-id="${asset.id}" data-tag="${tag.id}">在「${esc(tag.name)}」開啟</button>`).join('')}</div>`:''}
       <details class="member-controls" data-asset-detail="member" ${expanded.has(asset.id+':member')?'open':''}><summary>管理資產的 tag</summary>${tags.map(tag=>memberButton(tag,asset,'asset')).join('')}<p class="tag-status" data-feedback="${asset.id}" role="status"></p></details></div></article>`;
+  }
+  function openAsset(asset,origin){
+    const rows=opinions(asset),source=rows.find(({tag})=>tag.id===origin);
+    $('reader-context').textContent=source?`${source.tag.name} · 來源資產`:'多庫總覽 · 資產內容';
+    $('reader-title').textContent=source?.value||displayTitle(asset);
+    $('reader-tags').innerHTML=memberTags(asset.id).map(tag=>`<span class="chip">${esc(tag.name)}</span>`).join('');
+    $('reader-body').textContent=rows.length?asset.body:'目前無法讀取這筆資產的來源內容。';
+    $('reader-preview').hidden=!rows.length;
+    $('reader-material').open=false;
+    $('reader-material-name').textContent=rows.length?asset.material:'';
+    $('reader-file-type').textContent=rows.length?asset.material.split('.').pop().toUpperCase():'';
+    $('asset-page').showModal();
+    $('reader-title').focus();
   }
   function renderCards(){
     const invalid=[...filters].some(id=>unavailable.has(id)),q=$('search').value.trim().toLocaleLowerCase();
@@ -192,21 +235,24 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     if(unavailable.has(tag))return;
     if(filters.has(tag))filters.delete(tag);else filters.add(tag);
     $('membership-status').textContent='';
+    if(managerMode==='add'){manager=null;managerMode=null;}
     if(location.hash==='#/open')location.hash='#/home';
     render();
   }
   function toggleMember(tag,asset,mode){
     if(unavailable.has(tag.id))return;
     const member=hasMember(tag,asset.id);
+    if(!member&&!title(asset))return;
     $('membership-status').textContent='';
     const announce=message=>{
-      const region=mode==='tag'?$('manager-status'):$('assets').querySelector(`[data-feedback="${asset.id}"]`);
+      const region=mode==='asset'?$('assets').querySelector(`[data-feedback="${asset.id}"]`):$('manager-status');
       (region||$('membership-status')).textContent=message;
     };
     if(member&&memberTags(asset.id).length===1){announce('示範保留至少一個可讀 tag。');return;}
     if(!changes.has(tag.id))changes.set(tag.id,new Map());
     changes.get(tag.id).set(asset.id,!member);
     render();announce(`${displayTitle(asset)}已${member?'從工作環境移出':'加入'}「${tag.name}」。`);
+    if(mode==='add')($('manager-rows').querySelector('button')||$('manage-tag')).focus({preventScroll:true});
   }
   document.addEventListener('click',event=>{
     const button=event.target.closest('button[data-action]');
@@ -214,17 +260,27 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     const {action,id,tag,mode}=button.dataset;
     if(action==='filter')setFilter(id);
     if(action==='member')toggleMember(tagById(tag),assets.find(asset=>asset.id===id),mode);
+    if(action==='open-asset')openAsset(assets.find(asset=>asset.id===id),tag);
   });
   $('assets').addEventListener('change',event=>{
     const checkbox=event.target.closest('.asset-select');if(!checkbox)return;
     if(checkbox.checked)selected.add(checkbox.dataset.id);else selected.delete(checkbox.dataset.id);
     emptyMode=false;checkbox.closest('.asset-card').classList.toggle('selected',checkbox.checked);renderCreate();
   });
-  $('home-link').addEventListener('click',()=>{filters.clear();$('membership-status').textContent='';render();});
+  $('home-link').addEventListener('click',()=>{filters.clear();if(managerMode==='add'){manager=null;managerMode=null;}$('membership-status').textContent='';render();});
   $('create-empty').addEventListener('click',()=>{emptyMode=true;render();location.hash='#/home';setRoute();$('collection-name').focus();});
   $('clear-selection').addEventListener('click',()=>{selected.clear();emptyMode=false;render();});
-  $('manage-tags').addEventListener('click',()=>{manager=[...filters].find(id=>!unavailable.has(id))||sourceTags[0].id;location.hash='#/home';setRoute();$('manage-tag').focus();});
-  $('close-manager').addEventListener('click',()=>{manager=null;$('manager-status').textContent='';render();$('manage-tags').focus();});
+  function openManager(mode){
+    managerMode=mode;
+    manager=mode==='add'?(filters.size===1?[...filters][0]:null):([ ...filters ].find(id=>!unavailable.has(id))||tags.find(item=>!unavailable.has(item.id))?.id);
+    $('manager-status').textContent='';
+    if(location.hash==='#/open')location.hash='#/home';
+    setRoute();$('manage-tag').focus();
+  }
+  $('manage-tags').addEventListener('click',()=>openManager('members'));
+  $('add-to-tag').addEventListener('click',()=>openManager('add'));
+  $('close-manager').addEventListener('click',()=>{const back=managerMode==='add'?'add-to-tag':'manage-tags';manager=null;managerMode=null;$('manager-status').textContent='';render();($(back).hidden?$('manage-tags'):$(back)).focus();});
+  $('close-asset').addEventListener('click',()=>$('asset-page').close());
   $('manage-tag').addEventListener('change',event=>{manager=event.target.value;$('manager-status').textContent='';renderManager();});
   $('create-form').addEventListener('submit',event=>{
     event.preventDefault();const field=$('collection-name'),name=field.value.trim();
@@ -234,7 +290,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     created={id:`new-${nextTag++}`,name,members};tags.push(created);
     if(!emptyMode)selected.clear();emptyMode=false;field.value='';$('name-error').textContent='';render();$('created-link').focus();
   });
-  $('created-link').addEventListener('click',()=>{if(!created)return;filters=new Set([created.id]);render();});
+  $('created-link').addEventListener('click',()=>{if(!created)return;filters=new Set([created.id]);if(managerMode==='add'){manager=null;managerMode=null;}render();});
   $('search').addEventListener('input',renderCards);$('sort').addEventListener('change',renderCards);
   $('toggle-a').addEventListener('click',()=>{unavailable.add('archive');for(const id of selected)if(!title(assets.find(asset=>asset.id===id)))selected.delete(id);render();});
   $('reload').addEventListener('click',()=>{unavailable.clear();render();});
