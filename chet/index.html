@@ -2,377 +2,245 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex">
-  <meta name="color-scheme" content="light">
-  <title>Chet 資產總覽 · Zafkiel 流程展示</title>
+  <title>多庫總覽 — Zafkiel</title>
+  <link rel="icon" href="data:,">
   <style>
-    :root{font-family:system-ui,"Microsoft JhengHei",sans-serif;color:#222c27;background:#f3f2eb;line-height:1.5;--ink:#222c27;--quiet:#58635b;--line:#d7dcd1;--paper:#fffef8;--green:#1b4b3e;--tint:#e5efe7;--warn:#774719;--warn-bg:#f9eddb}
-    *,*::before,*::after{box-sizing:border-box}
-    body{margin:0;min-width:0}
-    button,select,input{font:inherit}
-    button,select{cursor:pointer}
-    button{color:inherit}
-    button:disabled{cursor:default}
-    button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #28816c;outline-offset:3px}
-    [hidden]{display:none!important}
-    .shell{width:min(100% - 64px,1320px);margin-inline:auto}
-    header{border-bottom:1px solid var(--line);background:var(--paper)}
-    .mast{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:70px;padding-block:9px}
-    .brand,.mast-actions,.row,.tagbar,.tools,.bulk,.token-list{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-    .brand{gap:13px;font-size:14px;font-weight:650;letter-spacing:.07em;color:var(--green)}
-    .mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--green);color:white;font-size:20px;line-height:1;font-weight:750;letter-spacing:0}
-    .mode{font-size:12px;color:var(--quiet);font-weight:650}
-    button,.button,select{min-height:38px;border:1px solid var(--line);border-radius:8px;background:var(--paper);padding:7px 12px;font-weight:650;font-size:14px}
-    button:hover:not(:disabled),select:hover{border-color:#829689;background:#f1f6ef}
-    button.primary{background:var(--green);border-color:var(--green);color:#fff}
-    button.primary:hover{background:#286052;border-color:#286052}
-    button.link{padding:0;min-height:30px;border:0;background:transparent;color:var(--green);text-decoration:underline;text-underline-offset:3px}
-    button.link:hover{background:transparent;color:#112f26}
-    .hero{padding-block:42px 26px;display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap}
-    h1,h2,h3,p{margin:0}
-    h1{font-weight:800;font-size:clamp(2.3rem,6vw,4.35rem);line-height:1.08;letter-spacing:-.062em}
-    .intro{margin-top:11px;color:var(--quiet);font-size:15px}
-    .hero-count{color:var(--quiet);font-size:13px;text-align:right;font-variant-numeric:tabular-nums}
-    .hero-count strong{font-size:27px;color:var(--green);display:block;line-height:1.1}
-    .filters{background:var(--paper);border:1px solid var(--line);padding:16px 18px;border-radius:13px;margin-bottom:18px}
-    .filters-head,.section-head,.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-    .filters-head{margin-bottom:12px}
-    .filters-head h2{font-size:14px}
-    .hint{font-size:13px;color:var(--quiet)}
-    .tagbar{gap:8px}
-    .filter{border-radius:99px;font-size:13px;min-height:36px;max-width:100%;overflow-wrap:anywhere}
-    .filter[aria-pressed=true]{background:var(--tint);color:#163d30;border-color:#699080}
-    .filter:disabled{background:#edede8;color:#636b64;border:1px dashed #a9afa5}
-    .dot{display:inline-block;width:8px;height:8px;flex-shrink:0;border-radius:50%;background:#648873;margin-inline-end:6px;vertical-align:.06em}
-    .dot[data-color="1"]{background:#ba794a}.dot[data-color="2"]{background:#6766a1}.dot[data-color="3"]{background:#407d8c}.dot[data-color="4"]{background:#a26a85}
-    .filter:disabled .dot{background:#838b84}
-    .count{font-weight:500;margin-inline-start:5px;color:var(--quiet);font-variant-numeric:tabular-nums}
-    .notice{background:var(--warn-bg);border:1px solid #e4c8a2;color:#653c17;padding:10px 13px;border-radius:8px;margin-top:13px;font-size:13px;overflow-wrap:anywhere}
-    .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(270px,340px);gap:20px;align-items:start}
-    .section-head{min-height:47px;margin-bottom:10px}
-    .section-head h2{font-size:17px}
-    .sort-label{font-size:13px;color:var(--quiet)}
-    .sort-label select{margin-inline-start:5px;color:var(--ink)}
-    .bulk{margin-bottom:10px;padding:10px 12px;border:1px solid #a8bfb1;background:var(--tint);border-radius:9px;font-size:13px}
-    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-    .card{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:12px;min-width:0;padding:13px 14px 12px;display:flex;flex-direction:column;min-height:154px;overflow-wrap:anywhere}
-    .card.active{border-color:#6d9180;box-shadow:inset 0 0 0 1px #6d9180}
-    .card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
-    .kind{font-size:12px;color:var(--quiet);font-weight:650}
-    .check{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--quiet)}
-    input[type=checkbox]{accent-color:var(--green);width:17px;height:17px;margin:3px;cursor:pointer}
-    .asset-title{border:0;padding:0;min-height:30px;overflow-wrap:anywhere;text-align:left;background:none;color:var(--ink);font-size:17px;line-height:1.32;letter-spacing:-.01em;border-radius:4px}
-    .asset-title:hover:not(:disabled){text-decoration:underline;background:none;text-underline-offset:3px}
-    .opinion-line{display:flex;align-items:baseline;gap:5px;font-size:12px;color:var(--quiet);min-width:0;margin-top:3px;overflow-wrap:anywhere}
-    .opinion-line b{color:var(--warn);font-weight:650;flex-shrink:0}
-    .token-list{gap:5px;margin-top:auto;padding-top:9px}
-    .token{font-size:11px;font-weight:630;border-radius:99px;padding:2px 7px;background:#eef0e8;color:#405347;max-width:100%;overflow-wrap:anywhere}
-    .empty{grid-column:1/-1;padding:32px 20px;border:1px dashed #a5b2a5;border-radius:10px;background:#f7f7ef;color:var(--quiet);text-align:center;overflow-wrap:anywhere}
-    .empty strong{display:block;color:var(--ink);margin-bottom:5px}
-    .inspector{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:16px;min-width:0;overflow-wrap:anywhere}
-    .panel-head{gap:8px;flex-wrap:nowrap;align-items:start}
-    .panel-head h2{font-size:18px;line-height:1.35}
-    .subhead{font-size:12px;font-weight:700;color:var(--green);margin-bottom:5px}
-    .panel-body{margin-top:10px;display:grid;grid-template-columns:minmax(0,1fr);gap:13px}
-    .inspector .sort-label{display:grid;gap:5px}
-    .inspector .sort-label select{min-width:0;max-width:100%;margin:0;text-overflow:ellipsis}
-    .panel-body h3{font-size:14px;margin-bottom:6px}
-    .panel-body p{font-size:13px;color:var(--quiet)}
-    .opinion,.member-row{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:7px 0;border-top:1px solid var(--line);min-width:0}
-    .opinion{align-items:start;font-size:13px}
-    .opinion span{color:var(--quiet);font-size:12px;min-width:0;text-align:right}
-    .member-row button,.manager-button{font-size:12px;min-height:32px;padding:4px 8px;flex-shrink:0}
-    .member-row label,.member-row .member-name{font-size:13px;font-weight:650;overflow-wrap:anywhere;min-width:0}
-    .member-row small{font-size:11px;color:var(--quiet);display:block}
-    .member-row button:disabled{color:#6e756e;background:#edede8}
-    .panel-message{font-size:13px;color:var(--green);background:var(--tint);border:1px solid #a8bfb1;border-radius:8px;padding:8px 10px;margin-bottom:8px;overflow-wrap:anywhere}
-    details.scenario{margin:20px 0 36px;color:var(--quiet);font-size:13px}
-    details summary{width:fit-content;cursor:pointer;color:var(--green);font-weight:650}
-    details .row{margin-top:10px}
-    dialog{width:min(calc(100% - 28px),460px);max-height:85vh;border:1px solid var(--line);border-radius:14px;background:var(--paper);color:var(--ink);padding:22px}
-    dialog::backdrop{background:#182a24aa}
-    dialog h2{font-size:21px;margin-bottom:6px}
-    dialog label{display:grid;gap:5px;margin:15px 0;font-size:14px;font-weight:650}
-    dialog input{width:100%;min-height:40px;border:1px solid #9ca99e;border-radius:8px;padding:8px 10px;background:white;color:var(--ink)}
-    dialog .row{justify-content:end}
-    .error{color:#842d24;font-size:13px;margin-bottom:12px}
-    @media(max-width:920px){.shell{width:min(100% - 40px,1320px)}.layout{grid-template-columns:minmax(0,1fr) minmax(240px,300px)}.grid{grid-template-columns:minmax(0,1fr)}}
-    @media(max-width:680px){.shell{width:calc(100% - 28px)}.mast{min-height:58px;gap:8px}.mast-actions{gap:6px}.brand{gap:7px;font-size:12px}.mark{width:28px;height:28px;font-size:17px}.mode{font-size:11px}.hero{padding-block:25px 17px;gap:12px}.hero-count{text-align:left}.hero-count strong{display:inline;margin-right:4px;font-size:19px}.filters{padding:12px}.layout{grid-template-columns:minmax(0,1fr)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.inspector{scroll-margin-top:10px}.card{padding:10px}.asset-title{font-size:16px}}
-    @media(max-width:390px){.grid{grid-template-columns:minmax(0,1fr)}.mast button{font-size:12px;padding:5px 7px}.mast .mode{display:none}.card{min-height:120px}}
+/* web/chet/style.css from 370d35741ab415f8f4dd958ccf69ddff6b3ee417 */
+/* Visual vocabulary from web/entry and web/capture on main. */
+:root{font:15px/1.6 "Segoe UI","Microsoft JhengHei",sans-serif;color-scheme:dark;color:#fff;background:#601818;--panel:#6d1c1c;--card:#ea9999;--muted:#dfbcbc;--gold:#d4af37;--line:#b76969;--hover:#7a2020}
+*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button,a,input,summary{-webkit-tap-highlight-color:transparent}button{border:1px solid transparent;background:transparent;color:inherit;border-radius:4px;cursor:pointer;padding:8px 12px;min-height:42px}button:hover{background:var(--hover)}button:disabled{opacity:.45;cursor:default}button.primary{background:var(--gold);color:#000;border-color:#000;font-weight:700}button.primary:hover:not(:disabled){background:#f0c850}a{color:inherit}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}input{border:1px solid #000;background:var(--card);color:#000;padding:9px 12px;border-radius:4px;min-width:0}input::placeholder{color:#5a1818}input[type=checkbox]{accent-color:var(--gold);width:23px;height:23px;flex-shrink:0;cursor:pointer}h1{font-size:27px;line-height:1.3;margin:4px 0 12px}h1:focus{outline:none}p{margin:0 0 16px}[hidden]{display:none!important}
+header{min-height:66px;background:#000;display:flex;gap:18px;align-items:center;padding:10px 26px}.brand{font-size:21px;font-weight:700;text-decoration:none;white-space:nowrap}.brand span{font:28px Georgia,serif;color:var(--gold);margin-right:8px}.demo-badge{font-size:12px;color:var(--muted);border-left:1px solid #704242;padding-left:18px}.manage-link{margin-left:auto;font-size:13px;color:var(--gold);padding:8px 0}
+.layout{display:grid;grid-template-columns:246px minmax(0,1fr);min-height:calc(100dvh - 66px)}aside{display:flex;flex-direction:column;border-right:1px solid #400a0a;padding:22px 12px 20px 0;min-width:0}nav a{display:flex;align-items:center;gap:10px;padding:12px 18px 12px 24px;text-decoration:none;border-radius:0 26px 26px 0;font-size:14px;overflow-wrap:anywhere}nav a span{margin-left:auto;font-size:11px;color:var(--muted);flex-shrink:0}nav a:hover{background:var(--hover)}nav a[aria-current=page]{background:#8a2828;box-shadow:inset 3px 0 var(--gold)}nav h2{font-size:12px;letter-spacing:.04em;color:var(--muted);padding:20px 16px 4px 24px;margin:0;display:flex;justify-content:space-between}.add-library{color:var(--muted)}.nav-note{font-size:12px;color:var(--muted);padding:8px 20px 0 24px}.sidebar-foot{margin-top:auto;padding:45px 18px 0 24px;font-size:11px;color:var(--muted)}.sidebar-foot p{margin-bottom:6px}.sidebar-foot button{padding-left:0;font-size:12px}
+main{padding:32px clamp(20px,3vw,48px) 60px;min-width:0}#status{color:#ffe19b;font-size:13px;overflow-wrap:anywhere}#status:empty{display:none}.entry-panel{max-width:680px;margin:32px auto;background:var(--panel);border:2px solid #000;border-radius:4px;padding:30px}.eyebrow{font-size:11px;color:var(--gold);letter-spacing:.13em;margin-bottom:7px}.intro{font-size:14px;color:var(--muted);max-width:760px}.entry-panel fieldset{padding:0;border:1px solid #000;border-radius:4px;background:var(--card);color:#000;margin:24px 0 14px}.entry-panel legend{background:#000;color:#fff;padding:4px 12px;font-size:12px;margin-left:14px}.vault-choice{display:flex;gap:14px;padding:18px;cursor:pointer}.vault-choice+.vault-choice{border-top:1px solid #9b5151}.vault-choice:hover{background:#f0aaaa}.vault-choice input{margin:4px 0}.vault-choice strong{display:block}.vault-choice small{display:block;color:#400a0a;overflow-wrap:anywhere}.vault-choice .vault-size{margin-top:7px;font-size:12px}.hint{font-size:12px;color:var(--muted);margin:10px 0 0}.entry-panel .hint{margin-bottom:22px}.demo-note{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:18px;margin:24px 0 0}
+.view-heading{display:flex;gap:18px;align-items:center;justify-content:space-between}.view-heading a{font-size:13px;color:var(--gold);flex-shrink:0}.view-heading h1{overflow-wrap:anywhere}.keep{border:1px solid var(--line);border-top:3px solid #000;background:var(--panel);border-radius:5px;padding:14px 18px;margin:24px 0 20px;max-width:900px}.selection-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:10px}.selection-row button{font-size:12px;padding:4px 8px;min-height:34px}.create-row{display:flex;gap:12px;align-items:center}.create-row label{font-size:13px;white-space:nowrap}.create-row input{flex:1;width:100%}.create-row button{white-space:nowrap}#name-error{color:#ffe19b;font-size:12px;margin:8px 0 0}#name-error:empty{display:none}.created-notice{display:flex;gap:16px;justify-content:space-between;align-items:center;border-left:3px solid var(--gold);background:#400a0a;padding:14px 18px;font-size:13px;overflow-wrap:anywhere}.created-notice a{color:var(--gold);flex-shrink:0}.results-bar{display:flex;align-items:center;gap:16px;justify-content:space-between;margin:20px 0 16px}.results-bar p{font-size:12px;color:var(--muted);margin:0}.search-label{display:flex;gap:10px;align-items:center;font-size:12px;color:var(--muted)}.search-label input{width:190px;font-size:13px;padding:7px 10px}
+.asset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:18px;align-items:start}.asset-card{position:relative;background:var(--card);color:#000;border-top:3px solid #000;border-radius:4px;min-width:0;box-shadow:0 2px 0 #0003}.asset-card:hover,.asset-card:focus-within{box-shadow:0 5px 16px #24050566}.asset-card.selected{outline:3px solid var(--gold);outline-offset:2px}.asset-select{position:absolute;top:10px;left:10px;z-index:1;margin:0}.card-art{width:100%;height:138px;display:block;border-radius:2px 2px 0 0;background:#400a0a}.card-content{padding:14px}.card-content h2{font-size:16px;margin:0 0 5px;font-weight:700}.card-caption{font-size:12px;color:#400a0a;margin-bottom:12px}.chips{display:flex;gap:6px;flex-wrap:wrap;font-size:11px}.chip{border:1px solid #9b5151;border-radius:14px;padding:2px 9px;color:#400a0a}.source-badge{font-size:11px;margin:12px 0 0;color:#400a0a}.shared{font-weight:700}.asset-details{border-top:1px solid #9b5151;margin-top:12px;padding-top:10px;font-size:11px}.asset-details summary{cursor:pointer;min-height:28px;padding:2px 0}.asset-details dl{margin:8px 0 0}.asset-details dt{color:#400a0a;margin-top:8px}.asset-details dd{margin:0;overflow-wrap:anywhere;font-family:Consolas,monospace}.asset-card :focus-visible{outline-color:#000}.empty-results{text-align:center;padding:40px;color:var(--muted)}.identity-note{margin-top:28px;font-size:12px;color:var(--muted);max-width:900px}.identity-note summary{cursor:pointer;padding:8px 0}.identity-note p{margin:8px 0}
+@media(max-width:950px){.layout{grid-template-columns:205px minmax(0,1fr)}main{padding:28px 22px}.create-row{flex-wrap:wrap}.create-row label{width:100%}.create-row input{width:140px}.asset-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}}
+@media(max-width:650px){header{padding:10px 16px;gap:8px;flex-wrap:wrap}.brand{font-size:18px}.demo-badge{font-size:10px;padding-left:10px}.manage-link{font-size:12px}.layout{display:block}aside{border-right:0;border-bottom:2px solid #000;padding:8px 12px 12px}nav{display:flex;gap:6px;flex-wrap:wrap;align-items:center}nav h2{width:100%;padding:8px 8px 0;font-size:11px;justify-content:flex-start;gap:8px}nav a{padding:8px 12px;border-radius:4px;min-height:40px;font-size:12px}#source-links,#collection-links{display:flex;flex-wrap:wrap;gap:4px;max-width:100%}nav a span{margin-left:2px}.nav-note{margin:0;padding:6px 8px;font-size:11px}.sidebar-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 8px 0}.sidebar-foot p{margin:0;font-size:10px}.sidebar-foot p br{display:none}.sidebar-foot button{min-height:32px}main{padding:24px 16px 40px}.entry-panel{margin:0;padding:20px}h1{font-size:24px}.vault-choice{padding:16px 12px}.view-heading{align-items:flex-start;flex-direction:column;gap:0}.view-heading a{margin-bottom:12px}.keep{margin-top:18px;padding:12px}.create-row{gap:8px}.create-row input{width:100%;flex-basis:100%}.create-row button{width:100%}.results-bar{align-items:flex-start;flex-direction:column;gap:10px}.search-label{width:100%}.search-label input{flex:1;width:120px}.asset-grid{grid-template-columns:minmax(0,1fr)}.card-art{height:164px}.created-notice{align-items:flex-start;flex-direction:column;gap:8px}}
+/* Functional prototype paths and text-led cards. */
+.source-input{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin:18px 0}.source-input label{grid-column:1/-1;font-size:12px;color:var(--muted)}.source-input input{width:100%}#open-submit{margin-top:18px}#existing-form{border-top:1px solid var(--line);margin-top:28px;padding-top:18px}#existing-form h2{font-size:18px;margin:0 0 12px}#existing-form label,.destination-label{display:block;font-size:12px;color:var(--muted);margin:14px 0 6px}#existing-path,#destination{width:100%}#existing-submit{margin-top:12px}#destination-preview,.view-heading+p{overflow-wrap:anywhere}.asset-card .card-content{padding:20px 16px}.asset-card:has(.asset-select) .card-content h2{padding-left:30px;min-height:28px}.asset-details dd{white-space:pre-wrap}.asset-issue{font-size:12px;font-weight:700}.created-notice span{min-width:0}.created-notice a{flex-shrink:1}#source-links a,#collection-links a{overflow-wrap:anywhere;min-width:0}#reload{border:1px solid var(--line);font-size:12px}#sample-paths{margin-top:14px;color:var(--gold)}.card-caption{white-space:pre-wrap;overflow-wrap:anywhere}#create-panel{scroll-margin-top:20px}
+
+.asset-reader{border-top:1px solid #9b5151;margin-top:14px;padding-top:10px}.asset-reader summary{cursor:pointer;min-height:32px}.full-body{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}.material-button,.source-actions button{color:#400a0a;border:1px solid #9b5151;margin:6px 0;padding:8px;max-width:100%;overflow-wrap:anywhere}.material-result a{display:block;color:#400a0a;font-size:12px;overflow-wrap:anywhere}.material-preview{display:block;width:100%;max-height:360px;object-fit:contain}.source-actions{display:flex;gap:6px;flex-wrap:wrap}.known-source{border:1px solid var(--line);margin:4px;padding:8px;overflow-wrap:anywhere}#pick-destination,#pick-existing{margin:10px 10px 0 0}#known-sources h2{font-size:15px}.source-input button{min-height:40px}
+/* The demo adds tag filters and membership controls to the existing Chet shell. */
+nav button.tag-filter,nav button.add-library{font:inherit;font-size:14px;display:flex;align-items:center;text-align:left;justify-content:space-between;gap:8px;width:100%;padding:12px 18px 12px 24px;border-radius:0 26px 26px 0;overflow-wrap:anywhere}
+nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px 0 var(--gold)}
+.tag-label{min-width:0}.tag-count{font-size:11px;color:var(--muted);flex-shrink:0}
+.tag-filter:disabled{opacity:.65;border-style:dashed;border-color:var(--line)}
+.manage-link{margin-left:auto}.keep+.keep{margin-top:0}.read-warning:empty{display:none}.read-warning:not(:empty){border-left:3px solid var(--gold);background:#400a0a;padding:10px 14px}
+.view-actions,.result-tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.result-tools select,.manage-select{background:var(--card);border:1px solid #000;border-radius:4px;color:#000;font:inherit;padding:7px;max-width:100%;min-width:0}
+.result-tools select:focus-visible,.manage-select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.asset-reader,.member-controls{border-top:1px solid #9b5151;margin-top:10px;padding-top:8px;font-size:12px}.member-controls summary{cursor:pointer;min-height:30px}
+.asset-card .source-opinions{margin:7px 0 11px;padding-left:9px;border-left:2px solid #9b5151;font-size:12px}.source-opinions p{margin:0 0 3px;overflow-wrap:anywhere}
+.source-opinions strong{color:#400a0a}.card-content h2,.member-row span{overflow-wrap:anywhere}.member-row{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid var(--line);padding:4px 0}.member-row:last-child{border-bottom:0}.member-row span{min-width:0}
+.member-row button{min-height:34px;font-size:12px;flex-shrink:0;border-color:var(--line)}.asset-card .member-row button{border-color:#9b5151}.asset-card .member-row button:hover:not(:disabled){background:#f0aaaa}.tag-status{font-size:12px;margin-top:9px;color:#ffe19b;overflow-wrap:anywhere}
+.asset-card .tag-status{color:#400a0a}.tag-status:empty{display:none}.asset-card .full-body{overflow-wrap:anywhere}.asset-card.missing h2{color:#400a0a}
+.inline-note{margin:10px 0 0}.identity-note button{border-color:var(--line);min-height:36px}.entry-panel li{overflow-wrap:anywhere}.open-samples{display:inline-block;margin-top:8px;background:var(--gold);border:1px solid #000;border-radius:4px;color:#000;padding:9px 14px;font-weight:700;text-decoration:none}
+@media(max-width:650px){#source-links{width:100%}nav button.tag-filter,nav button.add-library{width:auto;min-height:40px;padding:7px 10px;border-radius:4px;font-size:12px;gap:4px}nav button.tag-filter[aria-pressed=true]{box-shadow:inset 0 -2px var(--gold)}.result-tools{width:100%}.result-tools .search-label{min-width:0}.result-tools select{width:auto}.sidebar-foot{padding-top:0}.entry-panel .intro{margin-bottom:12px}}
   </style>
 </head>
 <body>
-  <header>
-    <div class="shell mast">
-      <div class="brand"><span class="mark" aria-hidden="true">C</span><span>ZAFKIEL / CHET</span></div>
-      <div class="mast-actions"><span class="mode">合成資料</span><button id="create-empty" class="primary" type="button">＋ 新建 tag</button></div>
-    </div>
-  </header>
-  <main class="shell">
-    <div class="hero">
-      <div><h1>資產總覽</h1><p class="intro">所有已登記的 tag 組合在同一個 Stage。</p></div>
-      <p class="hero-count" id="stage-count"></p>
-    </div>
-    <section class="filters" aria-labelledby="tag-label">
-      <div class="filters-head"><h2 id="tag-label">依 tag 篩選</h2><span class="hint">選多個 tag 時，資產需同時符合。</span></div>
-      <div id="tagbar" class="tagbar" aria-label="tag 篩選"></div>
-      <p id="read-status" class="notice" role="status" hidden></p>
-    </section>
-    <div class="layout">
-      <section aria-labelledby="results-title">
-        <div class="section-head">
-          <h2 id="results-title">全部資產</h2>
-          <label class="sort-label" for="sort">排序<select id="sort"><option value="asc">Stage 標題 ↑</option><option value="desc">Stage 標題 ↓</option></select></label>
+  <header><a class="brand" href="#/home"><span aria-hidden="true">Z</span> Zafkiel</a><span class="demo-badge">多庫總覽與分類庫</span><a class="manage-link" href="#/open">開啟資產庫</a></header>
+  <div class="layout">
+    <aside><nav aria-label="資產導覽">
+      <a id="home-link" href="#/home">首頁 <span>全部資產</span></a>
+      <h2>庫與 tag</h2><div id="source-links"></div>
+      <button id="create-empty" class="add-library" type="button">＋ 建立空 tag</button>
+      <button id="manage-tags" class="add-library" type="button" aria-controls="tag-manager" aria-expanded="false">管理 tag 成員</button>
+    </nav><div class="sidebar-foot"><p>合成資料 · 重新整理會重設</p></div></aside>
+    <main>
+      <p id="read-status" class="read-warning" role="status"></p>
+      <section id="entry-page" aria-labelledby="entry-title" hidden>
+        <div class="entry-panel"><p class="eyebrow">CHET / 多庫整理</p><h1 id="entry-title" tabindex="-1">開啟資產庫</h1>
+          <p class="intro">一起開啟已登記的庫。相同資產在總覽只顯示一次。</p>
+          <h2>已登記的資產庫</h2><ul id="registered"></ul>
+          <a class="open-samples" href="#/home">開啟多庫總覽</a><p class="demo-note">這份示範只使用合成庫。</p>
         </div>
-        <div id="bulk" class="bulk" hidden><span id="selection-count"></span><button type="button" id="create-selected">從選取建立 tag</button><button type="button" id="clear-selected" class="link">取消選取</button></div>
-        <div id="results" class="grid"></div>
       </section>
-      <div><p id="feedback" class="panel-message" role="status" hidden></p><aside id="inspector" class="inspector" aria-label="檢視與成員管理"></aside></div>
-    </div>
-    <details class="scenario">
-      <summary>模擬情境</summary>
-      <div class="row"><button type="button" id="toggle-a">模擬「影像檔案」離線</button><button type="button" id="reset">重設 demo</button></div>
-      <p class="hint">此頁用合成資料展示操作。重新整理會重設，頁面不讀寫 USD 或本機庫。</p>
-    </details>
-  </main>
-  <dialog id="create-dialog" aria-labelledby="create-title">
-    <form id="create-form">
-      <h2 id="create-title">新建 tag</h2>
-      <p class="hint" id="create-context"></p>
-      <label>名稱<input id="tag-name" maxlength="36" autocomplete="off" required></label>
-      <p id="create-error" class="error" role="alert" hidden></p>
-      <div class="row"><button type="button" id="cancel-create">取消</button><button type="submit" class="primary">建立 tag</button></div>
-    </form>
-  </dialog>
+      <section id="workspace-page" aria-labelledby="view-title">
+        <div class="view-heading"><div><p class="eyebrow">多庫總覽</p><h1 id="view-title" tabindex="-1">首頁</h1></div></div>
+        <p class="intro">選擇旁邊的 tag 篩選資產。選多個時，資產必須同時符合。</p>
+        <div class="view-actions"><button id="reload" type="button">重新讀取來源</button></div>
+        <section class="keep" aria-label="建立 tag"><form id="create-form">
+          <div class="selection-row"><strong id="selection-count" role="status">已選 0 筆</strong><button id="clear-selection" type="button" disabled>清除選取</button></div>
+          <div class="create-row"><label for="collection-name">tag 名稱</label><input id="collection-name" maxlength="36" autocomplete="off" placeholder="例如：旅行" required><button id="create-submit" class="primary" type="submit">建立空 tag</button></div>
+          <p id="create-context" class="hint"></p><p id="name-error" role="alert"></p>
+        </form></section>
+        <div id="created-notice" class="created-notice" role="status" hidden><span id="created-message"></span><button id="created-link" type="button">查看這個 tag →</button></div>
+        <section id="tag-manager" class="keep" aria-labelledby="manage-heading" hidden>
+          <div class="selection-row"><strong id="manage-heading">管理 tag 成員</strong><button id="close-manager" type="button">關閉</button></div>
+          <label for="manage-tag">選擇 tag </label><select id="manage-tag" class="manage-select"></select><div id="manager-rows"></div><p id="manager-status" class="tag-status" role="status"></p>
+        </section>
+        <p id="membership-status" class="tag-status" role="status"></p>
+        <div class="results-bar"><p id="asset-count" role="status"></p><div class="result-tools"><label class="search-label" for="search">搜尋本頁<input id="search" type="search" placeholder="名稱或標籤"></label><label class="search-label" for="sort">排序<select id="sort"><option value="asc">Stage 標題 ↑</option><option value="desc">Stage 標題 ↓</option></select></label></div></div>
+        <div id="assets" class="asset-grid"></div><p id="empty-results" class="empty-results" hidden></p>
+        <details class="identity-note" id="scenario"><summary>模擬情境</summary><p>讓「影像檔案」暫時失聯，再用「重新讀取來源」模擬恢復。</p><button id="toggle-a" type="button">模擬「影像檔案」離線</button> <button id="reset" type="button">重設 demo</button></details>
+      </section>
+      <noscript>請啟用 JavaScript。</noscript>
+    </main>
+  </div>
   <script>
-    'use strict';
-    const assets = [
-      {id:'north',kind:'照片',titles:{archive:'北堤，凌晨五點',coast:'北堤晨霧'}},
-      {id:'tide',kind:'筆記',titles:{archive:'潮位觀測筆記'}},
-      {id:'station',kind:'照片',titles:{archive:'舊測候站'}},
-      {id:'route',kind:'地圖',titles:{coast:'防波堤路線圖'}},
-      {id:'sound',kind:'錄音',titles:{archive:'岸邊環境音',coast:'岸邊環境音'}},
-      {id:'poster',kind:'文件',titles:{picks:'展覽封面提案'}},
-    ];
-    const sourceTags = [
-      {id:'archive',name:'影像檔案',color:0,members:['north','tide','station','sound']},
-      {id:'coast',name:'海岸計畫',color:1,members:['north','route','sound']},
-      {id:'picks',name:'展覽選件',color:2,members:['north','poster']},
-    ];
-    const $ = (id) => document.getElementById(id);
-    const filterBar = $('tagbar');
-    const results = $('results');
-    const inspector = $('inspector');
-    const dialog = $('create-dialog');
-    const collator = new Intl.Collator('zh-Hant');
-    const entities = {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};
-    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => entities[c]);
-    const assetById = new Map(assets.map((asset) => [asset.id, asset]));
-    let tags, changes, selectedTags, selectedAssets, unavailable, panel, nextTag, createMembers;
+  'use strict';
+  const assets = [
+    {id:'north',body:'日出前的北堤。霧把遠處的燈和堤線隔開。',material:'北堤照片.jpg',titles:{archive:'北堤，凌晨五點',coast:'北堤晨霧'}},
+    {id:'tide',body:'記錄漲退潮時間及觀察位置。',material:'潮位.txt',titles:{archive:'潮位觀測筆記'}},
+    {id:'station',body:'舊測候站外牆與海側入口。',material:'測候站.jpg',titles:{archive:'舊測候站'}},
+    {id:'route',body:'從漁港沿岸到防波堤的步行路線。',material:'路線圖.pdf',titles:{coast:'防波堤路線圖'}},
+    {id:'sound',body:'黎明時在岸邊錄下的環境聲。',material:'環境音.wav',titles:{archive:'岸邊環境音',coast:'岸邊環境音'}},
+    {id:'poster',body:'把北堤照片留在封面的版面提案。',material:'封面.pdf',titles:{picks:'展覽封面提案'}},
+  ];
+  const sourceTags = [
+    {id:'archive',name:'影像檔案',members:['north','tide','station','sound']},
+    {id:'coast',name:'海岸計畫',members:['north','route','sound']},
+    {id:'picks',name:'展覽選件',members:['north','poster']},
+  ];
+  const $ = id => document.getElementById(id);
+  const collator = new Intl.Collator('zh-Hant');
+  const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  let tags,changes,filters,selected,unavailable,manager,nextTag,emptyMode,created;
+  const tagById = id => tags.find(tag=>tag.id===id);
+  const hasMember = (tag,id) => changes.get(tag.id)?.get(id) ?? tag.members.includes(id);
+  const memberTags = id => tags.filter(tag=>!unavailable.has(tag.id)&&hasMember(tag,id));
+  const knownAssets = () => assets.filter(asset=>memberTags(asset.id).length);
+  // The fixtures contain direct title opinions in registration order. OpenUSD supplies the resolved title in a real read.
+  const opinions = asset => sourceTags.flatMap(tag=>!unavailable.has(tag.id)&&Object.hasOwn(asset.titles,tag.id)?[{tag,value:asset.titles[tag.id]}]:[]);
+  const title = asset => opinions(asset)[0]?.value ?? '';
+  const displayTitle = asset => title(asset)||'來源無法讀取';
 
-    function reset() {
-      tags = sourceTags.slice();
-      changes = new Map();
-      selectedTags = new Set();
-      selectedAssets = new Set();
-      unavailable = new Set();
-      panel = {type:'asset',id:'north'};
-      nextTag = 1;
-      $('sort').value = 'asc';
-      render();
-    }
-    const tagById = (id) => tags.find((tag) => tag.id === id);
-    function hasMember(tag, id) {
-      const local = changes.get(tag.id);
-      return local?.has(id) ? local.get(id) : tag.members.includes(id);
-    }
-    const memberTags = (id) => tags.filter((tag) => !unavailable.has(tag.id) && hasMember(tag, id));
-    // The fixture models direct title opinions in this known strong-to-weak order.
-    // A real integration reads the resolved title from OpenUSD.
-    const opinions = (asset) => sourceTags.flatMap((tag) =>
-      !unavailable.has(tag.id) && Object.hasOwn(asset.titles, tag.id) ? [{tag,value:asset.titles[tag.id]}] : []);
-    const resolvedTitle = (asset) => opinions(asset)[0]?.value ?? '';
-    const displayTitle = (asset) => resolvedTitle(asset) || '來源暫不可讀';
-    const token = (tag) => `<span class="token">${esc(tag.name)}</span>`;
-    const dot = (tag) => `<span class="dot" data-color="${tag.color}" aria-hidden="true"></span>`;
-    const offlineSelected = () => [...selectedTags].filter((id) => unavailable.has(id));
-    const knownAssets = () => assets.filter((asset) => memberTags(asset.id).length);
-    function feedback(message='') {
-      $('feedback').textContent = message;
-      $('feedback').hidden = !message;
-    }
-
-    function sorted(available) {
-      const order = $('sort').value === 'desc' ? -1 : 1;
-      return available.sort((a,b) => {
-        const left = resolvedTitle(a), right = resolvedTitle(b);
-        if (!left || !right) return Number(!left)-Number(!right) || a.id.localeCompare(b.id);
-        return order*collator.compare(left,right) || a.id.localeCompare(b.id);
-      });
-    }
-    function renderCard(asset) {
-      const items = opinions(asset);
-      const conflict = new Set(items.map((item) => item.value)).size > 1;
-      const active = panel?.type === 'asset' && panel.id === asset.id;
-      return `<article class="card${active ? ' active' : ''}" data-asset-id="${asset.id}">
-        <div class="card-top"><span class="kind">${asset.kind}</span><label class="check"><input type="checkbox" data-action="select" data-id="${asset.id}" aria-label="選取 ${esc(displayTitle(asset))}" ${selectedAssets.has(asset.id) ? 'checked' : ''}>選取</label></div>
-        <h3><button class="asset-title" type="button" data-action="asset" data-id="${asset.id}" aria-pressed="${active}">${esc(displayTitle(asset))}</button></h3>
-        ${conflict ? items.map(({tag,value}) => `<p class="opinion-line"><b>${esc(tag.name)}</b><span>${esc(value)}</span></p>`).join('') : ''}
-        <div class="token-list">${memberTags(asset.id).map(token).join('')}</div>
-      </article>`;
-    }
-    function renderAssetPanel(asset) {
-      const entries = opinions(asset);
-      const conflict = new Set(entries.map((item) => item.value)).size > 1;
-      inspector.innerHTML = `<p class="subhead">資產詳情</p><div class="panel-head"><h2 id="detail-title" tabindex="-1">${esc(displayTitle(asset))}</h2><button class="manager-button" type="button" data-action="manage">管理 tag</button></div>
-        <div class="panel-body">
-          <section><h3>${conflict ? '來源意見' : 'Stage 標題'}</h3>
-          ${entries.length ? entries.map(({tag,value},i) => `<div class="opinion"><strong>${esc(value)}</strong><span>${esc(tag.name)}${i===0 ? ' · 組合值' : ''}</span></div>`).join('') : '<p>目前沒有可讀的來源意見。</p>'}</section>
-          <section><h3>資產的 tag</h3>${tags.map((tag) => {
-            const offline = unavailable.has(tag.id);
-            const member = hasMember(tag,asset.id);
-            return `<div class="member-row"><span class="member-name">${dot(tag)}${esc(tag.name)}${offline ? '<small>暫時無法讀取</small>' : ''}</span><button type="button" data-action="member" data-id="${asset.id}" data-tag="${tag.id}" aria-label="${offline ? '無法管理' : member ? '移出' : '加入'} ${esc(tag.name)}" ${offline ? 'disabled' : ''}>${offline ? '不可用' : member ? '移出' : '加入'}</button></div>`;
-          }).join('')}</section>
-        </div>`;
-    }
-    function renderTagPanel(tag) {
-      const offline = unavailable.has(tag.id);
-      const records = sorted(knownAssets());
-      inspector.innerHTML = `<p class="subhead">tag 成員</p><div class="panel-head"><h2 id="detail-title" tabindex="-1">${esc(tag.name)}</h2><button class="manager-button" type="button" data-action="overview">資產詳情</button></div>
-        <div class="panel-body"><label class="sort-label" for="manage-tag">選擇 tag<select id="manage-tag">${tags.map((item) => `<option value="${item.id}" ${item.id === tag.id ? 'selected' : ''}>${esc(item.name)}${unavailable.has(item.id) ? '（不可用）' : ''}</option>`).join('')}</select></label>
-        ${offline ? '<p>這個 tag 暫時無法讀取，成員目前無法確認。</p>' : `<section><h3>加入或移出資產</h3>${records.map((asset) => {
-          const member = hasMember(tag,asset.id);
-          return `<div class="member-row"><span class="member-name">${esc(displayTitle(asset))}</span><button type="button" data-action="member" data-id="${asset.id}" data-tag="${tag.id}" aria-label="${member ? '移出' : '加入'} ${esc(displayTitle(asset))}">${member ? '移出' : '加入'}</button></div>`;
-        }).join('') || '<p>目前沒有可管理的資產。</p>'}</section>`}</div>`;
-    }
-    function render() {
-      const focused = document.activeElement;
-      const focusKey = focused?.closest('[data-action]');
-      const key = focusKey && [focusKey.dataset.action,focusKey.dataset.id,focusKey.dataset.tag];
-      const known = knownAssets();
-      const offline = offlineSelected();
-      const shown = offline.length ? [] : sorted(known.filter((asset) => [...selectedTags].every((id) => hasMember(tagById(id),asset.id))));
-      const activeTags = [...selectedTags].map((id) => tagById(id).name);
-      const names = [...unavailable].map((id) => tagById(id).name).join('、');
-      $('stage-count').innerHTML = `<strong>${known.length}</strong>${unavailable.size ? '筆可讀 tag 的已知資產' : '筆資產在 Stage 中'}`;
-      $('results-title').textContent = activeTags.length ? `${activeTags.join(' ＋ ')}${offline.length ? ' · 已暫停' : ` · ${shown.length} 筆`}` : '全部資產';
-      filterBar.innerHTML = `<button class="filter" type="button" data-action="filter" data-id="all" aria-pressed="${!selectedTags.size}">全部資產</button>` + tags.map((tag) => {
-        const offline = unavailable.has(tag.id);
-        const total = assets.filter((asset) => hasMember(tag,asset.id)).length;
-        return `<button class="filter" type="button" data-action="filter" data-id="${tag.id}" aria-pressed="${selectedTags.has(tag.id)}" ${offline ? 'disabled aria-describedby="read-status"' : ''}>${dot(tag)}${esc(tag.name)}<span class="count">${offline ? '讀取失敗' : total}</span></button>`;
-      }).join('');
-      $('read-status').hidden = !names;
-      $('read-status').textContent = names ? `${names} 暫時無法讀取。總覽仍可查看，成員與組合值可能不完整。` : '';
-      $('bulk').hidden = !selectedAssets.size;
-      $('selection-count').textContent = `已選取 ${selectedAssets.size} 筆資產`;
-      results.innerHTML = offline.length ? '<div class="empty"><strong>這組篩選已暫停</strong>目前無法確認失聯 tag 的成員。切回「全部資產」或恢復讀取後繼續。</div>' :
-        shown.length ? shown.map(renderCard).join('') : '<div class="empty"><strong>這組篩選沒有符合的已知資產</strong>試著選擇不同的 tag，或返回全部資產。</div>';
-      if(panel?.type==='tag' && tagById(panel.id)) renderTagPanel(tagById(panel.id));
-      else {
-        const asset = known.find((item) => item.id === panel?.id) || shown[0] || known[0];
-        if(asset) renderAssetPanel(asset);
-        else inspector.innerHTML = '<h2 id="detail-title" tabindex="-1">資產詳情</h2><p class="hint">選擇一筆可讀資產查看來源與 tag。</p>';
-      }
-      $('toggle-a').textContent = unavailable.has('archive') ? '恢復「影像檔案」讀取' : '模擬「影像檔案」離線';
-      if(key) [...document.querySelectorAll('[data-action]')].find((item) =>
-        item.dataset.action === key[0] && item.dataset.id === key[1] && item.dataset.tag === key[2])?.focus({preventScroll:true});
-    }
-
-    function openCreate(ids) {
-      createMembers = [...ids];
-      $('create-form').reset();
-      $('create-error').hidden = true;
-      $('create-context').textContent = ids.length ? `建立後會收錄目前選取的 ${ids.length} 筆資產。` : '建立一個空的 tag，之後可以再加入資產。';
-      dialog.showModal();
-      $('tag-name').focus();
-    }
-    function createTag(name, ids) {
-      const tag = {id:`new-${nextTag++}`,name,color:tags.length%5,members:[...ids]};
-      tags.push(tag);
-      panel = {type:'tag',id:tag.id};
-      return tag;
-    }
-    function toggleMember(tag, asset) {
-      if(unavailable.has(tag.id)) return;
-      const member = hasMember(tag,asset.id);
-      if(member && memberTags(asset.id).length===1) {
-        feedback('未移出。本展示保留至少一個可讀 tag。');
-        return;
-      }
-      if(!changes.has(tag.id)) changes.set(tag.id,new Map());
-      changes.get(tag.id).set(asset.id,!member);
-      feedback(`${displayTitle(asset)}已${member ? '從工作環境中的 tag 移出' : '加入 tag'}「${tag.name}」。`);
-      render();
-    }
-    function focusInspector() {
-      const heading = $('detail-title');
-      heading?.focus({preventScroll:true});
-      if(matchMedia('(max-width: 680px)').matches) inspector.scrollIntoView({block:'start'});
-    }
-    document.addEventListener('click',(event) => {
-      const target = event.target.closest('button[data-action]');
-      if(!target || target.disabled) return;
-      const {action,id,tag} = target.dataset;
-      if(action==='filter') {
-        if(id==='all') selectedTags.clear();
-        else if(selectedTags.has(id)) selectedTags.delete(id);
-        else selectedTags.add(id);
-        feedback();
-        render();
-      } else if(action==='asset') {
-        panel = {type:'asset',id};
-        render();
-        focusInspector();
-      } else if(action==='manage') {
-        const next = [...selectedTags].find((entry) => !unavailable.has(entry)) || tags.find((entry) => !unavailable.has(entry.id))?.id;
-        if(next) { panel={type:'tag',id:next}; render(); focusInspector(); }
-      } else if(action==='overview') {
-        panel = {type:'asset',id:'north'};
-        render();
-        focusInspector();
-      } else if(action==='member') toggleMember(tagById(tag),assetById.get(id));
+  function reset() {
+    tags=[...sourceTags];changes=new Map();filters=new Set();selected=new Set();unavailable=new Set();manager=null;created=null;nextTag=1;emptyMode=false;
+    $('search').value='';$('sort').value='asc';$('create-form').reset();$('name-error').textContent='';$('membership-status').textContent='';$('manager-status').textContent='';
+    render();
+  }
+  function sorted(records){
+    const direction=$('sort').value==='desc'?-1:1;
+    return records.sort((a,b)=>{
+      const aa=title(a),bb=title(b);
+      if(!aa||!bb)return Number(!aa)-Number(!bb)||a.id.localeCompare(b.id);
+      return direction*collator.compare(aa,bb)||a.id.localeCompare(b.id);
     });
-    document.addEventListener('change',(event) => {
-      const target = event.target;
-      if(target.id==='sort') render();
-      else if(target.id==='manage-tag') { panel={type:'tag',id:target.value}; render(); $('manage-tag')?.focus(); }
-      else if(target.dataset.action==='select') {
-        if(target.checked) selectedAssets.add(target.dataset.id);
-        else selectedAssets.delete(target.dataset.id);
-        render();
-      }
-    });
-    $('create-empty').addEventListener('click',() => openCreate([]));
-    $('create-selected').addEventListener('click',() => openCreate(selectedAssets));
-    $('cancel-create').addEventListener('click',() => dialog.close());
-    $('clear-selected').addEventListener('click',() => { selectedAssets.clear(); render(); filterBar.querySelector('button')?.focus(); });
-    $('create-form').addEventListener('submit',(event) => {
-      event.preventDefault();
-      const name = $('tag-name').value.trim();
-      const exists = tags.some((tag) => tag.name.toLocaleLowerCase()===name.toLocaleLowerCase());
-      if(!name || exists) {
-        $('create-error').textContent = exists ? '已有同名 tag，請使用其他名稱。' : '請輸入 tag 名稱。';
-        $('create-error').hidden = false;
-        $('tag-name').focus();
-        return;
-      }
-      const created = createTag(name,createMembers);
-      if(createMembers.length) selectedAssets.clear();
-      dialog.close();
-      feedback(`已建立「${created.name}」，收錄 ${created.members.length} 筆資產。`);
-      render();
-      focusInspector();
-    });
-    $('toggle-a').addEventListener('click',() => {
-      if(unavailable.has('archive')) unavailable.delete('archive');
-      else unavailable.add('archive');
-      for(const id of selectedAssets) if(!memberTags(id).length) selectedAssets.delete(id);
-      feedback();
-      render();
-    });
-    $('reset').addEventListener('click',() => { feedback('已重設合成資料。'); reset(); });
-    reset();
+  }
+  function setRoute({focus=false}={}){
+    const open=location.hash==='#/open';
+    $('entry-page').hidden=!open;$('workspace-page').hidden=open;
+    if(focus) $(open?'entry-title':'view-title').focus();
+    render();
+  }
+  function renderNav() {
+    const atHome=location.hash!=='#/open'&&!filters.size;
+    if(atHome)$('home-link').setAttribute('aria-current','page');else $('home-link').removeAttribute('aria-current');
+    $('source-links').innerHTML=tags.map(tag=>{
+      const offline=unavailable.has(tag.id);
+      const count=offline?'讀取失敗':`${assets.filter(asset=>hasMember(tag,asset.id)).length} 筆`;
+      return `<button class="tag-filter" type="button" data-action="filter" data-id="${tag.id}" aria-pressed="${filters.has(tag.id)}" ${offline?'disabled aria-describedby="read-status"':''}><span class="tag-label">${esc(tag.name)}</span><span class="tag-count">${count}</span></button>`;
+    }).join('');
+    $('registered').innerHTML=tags.map(tag=>`<li>${esc(tag.name)}${unavailable.has(tag.id)?'（讀取失敗）':''}</li>`).join('');
+    $('manage-tags').setAttribute('aria-expanded',String(Boolean(manager)));
+  }
+  function memberButton(tag,asset,mode) {
+    const offline=unavailable.has(tag.id),member=hasMember(tag,asset.id),name=mode==='tag'?displayTitle(asset):tag.name;
+    return `<div class="member-row"><span>${esc(name)}${offline?'（暫時無法讀取）':''}</span><button type="button" data-action="member" data-mode="${mode}" data-tag="${tag.id}" data-id="${asset.id}" aria-label="${offline?'無法管理':member?'移出':'加入'} ${esc(name)}" ${offline?'disabled':''}>${offline?'不可用':member?'移出':'加入'}</button></div>`;
+  }
+  function renderManager(){
+    $('tag-manager').hidden=!manager;
+    if(!manager)return;
+    const tag=tagById(manager);
+    $('manage-tag').innerHTML=tags.map(item=>`<option value="${item.id}" ${item.id===manager?'selected':''}>${esc(item.name)}${unavailable.has(item.id)?'（不可用）':''}</option>`).join('');
+    $('manager-rows').innerHTML=unavailable.has(tag.id)?'<p class="hint">暫時無法讀取這個 tag 的成員。</p>':sorted(knownAssets()).map(asset=>memberButton(tag,asset,'tag')).join('');
+  }
+  function renderCard(asset, expanded){
+    const rows=opinions(asset),conflict=new Set(rows.map(item=>item.value)).size>1,tagsForAsset=memberTags(asset.id);
+    return `<article class="asset-card${selected.has(asset.id)?' selected':''}${rows.length?'':' missing'}" data-asset-id="${asset.id}">
+      <input class="asset-select" type="checkbox" data-action="select" data-id="${asset.id}" aria-label="選取 ${esc(displayTitle(asset))}" ${selected.has(asset.id)?'checked':''} ${rows.length?'':'disabled'}>
+      <div class="card-content"><h2>${esc(displayTitle(asset))}</h2><p class="card-caption">${rows.length?esc(asset.body):'已知成員，來源意見暫時無法讀取。'}</p>
+      <div class="chips">${tagsForAsset.map(tag=>`<span class="chip">${esc(tag.name)}</span>`).join('')}</div>
+      <p class="source-badge">${tagsForAsset.length} 個 tag${rows.length?' · 1 個素材':''}</p>
+      ${conflict?`<div class="source-opinions">${rows.map(({tag,value},i)=>`<p><strong>${esc(tag.name)}${i===0?' · 組合值':''}</strong> ${esc(value)}</p>`).join('')}</div>`:''}
+      ${rows.length?`<details class="asset-reader" data-asset-detail="reader" ${expanded.has(asset.id+':reader')?'open':''}><summary>閱讀內容與素材</summary><p class="full-body">${esc(asset.body)}</p><p class="card-caption">${esc(asset.material)}（示意）</p></details>`:''}
+      <details class="member-controls" data-asset-detail="member" ${expanded.has(asset.id+':member')?'open':''}><summary>管理資產的 tag</summary>${tags.map(tag=>memberButton(tag,asset,'asset')).join('')}<p class="tag-status" data-feedback="${asset.id}" role="status"></p></details></div></article>`;
+  }
+  function renderCards(){
+    const invalid=[...filters].some(id=>unavailable.has(id)),q=$('search').value.trim().toLocaleLowerCase();
+    const known=knownAssets();
+    const scoped=invalid?[]:known.filter(asset=>[...filters].every(id=>hasMember(tagById(id),asset.id)));
+    const shown=sorted(scoped.filter(asset=>[displayTitle(asset),...memberTags(asset.id).map(tag=>tag.name)].join(' ').toLocaleLowerCase().includes(q)));
+    const expanded=new Set([...$('assets').querySelectorAll('details[open]')].map(detail=>detail.closest('[data-asset-id]').dataset.assetId+':'+detail.dataset.assetDetail));
+    $('asset-count').textContent=invalid?'篩選已暫停':`${q?`${shown.length} / `:''}${scoped.length} 筆${unavailable.size?'已知':''}資產`;
+    $('assets').innerHTML=shown.map(asset=>renderCard(asset,expanded)).join('');
+    $('empty-results').hidden=Boolean(shown.length);
+    $('empty-results').textContent=invalid?'這組篩選包含暫時無法讀取的 tag。返回首頁可查看已知資產。':'沒有符合的資產。';
+  }
+  function renderCreate(){
+    const count=selected.size,included=emptyMode?0:count;
+    $('selection-count').textContent=`已選 ${count} 筆`;
+    $('clear-selection').disabled=!count;
+    $('create-submit').textContent=included?'從選取建立 tag':'建立空 tag';
+    $('create-context').textContent=included?`建立後會收錄這 ${included} 筆資產。`:'建立空的 tag，之後可加入資產。';
+    $('created-notice').hidden=!created;
+    if(created)$('created-message').textContent=`已建立「${created.name}」· ${created.members.length} 筆。`;
+  }
+  function render(){
+    const focused=document.activeElement?.dataset;
+    const key=focused?.action&&[focused.action,focused.mode,focused.tag,focused.id];
+    renderNav();renderCreate();renderManager();renderCards();
+    $('view-title').textContent=filters.size?[...filters].map(id=>tagById(id).name).join(' ＋ '):'首頁';
+    $('read-status').textContent=unavailable.size?'影像檔案暫時無法讀取。總覽仍可查看，其成員與組合值可能不完整。':'';
+    $('toggle-a').disabled=unavailable.has('archive');
+    if(key)[...document.querySelectorAll('[data-action]')].find(el=>[el.dataset.action,el.dataset.mode,el.dataset.tag,el.dataset.id].every((value,i)=>value===key[i]))?.focus({preventScroll:true});
+  }
+  function setFilter(tag){
+    if(unavailable.has(tag))return;
+    if(filters.has(tag))filters.delete(tag);else filters.add(tag);
+    $('membership-status').textContent='';
+    if(location.hash==='#/open')location.hash='#/home';
+    render();
+  }
+  function toggleMember(tag,asset,mode){
+    if(unavailable.has(tag.id))return;
+    const member=hasMember(tag,asset.id);
+    $('membership-status').textContent='';
+    const announce=message=>{
+      const region=mode==='tag'?$('manager-status'):$('assets').querySelector(`[data-feedback="${asset.id}"]`);
+      (region||$('membership-status')).textContent=message;
+    };
+    if(member&&memberTags(asset.id).length===1){announce('示範保留至少一個可讀 tag。');return;}
+    if(!changes.has(tag.id))changes.set(tag.id,new Map());
+    changes.get(tag.id).set(asset.id,!member);
+    render();announce(`${displayTitle(asset)}已${member?'從工作環境移出':'加入'}「${tag.name}」。`);
+  }
+  document.addEventListener('click',event=>{
+    const button=event.target.closest('button[data-action]');
+    if(!button||button.disabled)return;
+    const {action,id,tag,mode}=button.dataset;
+    if(action==='filter')setFilter(id);
+    if(action==='member')toggleMember(tagById(tag),assets.find(asset=>asset.id===id),mode);
+  });
+  $('assets').addEventListener('change',event=>{
+    const checkbox=event.target.closest('.asset-select');if(!checkbox)return;
+    if(checkbox.checked)selected.add(checkbox.dataset.id);else selected.delete(checkbox.dataset.id);
+    emptyMode=false;checkbox.closest('.asset-card').classList.toggle('selected',checkbox.checked);renderCreate();
+  });
+  $('home-link').addEventListener('click',()=>{filters.clear();$('membership-status').textContent='';render();});
+  $('create-empty').addEventListener('click',()=>{emptyMode=true;render();location.hash='#/home';setRoute();$('collection-name').focus();});
+  $('clear-selection').addEventListener('click',()=>{selected.clear();emptyMode=false;render();});
+  $('manage-tags').addEventListener('click',()=>{manager=[...filters].find(id=>!unavailable.has(id))||sourceTags[0].id;location.hash='#/home';setRoute();$('manage-tag').focus();});
+  $('close-manager').addEventListener('click',()=>{manager=null;$('manager-status').textContent='';render();$('manage-tags').focus();});
+  $('manage-tag').addEventListener('change',event=>{manager=event.target.value;$('manager-status').textContent='';renderManager();});
+  $('create-form').addEventListener('submit',event=>{
+    event.preventDefault();const field=$('collection-name'),name=field.value.trim();
+    const duplicate=tags.some(tag=>tag.name.toLocaleLowerCase()===name.toLocaleLowerCase());
+    if(!name||duplicate){$('name-error').textContent=duplicate?'已有同名 tag。':'請輸入 tag 名稱。';field.focus();return;}
+    const members=emptyMode?[]:[...selected];
+    created={id:`new-${nextTag++}`,name,members};tags.push(created);
+    if(!emptyMode)selected.clear();emptyMode=false;field.value='';$('name-error').textContent='';render();$('created-link').focus();
+  });
+  $('created-link').addEventListener('click',()=>{if(!created)return;filters=new Set([created.id]);render();});
+  $('search').addEventListener('input',renderCards);$('sort').addEventListener('change',renderCards);
+  $('toggle-a').addEventListener('click',()=>{unavailable.add('archive');for(const id of selected)if(!title(assets.find(asset=>asset.id===id)))selected.delete(id);render();});
+  $('reload').addEventListener('click',()=>{unavailable.clear();render();});
+  $('reset').addEventListener('click',reset);
+  window.addEventListener('hashchange',()=>setRoute());
+  reset();setRoute();
   </script>
 </body>
 </html>
