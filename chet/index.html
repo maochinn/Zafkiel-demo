@@ -40,6 +40,7 @@ main{padding:32px clamp(20px,3vw,48px) 60px;min-width:0}#status{color:#ffe19b;fo
 #composer.keep{max-width:600px;margin:0 auto 25px;padding:0}#composer .capture-line{display:flex;width:100%;justify-content:space-between;text-align:left;padding:13px 18px;color:var(--muted)}#expanded{padding:14px 16px 10px}#expanded input,#expanded textarea{background:transparent;color:#fff;border:0;padding:4px 0;width:100%;font:inherit}#expanded input{font-weight:700}#expanded textarea{min-height:100px;resize:vertical}#expanded input::placeholder,#expanded textarea::placeholder{color:var(--muted)}.note-toolbar{display:flex;justify-content:end;gap:8px}#chet-tools{margin:16px 0;color:var(--muted)}#chet-tools summary{cursor:pointer;font-size:13px}#chet-tools .keep{color:white}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 @media(max-width:650px){#workspace-shell header #search{order:5;width:100%;flex-basis:100%}#workspace-shell header .manage-link{margin-left:auto}#workspace-shell header #new{min-width:32px;padding:0 5px}#launcher .entry-main{padding-top:20px}}
+.tag-chip{color:inherit;border:1px solid var(--line);border-radius:20px;padding:3px 10px;min-height:31px;font-size:12px}.tag-chip:hover{background:var(--hover)}.asset-card .tag-chip{color:#400a0a;border-color:#9b5151}.asset-card .tag-chip:hover{background:#f0aaaa}.tag-chip span{margin-left:6px;font-size:11px;opacity:.8}#active-tags{margin:0 0 12px}#active-tags:empty{display:none}#note-tags .chip{color:var(--muted)}#new-tag-dialog .create-row{flex-wrap:wrap}#new-tag-dialog .create-row input{width:auto;min-width:120px}#source-links:empty{display:none}
 /* The demo adds tag filters and membership controls to the existing Chet shell. */
 nav button.tag-filter,nav button.add-library{font:inherit;font-size:14px;display:flex;align-items:center;text-align:left;justify-content:space-between;gap:8px;width:100%;padding:12px 18px 12px 24px;border-radius:0 26px 26px 0;overflow-wrap:anywhere}
 nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px 0 var(--gold)}
@@ -77,27 +78,20 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   <div class="layout">
     <aside><nav aria-label="資產導覽">
       <a id="home-link" href="#/home">首頁 <span>全部資產</span></a>
-      <h2>庫與 tag</h2><div id="source-links"></div>
+      <h2>相關 tag</h2><div id="source-links"></div>
       <button id="create-empty" class="add-library" type="button">＋ 建立空 tag</button>
-      <button id="manage-tags" class="add-library" type="button" aria-controls="tag-manager" aria-expanded="false">管理 tag 成員</button>
+      <button id="show-tags" class="add-library" type="button">所有 tag</button>
     </nav><div class="sidebar-foot"><p>合成資料 · 重新整理會重設</p></div></aside>
     <main>
       <p id="read-status" class="read-warning" role="status"></p>
+      <section id="tag-directory" hidden aria-labelledby="directory-title"><p class="eyebrow">標籤目錄</p><h1 id="directory-title" tabindex="-1">所有 tag</h1><div id="directory-tags" class="chips"></div></section>
       <section id="workspace-page" aria-labelledby="view-title">
-        <article id="composer" class="keep" aria-label="新增記事"><button id="open" class="capture-line" type="button" aria-controls="expanded" aria-expanded="false">寫記事…<span aria-hidden="true">▧</span></button><form id="expanded" hidden><label class="sr-only" for="note-title">標題</label><input id="note-title" placeholder="標題" maxlength="200"><label class="sr-only" for="note-body">正文</label><textarea id="note-body" placeholder="輸入記事內容…"></textarea><div class="note-toolbar"><button id="cancel-note" type="button">取消</button><button id="complete" type="submit">關閉</button></div></form></article>
+        <article id="composer" class="keep" aria-label="新增記事"><button id="open" class="capture-line" type="button" aria-controls="expanded" aria-expanded="false">寫記事…<span aria-hidden="true">▧</span></button><form id="expanded" hidden><label class="sr-only" for="note-title">標題</label><input id="note-title" placeholder="標題" maxlength="200"><label class="sr-only" for="note-body">正文</label><textarea id="note-body" placeholder="輸入記事內容…"></textarea><div id="note-tags" class="chips" aria-label="記事將加入的 tag"></div><p id="note-status" class="hint" role="status"></p><div class="note-toolbar"><button id="cancel-note" type="button">取消</button><button id="complete" type="submit">關閉</button></div></form></article>
         <div class="view-heading"><div><p class="eyebrow">多庫總覽</p><h1 id="view-title" tabindex="-1">首頁</h1></div></div>
-        <p class="intro">選擇旁邊的 tag 篩選資產。選多個時，資產必須同時符合。</p>
+        <div id="active-tags" class="chips" aria-label="已選 tag"></div>
         <div class="view-actions"><button id="reload" type="button">重新讀取來源</button><button id="add-to-tag" class="primary" type="button" aria-controls="tag-manager" aria-expanded="false" hidden>加入資產</button></div>
-        <details id="chet-tools"><summary>建立分類庫（tag）</summary>
-        <section class="keep" aria-label="建立 tag"><form id="create-form">
-          <div class="selection-row"><strong id="selection-count" role="status">已選 0 筆</strong><button id="clear-selection" type="button" disabled>清除選取</button></div>
-          <div class="create-row"><label for="collection-name">tag 名稱</label><input id="collection-name" maxlength="36" autocomplete="off" placeholder="例如：旅行" required><button id="create-submit" class="primary" type="submit">建立空 tag</button></div>
-          <p id="create-context" class="hint"></p><p id="name-error" role="alert"></p>
-        </form></section>
-        <div id="created-notice" class="created-notice" role="status" hidden><span id="created-message"></span><button id="created-link" type="button">查看這個 tag →</button></div>
-        </details>
         <section id="tag-manager" class="keep" aria-labelledby="manage-heading" hidden>
-          <div class="selection-row"><strong id="manage-heading">管理 tag 成員</strong><button id="close-manager" type="button">關閉</button></div>
+          <div class="selection-row"><strong id="manage-heading">加入既有資產</strong><button id="close-manager" type="button">關閉</button></div>
           <label for="manage-tag">目標 tag </label><select id="manage-tag" class="manage-select"></select><div id="manager-rows"></div><p id="manager-status" class="tag-status" role="status"></p>
         </section>
         <p id="membership-status" class="tag-status" role="status"></p>
@@ -109,6 +103,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     </main>
   </div>
   </div>
+  <dialog id="new-tag-dialog" class="reader-dialog" aria-labelledby="new-tag-heading"><h2 id="new-tag-heading">建立空 tag</h2><form id="create-form"><div class="create-row"><label for="collection-name">tag 名稱</label><input id="collection-name" maxlength="36" autocomplete="off" required><button class="primary" type="submit">建立並開啟</button><button id="cancel-tag" type="button">取消</button></div><p id="name-error" role="alert"></p></form></dialog>
   <dialog id="asset-page" class="reader-dialog" aria-labelledby="reader-title">
     <div class="reader-controls"><p id="reader-context" class="eyebrow"></p><button id="close-asset" type="button" aria-label="關閉資產" title="關閉資產">×</button></div>
     <h2 id="reader-title" tabindex="-1"></h2><div class="chips" id="reader-tags"></div>
@@ -133,7 +128,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   const $ = id => document.getElementById(id);
   const collator = new Intl.Collator('zh-Hant');
   const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let assets,tags,changes,filters,selected,unavailable,manager,managerMode,nextTag,emptyMode,created,noteSequence;
+  let assets,tags,changes,filters,unavailable,manager,managerMode,nextTag,noteSequence,directory;
   const tagById = id => tags.find(tag=>tag.id===id);
   const hasMember = (tag,id) => changes.get(tag.id)?.get(id) ?? tag.members.includes(id);
   const memberTags = id => tags.filter(tag=>!unavailable.has(tag.id)&&hasMember(tag,id));
@@ -144,8 +139,8 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   const displayTitle = asset => title(asset)||'來源無法讀取';
 
   function reset() {
-    assets=[...fixtures];tags=[...sourceTags];changes=new Map();filters=new Set();selected=new Set();unavailable=new Set();manager=null;managerMode=null;created=null;nextTag=1;noteSequence=0;emptyMode=false;
-    resetNote();$('chet-tools').open=false;
+    assets=[...fixtures];tags=[...sourceTags];changes=new Map();filters=new Set();unavailable=new Set();manager=null;managerMode=null;nextTag=1;noteSequence=0;directory=false;
+    resetNote();
     $('search').value='';$('sort').value='asc';$('create-form').reset();$('name-error').textContent='';$('membership-status').textContent='';$('manager-status').textContent='';
     render();
   }
@@ -159,19 +154,22 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   }
   function setRoute({focus=false}={}){
     const open=location.hash!=='#/home';
-    $('launcher').hidden=!open;$('workspace-shell').hidden=open;$('workspace-page').hidden=open;
+    $('launcher').hidden=!open;$('workspace-shell').hidden=open;$('workspace-page').hidden=open||directory;$('tag-directory').hidden=open||!directory;
     if(focus) $(open?'entry-title':'view-title').focus();
     render();
   }
-  function renderNav() {
-    const atHome=location.hash==='#/home'&&!filters.size;
+  function renderNav(shown){
+    const atHome=location.hash==='#/home'&&!directory&&!filters.size;
     if(atHome)$('home-link').setAttribute('aria-current','page');else $('home-link').removeAttribute('aria-current');
-    $('source-links').innerHTML=tags.map(tag=>{
-      const offline=unavailable.has(tag.id);
-      const count=offline?'讀取失敗':`${assets.filter(asset=>hasMember(tag,asset.id)).length} 筆`;
-      return `<button class="tag-filter" type="button" data-action="filter" data-id="${tag.id}" aria-pressed="${filters.has(tag.id)}" ${offline?'disabled aria-describedby="read-status"':''}><span class="tag-label">${esc(tag.name)}</span><span class="tag-count">${count}</span></button>`;
+    const counts=new Map();
+    for(const asset of shown)for(const tag of memberTags(asset.id))counts.set(tag.id,(counts.get(tag.id)||0)+1);
+    $('source-links').innerHTML=tags.filter(tag=>counts.has(tag.id)).map(tag=>`<button class="tag-filter" type="button" data-action="filter" data-id="${tag.id}" aria-pressed="${filters.has(tag.id)}"><span class="tag-label">${esc(tag.name)}</span><span class="tag-count">${counts.get(tag.id)} 筆</span></button>`).join('');
+    $('active-tags').innerHTML=[...filters].map(id=>{
+      const tag=tagById(id);
+      return `<button class="tag-chip" type="button" data-action="filter" data-id="${id}" aria-label="移除篩選 ${esc(tag.name)}">${esc(tag.name)}${unavailable.has(id)?'（讀取失敗）':''} ×</button>`;
     }).join('');
-    $('manage-tags').setAttribute('aria-expanded',String(managerMode==='members'));
+    $('note-tags').innerHTML=[...filters].map(id=>`<span class="chip">${esc(tagById(id).name)}</span>`).join('');
+    if(directory)$('directory-tags').innerHTML=tags.map(tag=>`<button class="tag-chip" type="button" data-action="open-tag" data-id="${tag.id}" ${unavailable.has(tag.id)?'disabled':''}>${esc(tag.name)} <span>${unavailable.has(tag.id)?'讀取失敗':assets.filter(asset=>hasMember(tag,asset.id)).length}</span></button>`).join('');
     $('add-to-tag').hidden=![...filters].some(id=>!unavailable.has(id));
     $('add-to-tag').setAttribute('aria-expanded',String(managerMode==='add'));
   }
@@ -183,26 +181,23 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   function renderManager(){
     $('tag-manager').hidden=!managerMode;
     if(!managerMode)return;
-    const adding=managerMode==='add',tag=tagById(manager);
-    const choices=adding?tags.filter(item=>filters.has(item.id)):tags;
-    $('manage-heading').textContent=adding?'加入既有資產':'管理 tag 成員';
-    $('manage-tag').innerHTML=(adding?'<option value="" disabled>請選擇一個目標 tag</option>':'')+choices.map(item=>`<option value="${item.id}" ${adding&&unavailable.has(item.id)?'disabled':''}>${esc(item.name)}${unavailable.has(item.id)?'（不可用）':''}</option>`).join('');
+    const tag=tagById(manager),choices=tags.filter(item=>filters.has(item.id));
+    $('manage-tag').innerHTML='<option value="" disabled>請選擇一個目標 tag</option>'+choices.map(item=>`<option value="${item.id}" ${unavailable.has(item.id)?'disabled':''}>${esc(item.name)}${unavailable.has(item.id)?'（不可用）':''}</option>`).join('');
     $('manage-tag').value=manager||'';
     let content;
     if(!tag)content='<p class="hint">請先指定一個要加入資產的 tag。</p>';
     else if(unavailable.has(tag.id))content='<p class="hint">暫時無法讀取這個 tag 的成員。</p>';
     else {
-      const candidates=sorted(knownAssets().filter(asset=>!adding||(!hasMember(tag,asset.id)&&title(asset))));
-      content=(adding?'<p class="hint">可從其他已登記的 tag 加入現有資產。</p>':'')+(candidates.map(asset=>memberButton(tag,asset,adding?'add':'tag')).join('')||'<p class="hint">沒有可加入的資產。</p>');
+      const candidates=sorted(knownAssets().filter(asset=>!hasMember(tag,asset.id)&&title(asset)));
+      content='<p class="hint">選擇工作庫中的既有資產。</p>'+(candidates.map(asset=>memberButton(tag,asset,'add')).join('')||'<p class="hint">沒有可加入的資產。</p>');
     }
     $('manager-rows').innerHTML=content;
   }
   function renderCard(asset, expanded){
     const rows=opinions(asset),conflict=new Set(rows.map(item=>item.value)).size>1,tagsForAsset=memberTags(asset.id);
-    return `<article class="asset-card${selected.has(asset.id)?' selected':''}${rows.length?'':' missing'}" data-asset-id="${asset.id}">
-      <input class="asset-select" type="checkbox" data-action="select" data-id="${asset.id}" aria-label="選取 ${esc(displayTitle(asset))}" ${selected.has(asset.id)?'checked':''} ${rows.length?'':'disabled'}>
+    return `<article class="asset-card${rows.length?'':' missing'}" data-asset-id="${asset.id}">
       <div class="card-content"><h2><button class="asset-open" type="button" data-action="open-asset" data-id="${asset.id}" aria-label="開啟 ${esc(displayTitle(asset))}">${esc(displayTitle(asset))}</button></h2><p class="card-caption">${rows.length?esc(asset.body):'已知成員，來源意見暫時無法讀取。'}</p>
-      <div class="chips">${tagsForAsset.map(tag=>`<span class="chip">${esc(tag.name)}</span>`).join('')}</div>
+      <div class="chips">${tagsForAsset.map(tag=>`<button class="tag-chip" type="button" data-action="open-tag" data-id="${tag.id}">${esc(tag.name)}</button>`).join('')}</div>
       <p class="source-badge">${tagsForAsset.length} 個 tag${rows.length&&asset.material?' · 1 個素材':''}</p>
       ${conflict?`<div class="source-opinions">${rows.map(({tag,value},i)=>`<p><strong>${esc(tag.name)}${i===0?' · 組合值':''}</strong> ${esc(value)}</p>`).join('')}</div>`:''}
       ${rows.length?`<details class="asset-reader" data-asset-detail="reader" ${expanded.has(asset.id+':reader')?'open':''}><summary>閱讀內容與素材</summary><p class="full-body">${esc(asset.body)}</p>${asset.material?`<p class="card-caption">${esc(asset.material)}（示意）</p>`:''}</details>`:''}
@@ -231,28 +226,22 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     $('asset-count').textContent=invalid?'篩選已暫停':`${q?`${shown.length} / `:''}${scoped.length} 筆${unavailable.size?'已知':''}資產`;
     $('assets').innerHTML=shown.map(asset=>renderCard(asset,expanded)).join('');
     $('empty-results').hidden=Boolean(shown.length);
-    $('empty-results').textContent=invalid?'這組篩選包含暫時無法讀取的 tag。返回首頁可查看已知資產。':'沒有符合的資產。';
-  }
-  function renderCreate(){
-    const count=selected.size,included=emptyMode?0:count;
-    $('selection-count').textContent=`已選 ${count} 筆`;
-    $('clear-selection').disabled=!count;
-    $('create-submit').textContent=included?'從選取建立 tag':'建立空 tag';
-    $('create-context').textContent=included?`建立後會收錄這 ${included} 筆資產。`:'建立空的 tag，之後可加入資產。';
-    $('created-notice').hidden=!created;
-    if(created)$('created-message').textContent=`已建立「${created.name}」· ${created.members.length} 筆。`;
+    $('empty-results').textContent=invalid?'這組篩選包含暫時無法讀取的 tag。返回首頁可查看已知資產。':(filters.size===1&&!q?'這個 tag 目前沒有資產。可以寫記事，或加入既有資產。':'沒有符合的資產。');
+    return shown;
   }
   function render(){
     const focused=document.activeElement?.dataset;
     const key=focused?.action&&[focused.action,focused.mode,focused.tag,focused.id];
-    renderNav();renderCreate();renderManager();renderCards();
+    renderNav(renderCards());renderManager();
+    if(location.hash==='#/home'){$('workspace-page').hidden=directory;$('tag-directory').hidden=!directory;}
     $('view-title').textContent=filters.size?[...filters].map(id=>tagById(id).name).join(' ＋ '):'首頁';
     $('read-status').textContent=unavailable.size?'影像檔案暫時無法讀取。總覽仍可查看，其成員與組合值可能不完整。':'';
     $('toggle-a').disabled=unavailable.has('archive');
     if(key)[...document.querySelectorAll('[data-action]')].find(el=>[el.dataset.action,el.dataset.mode,el.dataset.tag,el.dataset.id].every((value,i)=>value===key[i]))?.focus({preventScroll:true});
   }
   function setFilter(tag){
-    if(unavailable.has(tag))return;
+    if(unavailable.has(tag)&&!filters.has(tag))return;
+    directory=false;
     if(filters.has(tag))filters.delete(tag);else filters.add(tag);
     $('membership-status').textContent='';
     if(managerMode==='add'){manager=null;managerMode=null;}
@@ -279,40 +268,42 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     if(!button||button.disabled)return;
     const {action,id,tag,mode}=button.dataset;
     if(action==='filter')setFilter(id);
+    if(action==='open-tag')openTag(id);
     if(action==='member')toggleMember(tagById(tag),assets.find(asset=>asset.id===id),mode);
     if(action==='open-asset')openAsset(assets.find(asset=>asset.id===id),tag);
   });
-  $('assets').addEventListener('change',event=>{
-    const checkbox=event.target.closest('.asset-select');if(!checkbox)return;
-    if(checkbox.checked)selected.add(checkbox.dataset.id);else selected.delete(checkbox.dataset.id);
-    if(checkbox.checked)$('chet-tools').open=true;
-    emptyMode=false;checkbox.closest('.asset-card').classList.toggle('selected',checkbox.checked);renderCreate();
-  });
-  $('home-link').addEventListener('click',()=>{filters.clear();if(managerMode==='add'){manager=null;managerMode=null;}$('membership-status').textContent='';render();});
-  $('create-empty').addEventListener('click',()=>{emptyMode=true;$('chet-tools').open=true;render();$('collection-name').focus();});
-  $('clear-selection').addEventListener('click',()=>{selected.clear();emptyMode=false;render();});
-  function openManager(mode){
-    managerMode=mode;
-    manager=mode==='add'?(filters.size===1?[...filters][0]:null):([ ...filters ].find(id=>!unavailable.has(id))||tags.find(item=>!unavailable.has(item.id))?.id);
+  function openTag(id){
+    directory=false;filters=new Set([id]);manager=null;managerMode=null;$('search').value='';$('membership-status').textContent='';render();$('view-title').focus();
+  }
+  $('home-link').addEventListener('click',()=>{directory=false;filters.clear();manager=null;managerMode=null;$('membership-status').textContent='';render();});
+  $('show-tags').addEventListener('click',()=>{directory=true;render();$('directory-title').focus();});
+  $('create-empty').addEventListener('click',()=>{$('create-form').reset();$('name-error').textContent='';$('new-tag-dialog').showModal();$('collection-name').focus();});
+  $('cancel-tag').addEventListener('click',()=>$('new-tag-dialog').close());
+  function openManager(){
+    managerMode='add';
+    manager=filters.size===1?[...filters][0]:null;
     $('manager-status').textContent='';
     if(location.hash==='#/open')location.hash='#/home';
     setRoute();$('manage-tag').focus();
   }
-  $('manage-tags').addEventListener('click',()=>openManager('members'));
-  $('add-to-tag').addEventListener('click',()=>openManager('add'));
-  $('close-manager').addEventListener('click',()=>{const back=managerMode==='add'?'add-to-tag':'manage-tags';manager=null;managerMode=null;$('manager-status').textContent='';render();($(back).hidden?$('manage-tags'):$(back)).focus();});
+  $('add-to-tag').addEventListener('click',openManager);
+  $('close-manager').addEventListener('click',()=>{manager=null;managerMode=null;$('manager-status').textContent='';render();$('add-to-tag').focus();});
   $('close-asset').addEventListener('click',()=>$('asset-page').close());
-  function showNote(open){$('open').hidden=open;$('open').setAttribute('aria-expanded',String(open));$('expanded').hidden=!open;if(open)$('note-title').focus();}
-  function resetNote(){$('expanded').reset();showNote(false);}
+  function showNote(open){if(open&&directory){directory=false;render();}$('open').hidden=open;$('open').setAttribute('aria-expanded',String(open));$('expanded').hidden=!open;if(open)$('note-title').focus();}
+  function resetNote(){$('expanded').reset();$('note-status').textContent='';showNote(false);}
   $('open').addEventListener('click',()=>showNote(true));$('new').addEventListener('click',()=>showNote(true));
   $('open-vault').addEventListener('submit',event=>{event.preventDefault();location.hash='#/home';});
   $('cancel-note').addEventListener('click',()=>{resetNote();$('open').focus();});
   $('expanded').addEventListener('submit',event=>{
     event.preventDefault();const title=$('note-title').value,body=$('note-body').value;
     if(title.trim()||body.trim()){
-      assets.push({id:`note-${++noteSequence}`,title,body,material:'',local:true});
-      filters.clear();manager=null;managerMode=null;$('search').value='';render();
-      $('membership-status').textContent='已儲存記事到合成工作庫，可從卡片加入 tag。';
+      if([...filters].some(id=>unavailable.has(id))){$('note-status').textContent='選取的 tag 暫時無法讀取。請恢復讀取或移除該篩選後再儲存。';return;}
+      const id=`note-${++noteSequence}`;
+      assets.push({id,title,body,material:'',local:true});
+      for(const tag of filters){if(!changes.has(tag))changes.set(tag,new Map());changes.get(tag).set(id,true);}
+      const names=[...filters].map(tag=>tagById(tag).name).join('、');
+      manager=null;managerMode=null;$('search').value='';render();
+      $('membership-status').textContent=names?'已保存記事並加入 '+names+'。':'已儲存記事到合成工作庫。';
     }
     resetNote();$('open').focus();
   });
@@ -321,13 +312,11 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     event.preventDefault();const field=$('collection-name'),name=field.value.trim();
     const duplicate=tags.some(tag=>tag.name.toLocaleLowerCase()===name.toLocaleLowerCase());
     if(!name||duplicate){$('name-error').textContent=duplicate?'已有同名 tag。':'請輸入 tag 名稱。';field.focus();return;}
-    const members=emptyMode?[]:[...selected];
-    created={id:`new-${nextTag++}`,name,members};tags.push(created);
-    if(!emptyMode)selected.clear();emptyMode=false;field.value='';$('name-error').textContent='';render();$('created-link').focus();
+    const created={id:`new-${nextTag++}`,name,members:[]};tags.push(created);
+    $('new-tag-dialog').close();openTag(created.id);
   });
-  $('created-link').addEventListener('click',()=>{if(!created)return;filters=new Set([created.id]);if(managerMode==='add'){manager=null;managerMode=null;}render();});
-  $('search').addEventListener('input',renderCards);$('sort').addEventListener('change',renderCards);
-  $('toggle-a').addEventListener('click',()=>{unavailable.add('archive');for(const id of selected)if(!title(assets.find(asset=>asset.id===id)))selected.delete(id);render();});
+  $('search').addEventListener('input',()=>{directory=false;render();});$('sort').addEventListener('change',render);
+  $('toggle-a').addEventListener('click',()=>{unavailable.add('archive');render();});
   $('reload').addEventListener('click',()=>{unavailable.clear();render();});
   $('reset').addEventListener('click',reset);
   window.addEventListener('hashchange',()=>setRoute({focus:true}));
