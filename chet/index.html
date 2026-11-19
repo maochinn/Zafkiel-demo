@@ -7,7 +7,6 @@
   <title>多庫總覽 — Zafkiel</title>
   <link rel="icon" href="data:,">
   <style>
-/* web/chet/style.css from 370d35741ab415f8f4dd958ccf69ddff6b3ee417 */
 /* Visual vocabulary from web/entry and web/capture on main. */
 :root{font:15px/1.6 "Segoe UI","Microsoft JhengHei",sans-serif;color-scheme:dark;color:#fff;background:#601818;--panel:#6d1c1c;--card:#ea9999;--muted:#dfbcbc;--gold:#d4af37;--line:#b76969;--hover:#7a2020}
 *{box-sizing:border-box}body{margin:0}button,input{font:inherit}button,a,input,summary{-webkit-tap-highlight-color:transparent}button{border:1px solid transparent;background:transparent;color:inherit;border-radius:4px;cursor:pointer;padding:8px 12px;min-height:42px}button:hover{background:var(--hover)}button:disabled{opacity:.45;cursor:default}button.primary{background:var(--gold);color:#000;border-color:#000;font-weight:700}button.primary:hover:not(:disabled){background:#f0c850}a{color:inherit}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}input{border:1px solid #000;background:var(--card);color:#000;padding:9px 12px;border-radius:4px;min-width:0}input::placeholder{color:#5a1818}input[type=checkbox]{accent-color:var(--gold);width:23px;height:23px;flex-shrink:0;cursor:pointer}h1{font-size:27px;line-height:1.3;margin:4px 0 12px}h1:focus{outline:none}p{margin:0 0 16px}[hidden]{display:none!important}
@@ -22,6 +21,25 @@ main{padding:32px clamp(20px,3vw,48px) 60px;min-width:0}#status{color:#ffe19b;fo
 .source-input{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin:18px 0}.source-input label{grid-column:1/-1;font-size:12px;color:var(--muted)}.source-input input{width:100%}#open-submit{margin-top:18px}#existing-form{border-top:1px solid var(--line);margin-top:28px;padding-top:18px}#existing-form h2{font-size:18px;margin:0 0 12px}#existing-form label,.destination-label{display:block;font-size:12px;color:var(--muted);margin:14px 0 6px}#existing-path,#destination{width:100%}#existing-submit{margin-top:12px}#destination-preview,.view-heading+p{overflow-wrap:anywhere}.asset-card .card-content{padding:20px 16px}.asset-card:has(.asset-select) .card-content h2{padding-left:30px;min-height:28px}.asset-details dd{white-space:pre-wrap}.asset-issue{font-size:12px;font-weight:700}.created-notice span{min-width:0}.created-notice a{flex-shrink:1}#source-links a,#collection-links a{overflow-wrap:anywhere;min-width:0}#reload{border:1px solid var(--line);font-size:12px}#sample-paths{margin-top:14px;color:var(--gold)}.card-caption{white-space:pre-wrap;overflow-wrap:anywhere}#create-panel{scroll-margin-top:20px}
 
 .asset-reader{border-top:1px solid #9b5151;margin-top:14px;padding-top:10px}.asset-reader summary{cursor:pointer;min-height:32px}.full-body{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}.material-button,.source-actions button{color:#400a0a;border:1px solid #9b5151;margin:6px 0;padding:8px;max-width:100%;overflow-wrap:anywhere}.material-result a{display:block;color:#400a0a;font-size:12px;overflow-wrap:anywhere}.material-preview{display:block;width:100%;max-height:360px;object-fit:contain}.source-actions{display:flex;gap:6px;flex-wrap:wrap}.known-source{border:1px solid var(--line);margin:4px;padding:8px;overflow-wrap:anywhere}#pick-destination,#pick-existing{margin:10px 10px 0 0}#known-sources h2{font-size:15px}.source-input button{min-height:40px}
+@scope (#launcher) {
+:root{font:15px/1.5 "Noto Sans TC","Microsoft JhengHei","PingFang TC",system-ui,sans-serif;color:#fff;background:#601818;--bg:#601818;--panel:#6d1c1c;--card:#ea9999;--line:#000;--accent:#000;--accent-hi:#2a0505;--gold:#d4af37;--ink:#fff;--mut:#c09a9a;--mut-card:#400a0a;--chip:#7a2020;--chip-hi:#8a2828}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink)}button,input{font:inherit}button{border:1px solid var(--line);background:var(--chip);color:#fff;border-radius:3px;cursor:pointer;padding:8px 16px;white-space:nowrap}button:hover{background:var(--chip-hi)}button:disabled{opacity:.5;cursor:default}button.primary{background:var(--gold);border-color:#000;color:#000;font-weight:700}button.primary:hover{background:#f0c850}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px}a{color:inherit}
+.entry-layout{min-height:100dvh;display:grid;grid-template-columns:minmax(260px,310px) minmax(0,1fr)}.vault-sidebar{border-right:2px solid var(--line);background:var(--panel);display:flex;flex-direction:column;min-width:0;padding:22px 14px}.brand{font-size:21px;font-weight:900;text-decoration:none;display:flex;align-items:center;gap:10px;padding:0 12px 20px}.brand span{font:28px Georgia,serif;color:var(--gold)}.sidebar-heading{padding:14px 12px 8px;border-top:1px solid var(--line);display:flex;align-items:baseline;gap:8px}.sidebar-heading h2{font-size:13px;font-weight:700;color:var(--mut);margin:0;flex:1}.sidebar-heading span{font-size:12px;color:var(--mut)}.vault-list{overflow:auto;min-height:90px;max-height:calc(100dvh - 190px)}.vault-row{display:flex;align-items:center;gap:5px;border-radius:3px;padding:3px 5px}.vault-row:hover,.vault-row:focus-within{background:var(--chip-hi)}.vault-open{min-width:0;width:100%;border:0;background:none;text-align:left;padding:9px 8px;display:flex;flex-direction:column;white-space:normal}.vault-open:hover{background:none}.vault-title{font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}.vault-path{font-size:11px;color:var(--mut);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}.vault-close{border:0;color:#fff;font-size:12px;padding:5px;align-self:flex-start}.empty-list{padding:12px;color:var(--mut);font-size:13px}.sidebar-note{margin-top:auto;padding:12px;color:var(--mut);font-size:12px}
+.sidebar-note a{color:var(--gold);display:inline-block;margin-top:8px}
+.entry-main{min-width:0;display:grid;place-items:center;padding:40px 28px}.entry-content{width:min(670px,100%)}#status{font-size:13px;color:var(--mut);margin:20px 4px 0;min-height:20px;overflow-wrap:anywhere}#status:empty{min-height:0;margin:0}
+#folder-filter{display:block;width:calc(100% - 28px);margin:0 14px 10px}
+
+#form{border:2px solid var(--line);border-radius:3px;padding:28px;background:var(--panel);box-shadow:0 2px 8px #0003}#form h1{font-size:22px;margin:12px 0 4px;font-weight:900}.form-intro{color:var(--mut);font-size:13px;margin:0 0 22px}.folder-picker{border:1px solid var(--line);border-radius:3px;overflow:hidden;background:var(--card);color:#000}.picker-heading{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #400a0a}.picker-heading h2{font-size:14px;margin:0;font-weight:900}.picker-heading>div{display:flex;gap:4px}.picker-heading button{border:0;padding:5px 8px;font-size:12px;background:#000;color:#fff}.picker-heading button:hover{background:var(--accent-hi)}.folder-picker label{display:block;padding:12px 14px 2px;color:var(--mut-card);font-size:12px}.path-row{display:flex;gap:6px;padding:0 14px 10px}.path-row input{flex:1;min-width:0}.path-row button{padding:6px 10px;background:#000;color:#fff}.path-row button:hover{background:var(--accent-hi)}input{border:1px solid #000;border-radius:3px;padding:8px 10px;background:var(--card);color:#000}input::placeholder{color:var(--mut-card)}#folders{height:194px;overflow:auto;border-top:1px solid #400a0a;border-bottom:1px solid #400a0a;padding:4px}.folder-item{display:block;width:100%;border:0;text-align:left;overflow:hidden;text-overflow:ellipsis;padding:7px 10px;white-space:nowrap;background:transparent;color:#000}.folder-item:hover{background:#f4b4b4}.folder-item::before{content:'▸';color:var(--mut-card);margin-right:10px}.folder-status{min-height:20px;font-size:12px;color:var(--mut-card);padding:5px 14px;margin:0;overflow-wrap:anywhere}.folder-picker .subtle{border:0;margin:0 10px 8px;background:#000;color:#fff;font-size:12px;white-space:normal;text-align:left}.folder-picker .subtle:hover{background:var(--accent-hi)}.selection-note{font-size:12px;color:var(--mut);overflow-wrap:anywhere;min-height:20px;margin:12px 0}.form-actions{display:flex;gap:8px;flex-wrap:wrap}[hidden]{display:none!important}
+@media(max-width:680px){.entry-layout{display:flex;flex-direction:column}.vault-sidebar{border-right:0;border-bottom:2px solid var(--line);padding:10px 14px 8px}.brand{padding:0 4px 6px}.sidebar-heading{padding:6px 4px}.vault-list{max-height:170px;min-height:0}.sidebar-note{display:none}.entry-main{display:block;padding:26px 16px}#form{padding:18px}.picker-heading{flex-wrap:wrap}}
+
+.workspace-link{display:block;margin:16px 0;padding:12px;border:1px solid currentColor;border-radius:6px;color:inherit;text-decoration:none}
+}
+#launcher{--bg:#601818;--line:#000;--mut:#dfbcbc;--mut-card:#400a0a;--chip:#7a2020;--chip-hi:#8a2828;--accent:#000;--accent-hi:#2a0505}
+#launcher .entry-main{padding:28px clamp(16px,5vw,72px)}#launcher .entry-content{width:min(100%,680px)}#launcher .folder-picker{margin-bottom:16px}#launcher .vault-open{text-decoration:none}
+#workspace-shell header{gap:12px}#workspace-shell header .brand{flex-shrink:0}#workspace-shell header #search{margin-right:auto;width:min(700px,50vw);padding:10px 14px}#workspace-shell header #new{min-width:42px;color:var(--gold);font-size:22px}
+#composer.keep{max-width:600px;margin:0 auto 25px;padding:0}#composer .capture-line{display:flex;width:100%;justify-content:space-between;text-align:left;padding:13px 18px;color:var(--muted)}#expanded{padding:14px 16px 10px}#expanded input,#expanded textarea{background:transparent;color:#fff;border:0;padding:4px 0;width:100%;font:inherit}#expanded input{font-weight:700}#expanded textarea{min-height:100px;resize:vertical}#expanded input::placeholder,#expanded textarea::placeholder{color:var(--muted)}.note-toolbar{display:flex;justify-content:end;gap:8px}#chet-tools{margin:16px 0;color:var(--muted)}#chet-tools summary{cursor:pointer;font-size:13px}#chet-tools .keep{color:white}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:650px){#workspace-shell header #search{order:5;width:100%;flex-basis:100%}#workspace-shell header .manage-link{margin-left:auto}#workspace-shell header #new{min-width:32px;padding:0 5px}#launcher .entry-main{padding-top:20px}}
 /* The demo adds tag filters and membership controls to the existing Chet shell. */
 nav button.tag-filter,nav button.add-library{font:inherit;font-size:14px;display:flex;align-items:center;text-align:left;justify-content:space-between;gap:8px;width:100%;padding:12px 18px 12px 24px;border-radius:0 26px 26px 0;overflow-wrap:anywhere}
 nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px 0 var(--gold)}
@@ -50,7 +68,12 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   </style>
 </head>
 <body>
-  <header><a class="brand" href="#/home"><span aria-hidden="true">Z</span> Zafkiel</a><span class="demo-badge">多庫總覽與分類庫</span><a class="manage-link" href="#/open">開啟資產庫</a></header>
+  <div id="launcher"><section id="entry-page" class="entry-layout" aria-labelledby="entry-title">
+    <aside class="vault-sidebar"><a class="brand" href="#/open"><span aria-hidden="true">Z</span> Zafkiel</a><div class="sidebar-heading"><h2>最近使用的資產庫</h2></div><div class="vault-list"><a class="vault-open" href="#/home"><strong class="vault-title">我的資產庫</strong><small class="vault-path">Chet · 合成工作庫</small></a></div></aside>
+    <main class="entry-main"><div class="entry-content"><form id="open-vault"><h1 id="entry-title" tabindex="-1">開啟資產庫</h1><p class="form-intro">Chet · 合成示範資料</p><div class="folder-picker"><div class="picker-heading"><h2>選擇資料夾</h2></div><label for="browse-path">目前位置</label><div class="path-row"><input id="browse-path" value="X:/Samples" readonly></div><p class="folder-status">已選取示範資料夾。</p></div><p class="selection-note">目前選取：我的資產庫</p><div class="form-actions"><button class="primary open-samples" type="submit">開啟資產庫</button></div></form></div></main>
+  </section></div>
+  <div id="workspace-shell" hidden>
+  <header><a class="brand" href="#/home"><span aria-hidden="true">Z</span> Zafkiel</a><label class="sr-only" for="search">搜尋資產</label><input id="search" type="search" placeholder="搜尋" autocomplete="off"><a class="manage-link" href="#/open">我的資產庫</a><button id="new" type="button" aria-label="新增記事" title="新增記事">＋</button></header>
   <div class="layout">
     <aside><nav aria-label="資產導覽">
       <a id="home-link" href="#/home">首頁 <span>全部資產</span></a>
@@ -60,34 +83,31 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     </nav><div class="sidebar-foot"><p>合成資料 · 重新整理會重設</p></div></aside>
     <main>
       <p id="read-status" class="read-warning" role="status"></p>
-      <section id="entry-page" aria-labelledby="entry-title" hidden>
-        <div class="entry-panel"><p class="eyebrow">CHET / 多庫整理</p><h1 id="entry-title" tabindex="-1">開啟資產庫</h1>
-          <p class="intro">一起開啟已登記的庫。相同資產在總覽只顯示一次。</p>
-          <h2>已登記的資產庫</h2><ul id="registered"></ul>
-          <a class="open-samples" href="#/home">開啟多庫總覽</a><p class="demo-note">這份示範只使用合成庫。</p>
-        </div>
-      </section>
       <section id="workspace-page" aria-labelledby="view-title">
+        <article id="composer" class="keep" aria-label="新增記事"><button id="open" class="capture-line" type="button" aria-controls="expanded" aria-expanded="false">寫記事…<span aria-hidden="true">▧</span></button><form id="expanded" hidden><label class="sr-only" for="note-title">標題</label><input id="note-title" placeholder="標題" maxlength="200"><label class="sr-only" for="note-body">正文</label><textarea id="note-body" placeholder="輸入記事內容…"></textarea><div class="note-toolbar"><button id="cancel-note" type="button">取消</button><button id="complete" type="submit">關閉</button></div></form></article>
         <div class="view-heading"><div><p class="eyebrow">多庫總覽</p><h1 id="view-title" tabindex="-1">首頁</h1></div></div>
         <p class="intro">選擇旁邊的 tag 篩選資產。選多個時，資產必須同時符合。</p>
         <div class="view-actions"><button id="reload" type="button">重新讀取來源</button><button id="add-to-tag" class="primary" type="button" aria-controls="tag-manager" aria-expanded="false" hidden>加入資產</button></div>
+        <details id="chet-tools"><summary>建立分類庫（tag）</summary>
         <section class="keep" aria-label="建立 tag"><form id="create-form">
           <div class="selection-row"><strong id="selection-count" role="status">已選 0 筆</strong><button id="clear-selection" type="button" disabled>清除選取</button></div>
           <div class="create-row"><label for="collection-name">tag 名稱</label><input id="collection-name" maxlength="36" autocomplete="off" placeholder="例如：旅行" required><button id="create-submit" class="primary" type="submit">建立空 tag</button></div>
           <p id="create-context" class="hint"></p><p id="name-error" role="alert"></p>
         </form></section>
         <div id="created-notice" class="created-notice" role="status" hidden><span id="created-message"></span><button id="created-link" type="button">查看這個 tag →</button></div>
+        </details>
         <section id="tag-manager" class="keep" aria-labelledby="manage-heading" hidden>
           <div class="selection-row"><strong id="manage-heading">管理 tag 成員</strong><button id="close-manager" type="button">關閉</button></div>
           <label for="manage-tag">目標 tag </label><select id="manage-tag" class="manage-select"></select><div id="manager-rows"></div><p id="manager-status" class="tag-status" role="status"></p>
         </section>
         <p id="membership-status" class="tag-status" role="status"></p>
-        <div class="results-bar"><p id="asset-count" role="status"></p><div class="result-tools"><label class="search-label" for="search">搜尋本頁<input id="search" type="search" placeholder="名稱或標籤"></label><label class="search-label" for="sort">排序<select id="sort"><option value="asc">Stage 標題 ↑</option><option value="desc">Stage 標題 ↓</option></select></label></div></div>
+        <div class="results-bar"><p id="asset-count" role="status"></p><div class="result-tools"><label class="search-label" for="sort">排序<select id="sort"><option value="asc">Stage 標題 ↑</option><option value="desc">Stage 標題 ↓</option></select></label></div></div>
         <div id="assets" class="asset-grid"></div><p id="empty-results" class="empty-results" hidden></p>
         <details class="identity-note" id="scenario"><summary>模擬情境</summary><p>讓「影像檔案」暫時失聯，再用「重新讀取來源」模擬恢復。</p><button id="toggle-a" type="button">模擬「影像檔案」離線</button> <button id="reset" type="button">重設 demo</button></details>
       </section>
       <noscript>請啟用 JavaScript。</noscript>
     </main>
+  </div>
   </div>
   <dialog id="asset-page" class="reader-dialog" aria-labelledby="reader-title">
     <div class="reader-controls"><p id="reader-context" class="eyebrow"></p><button id="close-asset" type="button" aria-label="關閉資產" title="關閉資產">×</button></div>
@@ -97,7 +117,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   </dialog>
   <script>
   'use strict';
-  const assets = [
+  const fixtures = [
     {id:'north',body:'日出前的北堤。霧把遠處的燈和堤線隔開。',material:'北堤照片.jpg',titles:{archive:'北堤，凌晨五點',coast:'北堤晨霧'}},
     {id:'tide',body:'記錄漲退潮時間及觀察位置。',material:'潮位.txt',titles:{archive:'潮位觀測筆記'}},
     {id:'station',body:'舊測候站外牆與海側入口。',material:'測候站.jpg',titles:{archive:'舊測候站'}},
@@ -113,18 +133,19 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   const $ = id => document.getElementById(id);
   const collator = new Intl.Collator('zh-Hant');
   const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let tags,changes,filters,selected,unavailable,manager,managerMode,nextTag,emptyMode,created;
+  let assets,tags,changes,filters,selected,unavailable,manager,managerMode,nextTag,emptyMode,created,noteSequence;
   const tagById = id => tags.find(tag=>tag.id===id);
   const hasMember = (tag,id) => changes.get(tag.id)?.get(id) ?? tag.members.includes(id);
   const memberTags = id => tags.filter(tag=>!unavailable.has(tag.id)&&hasMember(tag,id));
-  const knownAssets = () => assets.filter(asset=>memberTags(asset.id).length);
+  const knownAssets = () => assets.filter(asset=>asset.local||memberTags(asset.id).length);
   // The fixtures contain direct title opinions in registration order. OpenUSD supplies the resolved title in a real read.
-  const opinions = asset => sourceTags.flatMap(tag=>!unavailable.has(tag.id)&&Object.hasOwn(asset.titles,tag.id)?[{tag,value:asset.titles[tag.id]}]:[]);
+  const opinions = asset => asset.local?[{tag:{id:'work',name:'工作庫'},value:asset.title||'（空標題）'}]:sourceTags.flatMap(tag=>!unavailable.has(tag.id)&&Object.hasOwn(asset.titles,tag.id)?[{tag,value:asset.titles[tag.id]}]:[]);
   const title = asset => opinions(asset)[0]?.value ?? '';
   const displayTitle = asset => title(asset)||'來源無法讀取';
 
   function reset() {
-    tags=[...sourceTags];changes=new Map();filters=new Set();selected=new Set();unavailable=new Set();manager=null;managerMode=null;created=null;nextTag=1;emptyMode=false;
+    assets=[...fixtures];tags=[...sourceTags];changes=new Map();filters=new Set();selected=new Set();unavailable=new Set();manager=null;managerMode=null;created=null;nextTag=1;noteSequence=0;emptyMode=false;
+    resetNote();$('chet-tools').open=false;
     $('search').value='';$('sort').value='asc';$('create-form').reset();$('name-error').textContent='';$('membership-status').textContent='';$('manager-status').textContent='';
     render();
   }
@@ -137,20 +158,19 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     });
   }
   function setRoute({focus=false}={}){
-    const open=location.hash==='#/open';
-    $('entry-page').hidden=!open;$('workspace-page').hidden=open;
+    const open=location.hash!=='#/home';
+    $('launcher').hidden=!open;$('workspace-shell').hidden=open;$('workspace-page').hidden=open;
     if(focus) $(open?'entry-title':'view-title').focus();
     render();
   }
   function renderNav() {
-    const atHome=location.hash!=='#/open'&&!filters.size;
+    const atHome=location.hash==='#/home'&&!filters.size;
     if(atHome)$('home-link').setAttribute('aria-current','page');else $('home-link').removeAttribute('aria-current');
     $('source-links').innerHTML=tags.map(tag=>{
       const offline=unavailable.has(tag.id);
       const count=offline?'讀取失敗':`${assets.filter(asset=>hasMember(tag,asset.id)).length} 筆`;
       return `<button class="tag-filter" type="button" data-action="filter" data-id="${tag.id}" aria-pressed="${filters.has(tag.id)}" ${offline?'disabled aria-describedby="read-status"':''}><span class="tag-label">${esc(tag.name)}</span><span class="tag-count">${count}</span></button>`;
     }).join('');
-    $('registered').innerHTML=tags.map(tag=>`<li>${esc(tag.name)}${unavailable.has(tag.id)?'（讀取失敗）':''}</li>`).join('');
     $('manage-tags').setAttribute('aria-expanded',String(managerMode==='members'));
     $('add-to-tag').hidden=![...filters].some(id=>!unavailable.has(id));
     $('add-to-tag').setAttribute('aria-expanded',String(managerMode==='add'));
@@ -183,10 +203,10 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
       <input class="asset-select" type="checkbox" data-action="select" data-id="${asset.id}" aria-label="選取 ${esc(displayTitle(asset))}" ${selected.has(asset.id)?'checked':''} ${rows.length?'':'disabled'}>
       <div class="card-content"><h2><button class="asset-open" type="button" data-action="open-asset" data-id="${asset.id}" aria-label="開啟 ${esc(displayTitle(asset))}">${esc(displayTitle(asset))}</button></h2><p class="card-caption">${rows.length?esc(asset.body):'已知成員，來源意見暫時無法讀取。'}</p>
       <div class="chips">${tagsForAsset.map(tag=>`<span class="chip">${esc(tag.name)}</span>`).join('')}</div>
-      <p class="source-badge">${tagsForAsset.length} 個 tag${rows.length?' · 1 個素材':''}</p>
+      <p class="source-badge">${tagsForAsset.length} 個 tag${rows.length&&asset.material?' · 1 個素材':''}</p>
       ${conflict?`<div class="source-opinions">${rows.map(({tag,value},i)=>`<p><strong>${esc(tag.name)}${i===0?' · 組合值':''}</strong> ${esc(value)}</p>`).join('')}</div>`:''}
-      ${rows.length?`<details class="asset-reader" data-asset-detail="reader" ${expanded.has(asset.id+':reader')?'open':''}><summary>閱讀內容與素材</summary><p class="full-body">${esc(asset.body)}</p><p class="card-caption">${esc(asset.material)}（示意）</p></details>`:''}
-      ${rows.length?`<div class="source-actions">${rows.map(({tag})=>`<button type="button" data-action="open-asset" data-id="${asset.id}" data-tag="${tag.id}">在「${esc(tag.name)}」開啟</button>`).join('')}</div>`:''}
+      ${rows.length?`<details class="asset-reader" data-asset-detail="reader" ${expanded.has(asset.id+':reader')?'open':''}><summary>閱讀內容與素材</summary><p class="full-body">${esc(asset.body)}</p>${asset.material?`<p class="card-caption">${esc(asset.material)}（示意）</p>`:''}</details>`:''}
+      ${rows.length&&!asset.local?`<div class="source-actions">${rows.map(({tag})=>`<button type="button" data-action="open-asset" data-id="${asset.id}" data-tag="${tag.id}">在「${esc(tag.name)}」開啟</button>`).join('')}</div>`:''}
       <details class="member-controls" data-asset-detail="member" ${expanded.has(asset.id+':member')?'open':''}><summary>管理資產的 tag</summary>${tags.map(tag=>memberButton(tag,asset,'asset')).join('')}<p class="tag-status" data-feedback="${asset.id}" role="status"></p></details></div></article>`;
   }
   function openAsset(asset,origin){
@@ -195,7 +215,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     $('reader-title').textContent=source?.value||displayTitle(asset);
     $('reader-tags').innerHTML=memberTags(asset.id).map(tag=>`<span class="chip">${esc(tag.name)}</span>`).join('');
     $('reader-body').textContent=rows.length?asset.body:'目前無法讀取這筆資產的來源內容。';
-    $('reader-preview').hidden=!rows.length;
+    $('reader-preview').hidden=!rows.length||!asset.material;
     $('reader-material').open=false;
     $('reader-material-name').textContent=rows.length?asset.material:'';
     $('reader-file-type').textContent=rows.length?asset.material.split('.').pop().toUpperCase():'';
@@ -206,7 +226,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     const invalid=[...filters].some(id=>unavailable.has(id)),q=$('search').value.trim().toLocaleLowerCase();
     const known=knownAssets();
     const scoped=invalid?[]:known.filter(asset=>[...filters].every(id=>hasMember(tagById(id),asset.id)));
-    const shown=sorted(scoped.filter(asset=>[displayTitle(asset),...memberTags(asset.id).map(tag=>tag.name)].join(' ').toLocaleLowerCase().includes(q)));
+    const shown=sorted(scoped.filter(asset=>[displayTitle(asset),asset.body,...memberTags(asset.id).map(tag=>tag.name)].join(' ').toLocaleLowerCase().includes(q)));
     const expanded=new Set([...$('assets').querySelectorAll('details[open]')].map(detail=>detail.closest('[data-asset-id]').dataset.assetId+':'+detail.dataset.assetDetail));
     $('asset-count').textContent=invalid?'篩選已暫停':`${q?`${shown.length} / `:''}${scoped.length} 筆${unavailable.size?'已知':''}資產`;
     $('assets').innerHTML=shown.map(asset=>renderCard(asset,expanded)).join('');
@@ -248,7 +268,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
       const region=mode==='asset'?$('assets').querySelector(`[data-feedback="${asset.id}"]`):$('manager-status');
       (region||$('membership-status')).textContent=message;
     };
-    if(member&&memberTags(asset.id).length===1){announce('示範保留至少一個可讀 tag。');return;}
+    if(member&&!asset.local&&memberTags(asset.id).length===1){announce('示範保留至少一個可讀 tag。');return;}
     if(!changes.has(tag.id))changes.set(tag.id,new Map());
     changes.get(tag.id).set(asset.id,!member);
     render();announce(`${displayTitle(asset)}已${member?'從工作環境移出':'加入'}「${tag.name}」。`);
@@ -265,10 +285,11 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   $('assets').addEventListener('change',event=>{
     const checkbox=event.target.closest('.asset-select');if(!checkbox)return;
     if(checkbox.checked)selected.add(checkbox.dataset.id);else selected.delete(checkbox.dataset.id);
+    if(checkbox.checked)$('chet-tools').open=true;
     emptyMode=false;checkbox.closest('.asset-card').classList.toggle('selected',checkbox.checked);renderCreate();
   });
   $('home-link').addEventListener('click',()=>{filters.clear();if(managerMode==='add'){manager=null;managerMode=null;}$('membership-status').textContent='';render();});
-  $('create-empty').addEventListener('click',()=>{emptyMode=true;render();location.hash='#/home';setRoute();$('collection-name').focus();});
+  $('create-empty').addEventListener('click',()=>{emptyMode=true;$('chet-tools').open=true;render();$('collection-name').focus();});
   $('clear-selection').addEventListener('click',()=>{selected.clear();emptyMode=false;render();});
   function openManager(mode){
     managerMode=mode;
@@ -281,6 +302,20 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   $('add-to-tag').addEventListener('click',()=>openManager('add'));
   $('close-manager').addEventListener('click',()=>{const back=managerMode==='add'?'add-to-tag':'manage-tags';manager=null;managerMode=null;$('manager-status').textContent='';render();($(back).hidden?$('manage-tags'):$(back)).focus();});
   $('close-asset').addEventListener('click',()=>$('asset-page').close());
+  function showNote(open){$('open').hidden=open;$('open').setAttribute('aria-expanded',String(open));$('expanded').hidden=!open;if(open)$('note-title').focus();}
+  function resetNote(){$('expanded').reset();showNote(false);}
+  $('open').addEventListener('click',()=>showNote(true));$('new').addEventListener('click',()=>showNote(true));
+  $('open-vault').addEventListener('submit',event=>{event.preventDefault();location.hash='#/home';});
+  $('cancel-note').addEventListener('click',()=>{resetNote();$('open').focus();});
+  $('expanded').addEventListener('submit',event=>{
+    event.preventDefault();const title=$('note-title').value,body=$('note-body').value;
+    if(title.trim()||body.trim()){
+      assets.push({id:`note-${++noteSequence}`,title,body,material:'',local:true});
+      filters.clear();manager=null;managerMode=null;$('search').value='';render();
+      $('membership-status').textContent='已儲存記事到合成工作庫，可從卡片加入 tag。';
+    }
+    resetNote();$('open').focus();
+  });
   $('manage-tag').addEventListener('change',event=>{manager=event.target.value;$('manager-status').textContent='';renderManager();});
   $('create-form').addEventListener('submit',event=>{
     event.preventDefault();const field=$('collection-name'),name=field.value.trim();
@@ -295,7 +330,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   $('toggle-a').addEventListener('click',()=>{unavailable.add('archive');for(const id of selected)if(!title(assets.find(asset=>asset.id===id)))selected.delete(id);render();});
   $('reload').addEventListener('click',()=>{unavailable.clear();render();});
   $('reset').addEventListener('click',reset);
-  window.addEventListener('hashchange',()=>setRoute());
+  window.addEventListener('hashchange',()=>setRoute({focus:true}));
   reset();setRoute();
   </script>
 </body>
