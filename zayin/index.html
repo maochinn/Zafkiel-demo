@@ -37,6 +37,13 @@
     .toolbar{margin-top:10px;justify-content:space-between}.toolbar select{width:min(100%,230px)}
     button.primary{background:var(--gold);border-color:#000;color:#000;font-weight:700}
     button.primary:hover{background:#edc750}
+    .save-receipt{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:8px 12px;border-left:3px solid var(--gold);background:#401313;overflow-wrap:anywhere}
+    .save-receipt p{min-width:0}
+    .save-receipt button{color:#ffe19b}
+    .test-tools{margin:30px 0 0;padding:11px 12px;font-size:13px}
+    .test-tools:not([open]){background:transparent;border:0;padding-left:0;color:var(--muted)}
+    .test-tools[open]>summary{margin-bottom:10px}
+    .batch-panel{margin-top:20px;border-top:1px solid var(--line);padding-top:12px}
     .workspace-heading{display:flex;align-items:baseline;gap:12px;margin:0 0 10px;flex-wrap:wrap}
     #library-status:empty{display:none}
     .assets{list-style:none;margin:0 0 18px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:13px}
@@ -57,6 +64,46 @@
     dialog{color:#fff;background:var(--panel);border:1px solid var(--line);border-top:4px solid #000;border-radius:4px;width:min(920px,calc(100% - 24px));padding:16px 22px;overflow-wrap:anywhere}
     dialog::backdrop{background:#000a}.reader-controls{display:flex;justify-content:end}#asset-detail p{margin:9px 0}.reader-body{white-space:pre-wrap}
     @media(max-width:720px){.layout{display:block}aside{border:0;border-bottom:1px solid #400a0a;padding:5px 12px}nav{display:flex;gap:4px}nav a,nav button{width:auto;border-radius:4px;padding:8px 10px}.side-note{display:none}header{padding:8px 12px;gap:8px;flex-wrap:wrap}#search{order:3;width:100%;flex:1 0 100%}.badge{margin-left:auto}}
+    /* Geometry from the rendered capture workspace at 75fd02e. */
+    header{height:64px;padding:0 24px;gap:15px}
+    .brand{margin-right:12px}
+    #search{height:48px;width:min(700px,50vw);padding:12px 18px;border-radius:4px}
+    #search::placeholder{color:#641919}
+    .icon-button{color:var(--muted)}
+    main{display:flex;flex-direction:column;padding:30px 36px 32px}
+    .keep{width:min(100%,600px);border:1px solid var(--line);border-top:3px solid #000;margin-bottom:35px}
+    .capture-line{display:flex;justify-content:space-between;align-items:center;padding:13px 18px;list-style:none;font-weight:500}
+    .capture-line::-webkit-details-marker{display:none}
+    .capture-line span[aria-hidden]{font-size:16px}
+    .keep[open] .capture-line{display:none}
+    .keep form{padding:14px 16px 10px}
+    .keep .field:not(.material-picker) label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+    #title,#body{background:transparent;color:#fff;border:0;border-radius:0;padding:0}
+    #title{height:37px;min-height:0;padding-bottom:12px}
+    #body{display:block;min-height:106px}
+    #title::placeholder,#body::placeholder{color:var(--muted);opacity:1}
+    #title:focus-visible,#body:focus-visible{outline:none;box-shadow:inset 0 -1px #b76969}
+    .toolbar{align-items:center;justify-content:start;gap:5px}
+    .toolbar button[type=submit]{margin-left:auto;font-size:14px;font-weight:650}
+    .toolbar .material-toggle{font-size:18px;min-width:42px}
+    .toolbar .chosen-material{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+    .material-picker{margin-top:7px}
+    .asset-count{margin:0 0 13px;font-size:12px}
+    .assets{grid-template-columns:repeat(auto-fill,minmax(min(100%,235px),1fr));gap:18px}
+    .assets button{min-height:121px;padding:14px 16px;display:flex;flex-direction:column;align-items:flex-start}
+    .card-title{display:block;margin-left:26px;font-size:16px;color:#2a0505}
+    .assets .card-excerpt{display:block;margin-top:9px;font-size:14px;line-height:1.5}
+    .save-receipt{padding:3px 0 3px 10px;margin:0 0 14px;background:none}
+    .save-receipt p{font-size:13px}
+    .save-receipt button{min-height:34px}
+    .test-tools{margin-top:auto;padding-top:10px}
+    .test-tools summary{max-width:max-content}
+    dialog{position:fixed;inset:5vh 0 auto;margin:0 auto;width:min(820px,calc(100% - 24px));min-height:200px;max-height:90dvh;overflow:auto;border-radius:10px;padding:22px 30px}
+    dialog::backdrop{background:#0009;backdrop-filter:blur(1px)}
+    .reader-controls button{font-size:21px}
+    #asset-detail h2{font-size:24px;margin:3px 0 28px}
+    nav a{display:flex;align-items:center;gap:24px;padding-left:24px}.nav-icon{font-size:20px;line-height:1;color:var(--muted)}
+    @media(max-width:720px){header{height:auto;min-height:113px;padding:9px 12px}.brand{margin-right:auto;font-size:16px}#search{height:44px;width:100%;padding:10px}.layout{display:grid;grid-template-columns:72px minmax(0,1fr);min-height:calc(100dvh - 113px)}aside{border-right:1px solid #400a0a;padding:12px 3px 25px 0}nav{display:block}nav a{width:100%;justify-content:center;padding:12px 4px;border-radius:0 26px 26px 0;min-height:50px}.nav-text{display:none}main{padding:22px 14px}.keep{margin-bottom:35px}.assets{grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr))}dialog{padding:12px 16px}}
   </style>
 </head>
 <body>
@@ -69,29 +116,37 @@
   <div class="layout">
     <aside>
       <nav aria-label="資產導覽">
-        <a href="#home" aria-current="page">首頁</a>
-        <button id="open-tools" type="button" aria-controls="demo-tools" aria-expanded="false">保存情境</button>
+        <a href="#home" aria-current="page" aria-label="首頁"><span class="nav-icon" aria-hidden="true">⌂</span><span class="nav-text">首頁</span></a>
       </nav>
       <p class="side-note">示範工作庫 · 旅行資料</p>
     </aside>
     <main id="home">
       <details id="composer" class="keep">
-        <summary class="capture-line">寫記事…</summary>
+        <summary class="capture-line">寫記事…<span aria-hidden="true">▧</span></summary>
         <form id="register">
           <div class="field"><label for="title">標題（可留空）</label><input id="title" type="text" placeholder="標題" maxlength="2000"></div>
           <div class="field"><label for="body">記事內容</label><textarea id="body" placeholder="輸入記事內容…" maxlength="8000"></textarea></div>
-          <div class="toolbar">
-            <div class="field"><label for="material">加入素材（合成）</label><select id="material"><option value="">未加入素材</option><option>照片.jpg</option><option>收據.pdf</option></select></div>
-            <button type="submit" class="primary">關閉</button>
+          <div class="toolbar" aria-label="記事工具列">
+            <button id="material-toggle" class="material-toggle" type="button" aria-label="加入素材" aria-expanded="false" aria-controls="material-picker">▧</button>
+            <span id="chosen-material" class="chosen-material"></span>
+            <button type="submit">關閉並保存</button>
+          </div>
+          <div id="material-picker" class="field material-picker" hidden>
+            <label for="material">加入素材（合成）</label>
+            <select id="material"><option value="">未加入素材</option><option>照片.jpg</option><option>收據.pdf</option></select>
           </div>
           <p id="note-status" class="subtle" role="status"></p>
         </form>
       </details>
-      <div class="workspace-heading"><h1>首頁</h1><p id="asset-count" class="subtle"></p></div>
+      <div id="save-receipt" class="save-receipt" hidden>
+        <p id="save-message" role="status"></p>
+        <button id="read-saved" type="button">開啟記事</button>
+      </div>
+      <h1 class="sr-only">首頁</h1><p id="asset-count" class="subtle asset-count" role="status"></p>
       <p id="library-status" class="subtle" role="status"></p>
       <ul id="assets" class="assets"></ul>
-      <section id="demo-tools" class="tool-panel" aria-labelledby="scenario-heading" hidden>
-        <h2 id="scenario-heading" tabindex="-1">保存情境</h2>
+      <details id="demo-tools" class="tool-panel test-tools">
+        <summary>開發測試工具</summary>
         <p class="subtle">操作只存於本頁記憶體。重新整理會重設；10 KiB 是示意門檻。</p>
         <div class="controls">
           <div class="field"><label for="scenario">保存或讀取情境</label><select id="scenario">
@@ -117,11 +172,12 @@
         </table></div>
         <button id="verify" type="button" disabled>重新核對這批</button>
         <p id="check-status" class="check-status subtle" role="status"></p>
-      </section>
+        </section>
+      </details>
     </main>
   </div>
   <dialog id="reader" aria-label="資產內容">
-    <div class="reader-controls"><form method="dialog"><button type="submit" aria-label="關閉資產">關閉</button></form></div>
+    <div class="reader-controls"><form method="dialog"><button type="submit" aria-label="關閉資產">×</button></form></div>
     <div id="asset-detail" aria-live="polite"></div>
   </dialog>
   <script>
@@ -144,6 +200,7 @@
     let counters;
     let selectedId;
     let batchNote;
+    let lastSavedId;
 
     function node(tag, text, className) {
       const element = document.createElement(tag);
@@ -159,6 +216,9 @@
       counters = {asset: 0, shard: 0};
       selectedId = null;
       batchNote = '';
+      lastSavedId = null;
+      get('save-receipt').hidden = true;
+      get('save-message').textContent = '';
     }
 
     function currentComposition() {
@@ -307,30 +367,33 @@
         [asset.title, asset.body].some(value => value.toLocaleLowerCase().includes(term))) : [];
 
       get('library-status').textContent = assets ? '' : '目前無法開啟工作庫。';
-      get('asset-count').textContent = assets ? shown.length + ' 筆資產' : '';
+      get('asset-count').textContent = assets ? '共 ' + shown.length + ' 筆資產' : '';
       list.replaceChildren();
       if (assets && !shown.length) list.append(node('li', '沒有符合的資產。', 'empty'));
 
       for (const asset of shown) {
         const title = asset.title || '（空標題）';
-        const open = node('button', title);
+        const open = node('button');
         open.type = 'button';
         open.setAttribute('aria-label', '開啟 ' + title + '（' + asset.id + '）');
-        if (asset.body) open.append(node('span', asset.body.slice(0, 70)));
-        open.addEventListener('click', () => {
-          selectedId = asset.id;
-          const selectedRows = batch.filter(row => row.assetId === selectedId);
-          selectedRows.forEach(verifyRow);
-          if (selectedRows.length) batchNote = '核對結果僅更新這次開啟的資產。';
-          renderDetail(currentComposition());
-          get('reader').showModal();
-          renderBatch();
-        });
+        open.append(node('strong', title, 'card-title'));
+        if (asset.body) open.append(node('span', asset.body.slice(0, 70), 'card-excerpt'));
+        open.addEventListener('click', () => openAsset(asset.id));
         const item = node('li');
         item.append(open);
         list.append(item);
       }
       if (get('reader').open) renderDetail(assets);
+    }
+
+    function openAsset(id) {
+      selectedId = id;
+      const selectedRows = batch.filter(row => row.assetId === id);
+      selectedRows.forEach(verifyRow);
+      if (selectedRows.length) batchNote = '核對結果僅更新這次開啟的資產。';
+      renderDetail(currentComposition());
+      get('reader').showModal();
+      renderBatch();
     }
 
     function renderDetail(assets) {
@@ -345,7 +408,7 @@
     }
 
     function renderBatch() {
-      get('batch-panel').hidden = !batch.length || get('demo-tools').hidden;
+      get('batch-panel').hidden = !batch.length || !get('demo-tools').open;
       const table = get('batch');
       table.replaceChildren();
       if (!batch.length) {
@@ -395,17 +458,26 @@
       get('title').focus();
     });
     get('reader').addEventListener('close', () => { selectedId = null; });
-    get('open-tools').addEventListener('click', () => {
-      const tool = get('demo-tools');
-      tool.hidden = !tool.hidden;
-      renderBatch();
-      get('open-tools').setAttribute('aria-expanded', String(!tool.hidden));
-      if (!tool.hidden) {
-        get('scenario-heading').focus();
-        tool.scrollIntoView({block: 'nearest'});
-      }
+    get('demo-tools').addEventListener('toggle', renderBatch);
+    get('read-saved').addEventListener('click', () => {
+      if (lastSavedId) openAsset(lastSavedId);
     });
-    get('composer').addEventListener('toggle', () => { if (get('composer').open) get('title').focus(); });
+    function updateMaterialPicker(open) {
+      get('material-picker').hidden = !open;
+      get('material-toggle').setAttribute('aria-expanded', String(open));
+      get('chosen-material').textContent = get('material').value;
+    }
+
+    get('material-toggle').addEventListener('click', () => {
+      const open = get('material-picker').hidden;
+      updateMaterialPicker(open);
+      if (open) get('material').focus();
+    });
+    get('material').addEventListener('change', () => updateMaterialPicker(true));
+    get('composer').addEventListener('toggle', () => {
+      if (get('composer').open) get('body').focus();
+      else updateMaterialPicker(false);
+    });
     get('run').addEventListener('click', runScenario);
     get('restore').addEventListener('click', () => {
       faults = {entry: false, shard: null, materials: new Set()};
@@ -420,6 +492,7 @@
       resetSimulation();
       get('scenario').selectedIndex = 0;
       get('register').reset();
+      updateMaterialPicker(false);
       get('search').value = '';
       get('note-status').textContent = '';
       get('summary').textContent = '選擇情境後，會從原始工作庫開始示範。';
@@ -429,16 +502,25 @@
     get('register').addEventListener('submit', event => {
       event.preventDefault();
       const title = get('title').value;
-      register(title || '（空標題）', title, 4, 'normal', {
-        body: get('body').value,
-        material: get('material').value
-      });
+      const body = get('body').value;
+      const material = get('material').value;
+      if (!title.trim() && !body.trim() && !material) {
+        event.currentTarget.reset();
+        get('composer').open = false;
+        get('new-note').focus();
+        return;
+      }
+      register(title || '（空標題）', title, 4, 'normal', {body, material});
       const row = batch.at(-1);
       if (row.status === 'verified') {
         event.currentTarget.reset();
         get('composer').open = false;
         get('note-status').textContent = '';
-        get('new-note').focus();
+        get('search').value = '';
+        lastSavedId = row.assetId;
+        get('save-receipt').hidden = false;
+        get('save-message').textContent = title.trim() ? '已保存「' + title + '」' : '已保存這筆記事';
+        get('read-saved').focus();
       } else {
         get('note-status').textContent = row.reason;
       }
