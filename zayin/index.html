@@ -26,7 +26,7 @@
     .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
     h1,h2,h3,p{margin:0}h1{font-size:23px}h2{font-size:18px}h3{font-size:16px}
     .subtle{font-size:13px;color:var(--muted);overflow-wrap:anywhere}
-    .keep,.tool-panel{border:1px solid #000;border-top:3px solid #000;border-radius:5px;background:var(--panel);padding:14px 16px;margin-bottom:18px}
+    .keep{border:1px solid #000;border-top:3px solid #000;border-radius:5px;background:var(--panel);padding:14px 16px;margin-bottom:18px}
     .keep{max-width:600px;margin:0 auto 22px;padding:0;box-shadow:0 2px 6px #0005}
     .capture-line{cursor:pointer;color:var(--muted);padding:12px 16px}
     .keep form{padding:0 16px 12px}
@@ -40,10 +40,6 @@
     .save-receipt{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin:0 0 16px;padding:8px 12px;border-left:3px solid var(--gold);background:#401313;overflow-wrap:anywhere}
     .save-receipt p{min-width:0}
     .save-receipt button{color:#ffe19b}
-    .test-tools{margin:30px 0 0;padding:11px 12px;font-size:13px}
-    .test-tools:not([open]){background:transparent;border:0;padding-left:0;color:var(--muted)}
-    .test-tools[open]>summary{margin-bottom:10px}
-    .batch-panel{margin-top:20px;border-top:1px solid var(--line);padding-top:12px}
     .workspace-heading{display:flex;align-items:baseline;gap:12px;margin:0 0 10px;flex-wrap:wrap}
     #library-status:empty{display:none}
     .assets{list-style:none;margin:0 0 18px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:13px}
@@ -53,13 +49,8 @@
     .assets button:hover,.assets button:focus-visible{background:#f0acac}
     .assets span{display:block;color:#601818;font-size:12px;font-weight:400;margin-top:7px}
     summary{cursor:pointer;font-weight:650}
-    .tool-panel h2{margin:0 0 9px}.tool-panel .summary,.tool-panel .check-status{margin-top:9px}
-    .tool-panel .controls,.tool-panel details{margin-top:10px}
-    .table-wrap{overflow:auto}table{width:100%;table-layout:fixed;border-collapse:collapse;margin:10px 0;font-size:13px}
     th,td{border-bottom:1px solid var(--line);text-align:left;vertical-align:top;padding:8px 5px;overflow-wrap:anywhere}
     th:nth-child(1){width:28%}th:nth-child(2){width:23%}
-    .verified{color:#efedba}.unknown,.unpublished,.not-attempted{color:#ffe19b}
-    .layer-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px}
     .layer{background:var(--hover);border:1px solid var(--line);border-radius:4px;padding:8px}
     dialog{color:#fff;background:var(--panel);border:1px solid var(--line);border-top:4px solid #000;border-radius:4px;width:min(920px,calc(100% - 24px));padding:16px 22px;overflow-wrap:anywhere}
     dialog::backdrop{background:#000a}.reader-controls{display:flex;justify-content:end}#asset-detail p{margin:9px 0}.reader-body{white-space:pre-wrap}
@@ -96,21 +87,57 @@
     .save-receipt{padding:3px 0 3px 10px;margin:0 0 14px;background:none}
     .save-receipt p{font-size:13px}
     .save-receipt button{min-height:34px}
-    .test-tools{margin-top:auto;padding-top:10px}
-    .test-tools summary{max-width:max-content}
     dialog{position:fixed;inset:5vh 0 auto;margin:0 auto;width:min(820px,calc(100% - 24px));min-height:200px;max-height:90dvh;overflow:auto;border-radius:10px;padding:22px 30px}
     dialog::backdrop{background:#0009;backdrop-filter:blur(1px)}
     .reader-controls button{font-size:21px}
     #asset-detail h2{font-size:24px;margin:3px 0 28px}
     nav a{display:flex;align-items:center;gap:24px;padding-left:24px}.nav-icon{font-size:20px;line-height:1;color:var(--muted)}
     @media(max-width:720px){header{height:auto;min-height:113px;padding:9px 12px}.brand{margin-right:auto;font-size:16px}#search{height:44px;width:100%;padding:10px}.layout{display:grid;grid-template-columns:72px minmax(0,1fr);min-height:calc(100dvh - 113px)}aside{border-right:1px solid #400a0a;padding:12px 3px 25px 0}nav{display:block}nav a{width:100%;justify-content:center;padding:12px 4px;border-radius:0 26px 26px 0;min-height:50px}.nav-text{display:none}main{padding:22px 14px}.keep{margin-bottom:35px}.assets{grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr))}dialog{padding:12px 16px}}
+    /* Launcher adapted from web/entry at the feature fork, with a synthetic folder. */
+    .entry-layout{min-height:100dvh;display:grid;grid-template-columns:minmax(260px,310px) minmax(0,1fr)}
+    .vault-sidebar{border-right:2px solid #000;background:var(--panel);padding:22px 14px}
+    .vault-sidebar .brand{display:block;padding:0 12px 20px}
+    .vault-sidebar h2{font-size:13px;color:var(--muted);border-top:1px solid #000;padding:14px 12px 8px}
+    .vault-row{width:100%;text-align:left;font-weight:700}.vault-row small{display:block;font-weight:400;color:var(--muted)}
+    .entry-main{display:grid;place-items:center;padding:40px 28px}
+    #vault-form{width:min(670px,100%);border:2px solid #000;background:var(--panel);padding:28px;border-radius:3px;box-shadow:0 2px 8px #0005}
+    #vault-form h1{margin:6px 0 4px}
+    .folder-picker{margin:18px 0 10px;padding:10px 14px;background:var(--card);border:1px solid #000;color:#400a0a;border-radius:3px}
+    .folder-picker h2{font-size:14px;margin:0 0 7px}
+    .folder-picker p{font-size:12px;margin:0 0 7px}
+    .folder-picker button{width:100%;text-align:left}.folder-picker button:hover,.folder-picker button[aria-pressed=true]{background:#f5b5b5;color:#400a0a}
+    #vault-choice{min-height:1.6em;margin-bottom:8px}
+    .reader-material{margin-top:16px;padding-top:10px;border-top:1px solid var(--line)}
+    .reader-material button{border-color:var(--line)}
+    @media(max-width:680px){.entry-layout{display:flex;flex-direction:column}.vault-sidebar{border:0;border-bottom:2px solid #000;padding:10px 14px 8px}.vault-sidebar .brand{padding:0 4px 6px}.entry-main{display:block;padding:26px 16px}#vault-form{padding:18px}}
   </style>
 </head>
 <body>
+  <div id="launcher" class="entry-layout">
+    <aside class="vault-sidebar" aria-label="資產庫清單">
+      <a class="brand" href="#/open"><span aria-hidden="true">Z</span>Zafkiel</a>
+      <h2>最近使用的資產庫</h2>
+      <button id="recent-vault" class="vault-row" type="button">旅行資料<small>示範資產庫</small></button>
+    </aside>
+    <main class="entry-main">
+      <form id="vault-form" aria-labelledby="entry-title">
+        <h1 id="entry-title" tabindex="-1">開啟資產庫</h1>
+        <p class="subtle">選擇資料夾以開啟示範資產庫。</p>
+        <section class="folder-picker" aria-labelledby="folder-heading">
+          <h2 id="folder-heading">選擇資料夾</h2>
+          <p>目前位置 · 示範工作區</p>
+          <button id="select-vault" type="button" aria-pressed="false">▸ 旅行資料</button>
+        </section>
+        <p id="vault-choice" class="subtle" role="status"></p>
+        <button id="open-vault" class="primary" type="submit" disabled>開啟資產庫</button>
+      </form>
+    </main>
+  </div>
+  <div id="workspace" hidden>
   <header>
     <a href="#home" class="brand"><span aria-hidden="true">Z</span>Zafkiel</a>
     <label for="search" class="sr-only">搜尋資產</label><input id="search" type="search" placeholder="搜尋">
-    <span class="badge">合成示範</span>
+    <a class="badge" href="#/open">選擇資產庫</a>
     <button id="new-note" class="icon-button" type="button" aria-label="新增記事">＋</button>
   </header>
   <div class="layout">
@@ -135,7 +162,6 @@
             <label for="material">加入素材（合成）</label>
             <select id="material"><option value="">未加入素材</option><option>照片.jpg</option><option>收據.pdf</option></select>
           </div>
-          <p id="note-status" class="subtle" role="status"></p>
         </form>
       </details>
       <div id="save-receipt" class="save-receipt" hidden>
@@ -143,393 +169,150 @@
         <button id="read-saved" type="button">開啟記事</button>
       </div>
       <h1 class="sr-only">首頁</h1><p id="asset-count" class="subtle asset-count" role="status"></p>
-      <p id="library-status" class="subtle" role="status"></p>
       <ul id="assets" class="assets"></ul>
-      <details id="demo-tools" class="tool-panel test-tools">
-        <summary>開發測試工具</summary>
-        <p class="subtle">操作只存於本頁記憶體。重新整理會重設；10 KiB 是示意門檻。</p>
-        <div class="controls">
-          <div class="field"><label for="scenario">保存或讀取情境</label><select id="scenario">
-            <option value="safe">A 未確認，B 可以保存</option>
-            <option value="unsafe">入口讀不到，B 暫停</option>
-            <option value="lost">A 的回覆遺失，沒有 ID</option>
-            <option value="source">清單可讀，改動未核對</option>
-            <option value="size">按大小輪替與超大單筆</option>
-            <option value="before">發布前失敗</option>
-          </select></div>
-          <button id="run" class="primary" type="button">執行情境</button>
-          <button id="restore" type="button" disabled>模擬讀取恢復</button>
-          <button id="reset" type="button">重設示範</button>
-        </div>
-        <p id="summary" class="summary subtle" role="status">選擇情境後，會從原始工作庫開始示範。</p>
-        <details id="storage-details"><summary>查看保存示意</summary><p id="revision" class="subtle"></p><div id="layers" class="layer-list"></div></details>
-      </section>
-      <section id="batch-panel" class="tool-panel" aria-labelledby="batch-heading" hidden>
-        <h2 id="batch-heading">本批保存與核對</h2>
-        <div class="table-wrap"><table>
-          <thead><tr><th scope="col">項目</th><th scope="col">資產 ID</th><th scope="col">結果</th></tr></thead>
-          <tbody id="batch"></tbody>
-        </table></div>
-        <button id="verify" type="button" disabled>重新核對這批</button>
-        <p id="check-status" class="check-status subtle" role="status"></p>
-        </section>
-      </details>
     </main>
+  </div>
   </div>
   <dialog id="reader" aria-label="資產內容">
     <div class="reader-controls"><form method="dialog"><button type="submit" aria-label="關閉資產">×</button></form></div>
     <div id="asset-detail" aria-live="polite"></div>
   </dialog>
   <script>
-    const SHARD_TARGET = 10;
-    const sourceAssets = [
-      { id: 'source-0001', title: '旅行筆記', body: '記錄海邊的路線和照片。', material: '海邊.jpg' },
-      { id: 'source-0002', title: '行前清單', body: '行前準備與待辦。', material: '清單.txt' }
+    // Fixtures are ordinary library records. The reader reports errors only for the content requested.
+    const assets = [
+      {id:'travel', title:'旅行筆記', body:'記錄海邊的路線和照片。', material:'路線圖.pdf'},
+      {id:'checklist', title:'行前清單', body:'行前準備與待辦。', material:''},
+      {id:'photos', title:'北堤照片', body:'日出前在北堤拍攝。', material:'北堤.jpg', materialUnavailable:true},
+      {id:'audio', title:'渡口錄音', body:'', material:'', unavailable:true}
     ];
-    const outcomes = {
-      verified: '已發布且核對完成',
-      unpublished: '確認未發布',
-      unknown: '結果未確認',
-      'not-attempted': '未嘗試保存'
-    };
     const get = id => document.getElementById(id);
+    const node = (tag, text, className) => {
+      const result = document.createElement(tag);
+      result.textContent = text;
+      if (className) result.className = className;
+      return result;
+    };
+    let vaultOpened = false;
+    let lastSaved = null;
+    let nextId = 0;
 
-    let workspace;
-    let faults;
-    let batch;
-    let counters;
-    let selectedId;
-    let batchNote;
-    let lastSavedId;
-
-    function node(tag, text, className) {
-      const element = document.createElement(tag);
-      if (text !== undefined) element.textContent = text;
-      if (className) element.className = className;
-      return element;
-    }
-
-    function resetSimulation() {
-      workspace = {revision: 0, shards: []};
-      faults = {entry: false, shard: null, materials: new Set()};
-      batch = [];
-      counters = {asset: 0, shard: 0};
-      selectedId = null;
-      batchNote = '';
-      lastSavedId = null;
-      get('save-receipt').hidden = true;
-      get('save-message').textContent = '';
-    }
-
-    function currentComposition() {
-      if (faults.entry) return null;
-
-      const assets = new Map(sourceAssets.map(asset => [asset.id, asset]));
-      for (const shard of workspace.shards) {
-        if (shard.id === faults.shard) continue;
-        for (const record of shard.records) {
-          const material = faults.materials.has(record.asset.id) ? null : record.asset.material;
-          assets.set(record.asset.id, {...record.asset, material});
-        }
-      }
-      return assets;
-    }
-
-    function publish(asset, size) {
-      const last = workspace.shards.at(-1);
-      const dedicated = size > SHARD_TARGET;
-      const revision = workspace.revision + 1;
-      const record = {asset, revision};
-      const fits = !dedicated && last && !last.dedicated && last.size + size <= SHARD_TARGET;
-
-      // Build a complete candidate in memory before changing the public entry.
-      const shards = fits
-        ? [...workspace.shards.slice(0, -1), {...last, size: last.size + size, records: [...last.records, record]}]
-        : [...workspace.shards, {id: ++counters.shard, size, dedicated, records: [record]}];
-      workspace = {revision, shards};
-      return {revision, shardId: shards.at(-1).id};
-    }
-
-    function outcome(row, status, reason) {
-      Object.assign(row, {status, reason});
-    }
-
-    function verifyRow(row) {
-      if (row.status === 'unpublished' || row.status === 'not-attempted') return;
-      if (!row.assetId) {
-        outcome(row, 'unknown', '未收到回覆，無法把此項目對應到資產 ID。');
-        return;
-      }
-      if (faults.entry) {
-        outcome(row, 'unknown', '目前無法讀取工作庫，核對仍未完成。');
-        return;
-      }
-
-      const observed = currentComposition().get(row.assetId);
-      const record = workspace.shards
-        .filter(shard => shard.id !== faults.shard)
-        .flatMap(shard => shard.records)
-        .find(item => item.asset.id === row.assetId && item.revision === row.revision);
-      const fields = ['title', 'body', 'material'];
-      if (!record || !observed || !fields.every(field => record.asset[field] === row.expected[field] && observed[field] === row.expected[field])) {
-        outcome(row, 'unknown', '目前讀不到這次發布的完整內容。');
-        return;
-      }
-      outcome(row, 'verified', '已讀回同一筆資產及其完整描述。');
-    }
-
-    function register(label, title, size, fault = 'normal', description = {}) {
-      const row = {label, assetId: null, status: 'unknown', reason: ''};
-      batch.push(row);
-      if (faults.entry) {
-        outcome(row, 'not-attempted', '無法確認工作入口目前的版本。');
-        return;
-      }
-
-      const asset = {
-        id: 'demo-' + String(++counters.asset).padStart(4, '0'),
-        title,
-        body: description.body ?? '這是一筆合成的登記內容。',
-        material: description.material ?? '照片.jpg'
-      };
-      if (fault === 'before') {
-        row.assetId = asset.id;
-        outcome(row, 'unpublished', '已在發布前停止，工作庫未新增這筆。');
-        return;
-      }
-
-      const publication = publish(asset, size);
-      if (fault === 'lost') {
-        outcome(row, 'unknown', '未收到回覆，無法把此項目對應到資產 ID。');
-        return;
-      }
-
-      Object.assign(row, {assetId: asset.id, revision: publication.revision, expected: asset});
-      if (fault === 'material') faults.materials.add(asset.id);
-      if (fault === 'entry') faults.entry = true;
-      verifyRow(row);
-    }
-
-    function checkBatch() {
-      batch.forEach(verifyRow);
-      const count = status => batch.filter(row => row.status === status).length;
-      batchNote = '已核對 ' + count('verified') + ' 筆，未確認 ' + count('unknown') +
-        ' 筆，確認未發布 ' + count('unpublished') + ' 筆，未嘗試 ' + count('not-attempted') + ' 筆。';
-    }
-
-    function runScenario() {
-      resetSimulation();
-      const scenario = get('scenario').value;
-      let message;
-
-      if (scenario === 'safe') {
-        register('A · 旅途照片', '旅途照片', 4, 'material');
-        register('B · 車票收據', '車票收據', 4);
-        message = 'A 可出現在工作庫清單，但素材描述尚未讀回。工作入口可確認，B 已保存。';
-      } else if (scenario === 'unsafe') {
-        register('A · 旅途照片', '旅途照片', 4, 'entry');
-        register('B · 車票收據', '車票收據', 4);
-        message = 'A 的結果未確認，且目前讀不到工作入口。B 在分配 ID 和寫入前停止。';
-      } else if (scenario === 'lost') {
-        register('A · 旅行收據', '旅行收據', 4, 'lost');
-        register('B · 旅行收據', '旅行收據', 4);
-        message = 'A 的完整回覆遺失。工作庫能找到同名資產，匯入端仍無法據此辨認 A。';
-      } else if (scenario === 'source') {
-        const asset = {...sourceAssets[0], title: '旅行筆記（更新）'};
-        const {revision, shardId} = publish(asset, 4);
-        faults.shard = shardId;
-        batch.push({label: 'A · 標題修改（既有意見）', assetId: asset.id,
-          revision, expected: asset, status: 'unknown'});
-        message = '工作庫能組合出來源標題。核對這次修改時，較新的意見仍讀不到。';
-      } else if (scenario === 'before') {
-        register('A · 旅途照片', '旅途照片', 4, 'before');
-        message = 'A 在發布前停止，工作庫與版本維持原樣。';
+    function renderRoute() {
+      const showWorkspace = vaultOpened && location.hash === '#/home';
+      get('launcher').hidden = showWorkspace;
+      get('workspace').hidden = !showWorkspace;
+      if (showWorkspace) {
+        renderLibrary();
+        get('composer').querySelector('summary').focus();
       } else {
-        for (const [index, size] of [4, 4, 4, 14, 3].entries()) {
-          const title = '大小示例 ' + (index + 1) + '（' + size + ' KiB）';
-          register(title, title, size);
-        }
-        message = '兩筆 4 KiB 共用第一片。接下來依序使用 4、14、3 KiB 的三片。14 KiB 整筆獨立保存。';
-        get('storage-details').open = true;
+        if (get('reader').open) get('reader').close();
+        get('entry-title').focus();
       }
+    }
 
-      get('search').value = '';
-      get('summary').textContent = message;
-      checkBatch();
-      render();
+    function openVault() {
+      vaultOpened = true;
+      if (location.hash === '#/home') renderRoute();
+      else location.hash = '#/home';
     }
 
     function renderLibrary() {
-      const assets = currentComposition();
-      const list = get('assets');
       const term = get('search').value.trim().toLocaleLowerCase();
-      const shown = assets ? [...assets.values()].filter(asset =>
-        [asset.title, asset.body].some(value => value.toLocaleLowerCase().includes(term))) : [];
-
-      get('library-status').textContent = assets ? '' : '目前無法開啟工作庫。';
-      get('asset-count').textContent = assets ? '共 ' + shown.length + ' 筆資產' : '';
+      const shown = assets.filter(asset =>
+        [asset.title, asset.body].some(value => value.toLocaleLowerCase().includes(term)));
+      get('asset-count').textContent = '共 ' + shown.length + ' 筆資產';
+      const list = get('assets');
       list.replaceChildren();
-      if (assets && !shown.length) list.append(node('li', '沒有符合的資產。', 'empty'));
-
+      if (!shown.length) list.append(node('li', '沒有符合的資產。', 'empty'));
       for (const asset of shown) {
         const title = asset.title || '（空標題）';
-        const open = node('button');
-        open.type = 'button';
-        open.setAttribute('aria-label', '開啟 ' + title + '（' + asset.id + '）');
-        open.append(node('strong', title, 'card-title'));
-        if (asset.body) open.append(node('span', asset.body.slice(0, 70), 'card-excerpt'));
-        open.addEventListener('click', () => openAsset(asset.id));
-        const item = node('li');
-        item.append(open);
+        const button = node('button', '');
+        button.type = 'button';
+        button.setAttribute('aria-label', '開啟 ' + title);
+        button.append(node('strong', title, 'card-title'));
+        if (asset.body) button.append(node('span', asset.body.slice(0,70), 'card-excerpt'));
+        button.onclick = () => openAsset(asset);
+        const item = node('li', '');
+        item.append(button);
         list.append(item);
       }
-      if (get('reader').open) renderDetail(assets);
     }
 
-    function openAsset(id) {
-      selectedId = id;
-      const selectedRows = batch.filter(row => row.assetId === id);
-      selectedRows.forEach(verifyRow);
-      if (selectedRows.length) batchNote = '核對結果僅更新這次開啟的資產。';
-      renderDetail(currentComposition());
-      get('reader').showModal();
-      renderBatch();
-    }
-
-    function renderDetail(assets) {
-      const asset = assets?.get(selectedId);
+    function openAsset(asset) {
       const detail = get('asset-detail');
-      if (!asset || asset.material === null) {
-        detail.replaceChildren(node('p', '目前無法開啟這筆資產。'));
-        return;
+      detail.replaceChildren(node('h2', asset.title || '（空標題）'));
+      if (asset.unavailable) {
+        detail.append(node('p', '目前無法開啟這筆資產。'));
+      } else {
+        detail.append(node('p', asset.body, 'reader-body'));
+        if (asset.material) {
+          const materials = node('section', '', 'reader-material');
+          const open = node('button', asset.material);
+          const status = node('p', '', 'subtle');
+          status.setAttribute('role', 'status');
+          open.type = 'button';
+          open.onclick = () => {
+            status.textContent = asset.materialUnavailable
+              ? '目前無法開啟這份素材。'
+              : '已讀取合成素材：' + asset.material;
+          };
+          materials.append(node('h3', '素材'), open, status);
+          detail.append(materials);
+        }
       }
-      detail.replaceChildren(node('h2', asset.title || '（空標題）'), node('p', asset.body, 'reader-body'));
-      if (asset.material) detail.append(node('p', '素材：' + asset.material, 'subtle'));
+      get('reader').showModal();
     }
 
-    function renderBatch() {
-      get('batch-panel').hidden = !batch.length || !get('demo-tools').open;
-      const table = get('batch');
-      table.replaceChildren();
-      if (!batch.length) {
-        const cell = node('td', '尚未送出請求。');
-        cell.colSpan = 3;
-        const row = node('tr');
-        row.append(cell);
-        table.append(row);
-      }
-      for (const item of batch) {
-        const row = node('tr');
-        const status = node('td');
-        status.append(node('strong', outcomes[item.status], item.status), node('div', item.reason, 'subtle'));
-        row.append(node('td', item.label), node('td', item.assetId || '—'), status);
-        table.append(row);
-      }
-      get('verify').disabled = !batch.length;
-      get('check-status').textContent = batchNote;
-    }
-
-    function renderStorage() {
-      get('revision').textContent = faults.entry ? '目前版本無法讀取' : '可讀的發布版本 ' + workspace.revision;
-      const list = get('layers');
-      list.replaceChildren();
-      if (faults.entry) return;
-      if (!workspace.shards.length) list.append(node('p', '目前只有來源庫。', 'subtle'));
-      for (const shard of workspace.shards) {
-        const layer = node('div', undefined, 'layer');
-        layer.append(node('strong', '分片 ' + shard.id),
-          node('div', shard.size + ' KiB · ' + shard.records.length + ' 筆' +
-            (shard.dedicated ? ' · 超大單筆' : '') +
-            (shard.id === faults.shard ? ' · 模擬讀取失敗' : ''), 'subtle'));
-        list.append(layer);
-      }
-    }
-
-    function render() {
-      renderLibrary();
-      renderBatch();
-      renderStorage();
-      get('restore').disabled = !faults.entry && faults.shard === null && !faults.materials.size;
-    }
-
-    get('search').addEventListener('input', renderLibrary);
-    get('new-note').addEventListener('click', () => {
-      get('composer').open = true;
-      get('title').focus();
-    });
-    get('reader').addEventListener('close', () => { selectedId = null; });
-    get('demo-tools').addEventListener('toggle', renderBatch);
-    get('read-saved').addEventListener('click', () => {
-      if (lastSavedId) openAsset(lastSavedId);
-    });
-    function updateMaterialPicker(open) {
+    function updateMaterial(open) {
       get('material-picker').hidden = !open;
       get('material-toggle').setAttribute('aria-expanded', String(open));
       get('chosen-material').textContent = get('material').value;
     }
 
-    get('material-toggle').addEventListener('click', () => {
+    get('select-vault').onclick = () => {
+      get('select-vault').setAttribute('aria-pressed', 'true');
+      get('vault-choice').textContent = '已選擇：旅行資料';
+      get('open-vault').disabled = false;
+    };
+    get('recent-vault').onclick = openVault;
+    get('vault-form').onsubmit = event => {
+      event.preventDefault();
+      if (!get('open-vault').disabled) openVault();
+    };
+    window.addEventListener('hashchange', renderRoute);
+    get('search').oninput = renderLibrary;
+    get('new-note').onclick = () => { get('composer').open = true; };
+    get('material-toggle').onclick = () => {
       const open = get('material-picker').hidden;
-      updateMaterialPicker(open);
+      updateMaterial(open);
       if (open) get('material').focus();
-    });
-    get('material').addEventListener('change', () => updateMaterialPicker(true));
+    };
+    get('material').onchange = () => updateMaterial(true);
     get('composer').addEventListener('toggle', () => {
       if (get('composer').open) get('body').focus();
-      else updateMaterialPicker(false);
+      else updateMaterial(false);
     });
-    get('run').addEventListener('click', runScenario);
-    get('restore').addEventListener('click', () => {
-      faults = {entry: false, shard: null, materials: new Set()};
-      get('summary').textContent = '模擬讀取已恢復。開啟單筆或重新核對這批，才會更新核對結果。';
-      render();
-    });
-    get('verify').addEventListener('click', () => {
-      checkBatch();
-      renderBatch();
-    });
-    get('reset').addEventListener('click', () => {
-      resetSimulation();
-      get('scenario').selectedIndex = 0;
-      get('register').reset();
-      updateMaterialPicker(false);
-      get('search').value = '';
-      get('note-status').textContent = '';
-      get('summary').textContent = '選擇情境後，會從原始工作庫開始示範。';
-      get('storage-details').open = false;
-      render();
-    });
-    get('register').addEventListener('submit', event => {
+    get('read-saved').onclick = () => { if (lastSaved) openAsset(lastSaved); };
+
+    get('register').onsubmit = event => {
       event.preventDefault();
       const title = get('title').value;
       const body = get('body').value;
       const material = get('material').value;
+      event.currentTarget.reset();
+      get('composer').open = false;
       if (!title.trim() && !body.trim() && !material) {
-        event.currentTarget.reset();
-        get('composer').open = false;
         get('new-note').focus();
         return;
       }
-      register(title || '（空標題）', title, 4, 'normal', {body, material});
-      const row = batch.at(-1);
-      if (row.status === 'verified') {
-        event.currentTarget.reset();
-        get('composer').open = false;
-        get('note-status').textContent = '';
-        get('search').value = '';
-        lastSavedId = row.assetId;
-        get('save-receipt').hidden = false;
-        get('save-message').textContent = title.trim() ? '已保存「' + title + '」' : '已保存這筆記事';
-        get('read-saved').focus();
-      } else {
-        get('note-status').textContent = row.reason;
-      }
-      batchNote = '本次建立結果已更新。';
-      render();
-    });
-
-    resetSimulation();
-    render();
+      lastSaved = {id:'note-' + ++nextId, title, body, material};
+      assets.push(lastSaved);
+      get('search').value = '';
+      renderLibrary();
+      get('save-message').textContent = title.trim() ? '已保存「' + title + '」' : '已保存這筆記事';
+      get('save-receipt').hidden = false;
+      get('read-saved').focus();
+    };
+    renderRoute();
   </script>
 </body>
 </html>
