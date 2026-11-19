@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Zayin · 保存工作流程</title>
+  <style>
+    :root{font-family:"Segoe UI","Microsoft JhengHei",sans-serif;color:#18362e;background:#f2f5ef;line-height:1.55}
+    *{box-sizing:border-box}
+    body{margin:0}
+    header{background:#163c32;color:#fff;padding:27px max(20px,calc((100vw - 1160px)/2))}
+    header small{color:#b8e4cc;letter-spacing:.13em}
+    h1{font-size:clamp(25px,5vw,38px);margin:4px 0}
+    header p{margin:0;color:#d0e8dc}
+    main{max-width:1200px;margin:auto;padding:20px}
+    h2{font-size:20px;margin:0 0 10px}
+    h3{font-size:16px;margin:0 0 6px}
+    p{margin:0 0 12px}
+    .notice{border-left:4px solid #a8751c;background:#fff4d9;padding:11px 15px;margin-bottom:16px}
+    .card{background:#fff;border:1px solid #d5e0d4;border-radius:13px;padding:18px;margin-bottom:14px;min-width:0}
+    .columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:14px}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+    .field{min-width:0;max-width:100%}
+    label{display:block;font-size:13px;font-weight:650;margin-bottom:3px}
+    input,select,button{font:inherit;color:#18362e;border:1px solid #9eb4a5;border-radius:7px;padding:8px 10px;min-height:41px;max-width:100%}
+    select{background:#fff;width:100%}
+    input[type=text]{width:212px}
+    input[type=number]{width:100px}
+    button{background:#eff5ef;cursor:pointer}
+    button.primary{background:#146647;color:#fff;border-color:#146647;font-weight:650}
+    button:disabled{opacity:.5;cursor:not-allowed}
+    :focus-visible{outline:3px solid #a96c14;outline-offset:2px}
+    summary{font-weight:650;cursor:pointer}
+    details>.controls,details>p,details>ol,details>div{margin:10px 0 0}
+    .subtle{font-size:13px;color:#4b6256}
+    .summary{margin:10px 0 0;min-height:1.55em}
+    .assets{list-style:none;margin:0;padding:0}
+    .assets li{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid #e2e9df}
+    .assets span{min-width:0;overflow-wrap:anywhere}
+    .assets button{flex:none}
+    .detail,.layer{margin-top:10px;background:#eef5ef;padding:10px 12px;border-radius:8px;overflow-wrap:anywhere}
+    .detail p{margin:4px 0 0}
+    .table-wrap{overflow:auto}
+    table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px;margin-top:9px}
+    td,th{text-align:left;vertical-align:top;padding:8px 6px;border-bottom:1px solid #e2e9df;overflow-wrap:anywhere}
+    th:first-child{width:30%}
+    th:nth-child(2){width:26%}
+    .verified{color:#115339}
+    .unknown{color:#714a13}
+    .unpublished,.not-attempted{color:#743824}
+    #library-status:empty{margin:0}
+    .check-status{margin-top:10px;min-height:1.55em}
+    .layer-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px}
+    .layer{margin-top:0}
+    footer{padding:5px 0 16px}
+    @media(max-width:760px){.columns{grid-template-columns:1fr}}
+    @media(max-width:410px){main{padding:12px}.card{padding:13px}.scenario-field{width:100%}table{font-size:13px}}
+  </style>
+</head>
+<body>
+  <header>
+    <small>VII ZAYIN</small>
+    <h1>資產保存與核對</h1>
+    <p>工作庫照常讀取，這一批的保存結果可以另外核對。</p>
+  </header>
+  <main>
+    <p class="notice"><strong>合成示範。</strong> 操作只存於本頁記憶體。重新整理會重設。10 KiB 是分片示意門檻。</p>
+
+    <section class="card" aria-labelledby="scenario-heading">
+      <h2 id="scenario-heading">選擇情境</h2>
+      <div class="controls">
+        <div class="field scenario-field">
+          <label for="scenario">保存或讀取情境</label>
+          <select id="scenario">
+            <option value="safe">A 未確認，B 可以保存</option>
+            <option value="unsafe">入口讀不到，B 暫停</option>
+            <option value="lost">A 的回覆遺失，沒有 ID</option>
+            <option value="source">清單可讀，改動未核對</option>
+            <option value="size">按大小輪替與超大單筆</option>
+          </select>
+        </div>
+        <button id="run" class="primary" type="button">執行情境</button>
+        <button id="restore" type="button" disabled>模擬讀取恢復</button>
+        <button id="reset" type="button">重設示範</button>
+      </div>
+      <p id="summary" class="summary subtle" role="status">選擇情境後，會從原始工作庫開始示範。</p>
+    </section>
+
+    <div class="columns">
+      <section class="card" aria-labelledby="library-heading">
+        <h2 id="library-heading">工作庫</h2>
+        <p id="library-status" class="subtle" role="status"></p>
+        <ul id="assets" class="assets"></ul>
+        <div id="asset-detail" class="detail" aria-live="polite" hidden></div>
+      </section>
+
+      <section class="card" aria-labelledby="batch-heading">
+        <h2 id="batch-heading">本批保存與核對</h2>
+        <p class="subtle">送完後，匯入工具依此批已知的資料逐筆核對。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th scope="col">項目</th><th scope="col">資產 ID</th><th scope="col">結果</th></tr></thead>
+            <tbody id="batch"></tbody>
+          </table>
+        </div>
+        <div class="controls">
+          <button id="verify" type="button" disabled>重新核對這批</button>
+        </div>
+        <p id="check-status" class="check-status subtle" role="status"></p>
+      </section>
+    </div>
+
+    <section class="card">
+      <details>
+        <summary>自訂單筆登記</summary>
+        <form id="register" class="controls">
+          <div class="field">
+            <label for="title">標題（可留空）</label>
+            <input id="title" type="text" value="旅行筆記" maxlength="2000">
+          </div>
+          <div class="field">
+            <label for="size">大小（示意 KiB）</label>
+            <input id="size" type="number" value="4" required min="1" max="99" step="1">
+          </div>
+          <div class="field">
+            <label for="fault">保存結果模擬</label>
+            <select id="fault">
+              <option value="normal">正常保存</option>
+              <option value="before">發布前失敗</option>
+              <option value="material">發布後讀回核對失敗</option>
+              <option value="lost">發布後回覆遺失</option>
+            </select>
+          </div>
+          <button type="submit" class="primary">建立一筆</button>
+        </form>
+      </details>
+    </section>
+
+    <section class="card">
+      <details id="storage-details">
+        <summary>查看保存示意</summary>
+        <p class="subtle">一個入口、兩筆唯讀來源資產、一個來源 tag。分片大小按情境指定。</p>
+        <div id="revision" class="subtle"></div>
+        <div id="layers" class="layer-list"></div>
+      </details>
+    </section>
+
+    <footer class="subtle">食時之城提供登記描述，Zayin 保存與核對，Chet 組合工作庫。</footer>
+  </main>
+
+  <script>
+    const SHARD_TARGET = 10;
+    const sourceAssets = [
+      { id: 'source-0001', title: '旅行筆記', body: '記錄海邊的路線和照片。', material: '海邊.jpg' },
+      { id: 'source-0002', title: '行前清單', body: '行前準備與待辦。', material: '清單.txt' }
+    ];
+    const outcomes = {
+      verified: '已發布且核對完成',
+      unpublished: '確認未發布',
+      unknown: '結果未確認',
+      'not-attempted': '未嘗試保存'
+    };
+    const get = id => document.getElementById(id);
+
+    let workspace;
+    let faults;
+    let batch;
+    let counters;
+    let selectedId;
+    let batchNote;
+
+    function node(tag, text, className) {
+      const element = document.createElement(tag);
+      if (text !== undefined) element.textContent = text;
+      if (className) element.className = className;
+      return element;
+    }
+
+    function resetSimulation() {
+      workspace = {revision: 0, shards: []};
+      faults = {entry: false, shard: null, materials: new Set()};
+      batch = [];
+      counters = {asset: 0, shard: 0};
+      selectedId = null;
+      batchNote = '';
+    }
+
+    function currentComposition() {
+      if (faults.entry) return null;
+
+      const assets = new Map(sourceAssets.map(asset => [asset.id, asset]));
+      for (const shard of workspace.shards) {
+        if (shard.id === faults.shard) continue;
+        for (const record of shard.records) {
+          const material = faults.materials.has(record.asset.id) ? null : record.asset.material;
+          assets.set(record.asset.id, {...record.asset, material});
+        }
+      }
+      return assets;
+    }
+
+    function publish(asset, size) {
+      const last = workspace.shards.at(-1);
+      const dedicated = size > SHARD_TARGET;
+      const revision = workspace.revision + 1;
+      const record = {asset, revision};
+      const fits = !dedicated && last && !last.dedicated && last.size + size <= SHARD_TARGET;
+
+      // Build a complete candidate in memory before changing the public entry.
+      const shards = fits
+        ? [...workspace.shards.slice(0, -1), {...last, size: last.size + size, records: [...last.records, record]}]
+        : [...workspace.shards, {id: ++counters.shard, size, dedicated, records: [record]}];
+      workspace = {revision, shards};
+      return {revision, shardId: shards.at(-1).id};
+    }
+
+    function outcome(row, status, reason) {
+      Object.assign(row, {status, reason});
+    }
+
+    function verifyRow(row) {
+      if (row.status === 'unpublished' || row.status === 'not-attempted') return;
+      if (!row.assetId) {
+        outcome(row, 'unknown', '未收到回覆，無法把此項目對應到資產 ID。');
+        return;
+      }
+      if (faults.entry) {
+        outcome(row, 'unknown', '目前無法讀取工作庫，核對仍未完成。');
+        return;
+      }
+
+      const observed = currentComposition().get(row.assetId);
+      const record = workspace.shards
+        .filter(shard => shard.id !== faults.shard)
+        .flatMap(shard => shard.records)
+        .find(item => item.asset.id === row.assetId && item.revision === row.revision);
+      const fields = ['title', 'body', 'material'];
+      if (!record || !observed || !fields.every(field => record.asset[field] === row.expected[field] && observed[field] === row.expected[field])) {
+        outcome(row, 'unknown', '目前讀不到這次發布的完整內容。');
+        return;
+      }
+      outcome(row, 'verified', '已讀回同一筆資產及其完整描述。');
+    }
+
+    function register(label, title, size, fault = 'normal') {
+      const row = {label, assetId: null, status: 'unknown', reason: ''};
+      batch.push(row);
+      if (faults.entry) {
+        outcome(row, 'not-attempted', '無法確認工作入口目前的版本。');
+        return;
+      }
+
+      const asset = {
+        id: 'demo-' + String(++counters.asset).padStart(4, '0'),
+        title,
+        body: '這是一筆合成的登記內容。',
+        material: '照片.jpg'
+      };
+      if (fault === 'before') {
+        row.assetId = asset.id;
+        outcome(row, 'unpublished', '已在發布前停止，工作庫未新增這筆。');
+        return;
+      }
+
+      const publication = publish(asset, size);
+      if (fault === 'lost') {
+        outcome(row, 'unknown', '未收到回覆，無法把此項目對應到資產 ID。');
+        return;
+      }
+
+      Object.assign(row, {assetId: asset.id, revision: publication.revision, expected: asset});
+      if (fault === 'material') faults.materials.add(asset.id);
+      if (fault === 'entry') faults.entry = true;
+      verifyRow(row);
+    }
+
+    function checkBatch() {
+      batch.forEach(verifyRow);
+      const count = status => batch.filter(row => row.status === status).length;
+      batchNote = '已核對 ' + count('verified') + ' 筆，未確認 ' + count('unknown') +
+        ' 筆，確認未發布 ' + count('unpublished') + ' 筆，未嘗試 ' + count('not-attempted') + ' 筆。';
+    }
+
+    function runScenario() {
+      resetSimulation();
+      const scenario = get('scenario').value;
+      let message;
+
+      if (scenario === 'safe') {
+        register('A · 旅途照片', '旅途照片', 4, 'material');
+        register('B · 車票收據', '車票收據', 4);
+        message = 'A 可出現在工作庫清單，但素材描述尚未讀回。工作入口可確認，B 已保存。';
+      } else if (scenario === 'unsafe') {
+        register('A · 旅途照片', '旅途照片', 4, 'entry');
+        register('B · 車票收據', '車票收據', 4);
+        message = 'A 的結果未確認，且目前讀不到工作入口。B 在分配 ID 和寫入前停止。';
+      } else if (scenario === 'lost') {
+        register('A · 旅行收據', '旅行收據', 4, 'lost');
+        register('B · 旅行收據', '旅行收據', 4);
+        message = 'A 的完整回覆遺失。工作庫能找到同名資產，匯入端仍無法據此辨認 A。';
+      } else if (scenario === 'source') {
+        const asset = {...sourceAssets[0], title: '旅行筆記（更新）'};
+        const {revision, shardId} = publish(asset, 4);
+        faults.shard = shardId;
+        batch.push({label: 'A · 標題修改（既有意見）', assetId: asset.id,
+          revision, expected: asset, status: 'unknown'});
+        message = '工作庫能組合出來源標題。核對這次修改時，較新的意見仍讀不到。';
+      } else {
+        for (const [index, size] of [4, 4, 4, 14, 3].entries()) {
+          const title = '大小示例 ' + (index + 1) + '（' + size + ' KiB）';
+          register(title, title, size);
+        }
+        message = '兩筆 4 KiB 共用第一片。接下來依序使用 4、14、3 KiB 的三片。14 KiB 整筆獨立保存。';
+        get('storage-details').open = true;
+      }
+
+      get('summary').textContent = message;
+      checkBatch();
+      render();
+    }
+
+    function renderLibrary() {
+      const assets = currentComposition();
+      const list = get('assets');
+      const detail = get('asset-detail');
+      get('library-status').textContent = assets ? '' : '目前無法開啟工作庫。';
+      list.replaceChildren();
+
+      // Keep the same controls focused when a detail is opened.
+      if (assets) {
+        for (const asset of assets.values()) {
+          const title = asset.title || '（空標題）';
+          const open = node('button', '開啟');
+          open.type = 'button';
+          open.setAttribute('aria-label', '開啟 ' + title + '（' + asset.id + '）');
+          open.addEventListener('click', () => {
+            selectedId = asset.id;
+            const selectedRows = batch.filter(row => row.assetId === selectedId);
+            selectedRows.forEach(verifyRow);
+            if (selectedRows.length) batchNote = '核對結果僅更新這次開啟的資產。';
+            renderDetail(currentComposition());
+            renderBatch();
+          });
+          const item = node('li');
+          item.append(node('span', title), open);
+          list.append(item);
+        }
+      }
+      renderDetail(assets);
+      detail.hidden = !selectedId;
+    }
+
+    function renderDetail(assets) {
+      if (!selectedId) return;
+      const asset = assets?.get(selectedId);
+      const detail = get('asset-detail');
+      detail.hidden = false;
+      if (!asset || !asset.material) {
+        detail.replaceChildren(node('p', '目前無法開啟這筆資產。'));
+        return;
+      }
+      detail.replaceChildren(
+        node('h3', asset.title || '（空標題）'),
+        node('p', asset.body),
+        node('p', '素材：' + asset.material, 'subtle')
+      );
+    }
+
+    function renderBatch() {
+      const table = get('batch');
+      table.replaceChildren();
+      if (!batch.length) {
+        const cell = node('td', '尚未送出請求。');
+        cell.colSpan = 3;
+        const row = node('tr');
+        row.append(cell);
+        table.append(row);
+      }
+      for (const item of batch) {
+        const row = node('tr');
+        const status = node('td');
+        status.append(node('strong', outcomes[item.status], item.status), node('div', item.reason, 'subtle'));
+        row.append(node('td', item.label), node('td', item.assetId || '—'), status);
+        table.append(row);
+      }
+      get('verify').disabled = !batch.length;
+      get('check-status').textContent = batchNote;
+    }
+
+    function renderStorage() {
+      get('revision').textContent = faults.entry ? '目前版本無法讀取' : '可讀的發布版本 ' + workspace.revision;
+      const list = get('layers');
+      list.replaceChildren();
+      if (faults.entry) return;
+      if (!workspace.shards.length) list.append(node('p', '目前只有來源庫。', 'subtle'));
+      for (const shard of workspace.shards) {
+        const layer = node('div', undefined, 'layer');
+        layer.append(node('strong', '分片 ' + shard.id),
+          node('div', shard.size + ' KiB · ' + shard.records.length + ' 筆' +
+            (shard.dedicated ? ' · 超大單筆' : '') +
+            (shard.id === faults.shard ? ' · 模擬讀取失敗' : ''), 'subtle'));
+        list.append(layer);
+      }
+    }
+
+    function render() {
+      renderLibrary();
+      renderBatch();
+      renderStorage();
+      get('restore').disabled = !faults.entry && faults.shard === null && !faults.materials.size;
+    }
+
+    get('run').addEventListener('click', runScenario);
+    get('restore').addEventListener('click', () => {
+      faults = {entry: false, shard: null, materials: new Set()};
+      get('summary').textContent = '模擬讀取已恢復。開啟單筆或重新核對這批，才會更新核對結果。';
+      render();
+    });
+    get('verify').addEventListener('click', () => {
+      checkBatch();
+      renderBatch();
+    });
+    get('reset').addEventListener('click', () => {
+      resetSimulation();
+      get('scenario').selectedIndex = 0;
+      get('register').reset();
+      get('summary').textContent = '選擇情境後，會從原始工作庫開始示範。';
+      get('storage-details').open = false;
+      render();
+    });
+    get('register').addEventListener('submit', event => {
+      event.preventDefault();
+      const title = get('title').value;
+      register(title || '（空標題）', title, Number(get('size').value), get('fault').value);
+      batchNote = '本次建立結果已更新。';
+      render();
+    });
+
+    resetSimulation();
+    render();
+  </script>
+</body>
+</html>
