@@ -58,12 +58,22 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
 #tag-manager{scroll-margin-top:12px}#manager-rows{margin-top:9px}
 .asset-open{color:#000;min-height:28px;padding:0;text-align:left;font-weight:700;overflow-wrap:anywhere;text-decoration:underline;text-underline-offset:3px}
 .asset-open:hover{background:transparent;color:#531717}.source-actions button{min-height:34px;font-size:11px;padding:5px 8px}
+.asset-card{cursor:pointer}.asset-card button,.asset-card summary{cursor:pointer}.asset-card .asset-open{display:block;width:100%}
 .reader-dialog{width:min(820px,calc(100% - 40px));max-height:calc(100% - 65px);margin:45px auto auto;overflow:auto;padding:20px 30px 35px;background:var(--panel);color:#fff;border:1px solid var(--line);border-top:4px solid #000;border-radius:10px;box-shadow:0 8px 25px #0004}
 .reader-dialog::backdrop{background:#0008;backdrop-filter:blur(1px)}.reader-dialog h2{font-size:25px;line-height:1.4;margin:8px 0 16px;overflow-wrap:anywhere}.reader-dialog h2:focus{outline:none}
 .reader-controls{display:flex;align-items:center;justify-content:space-between;gap:8px}.reader-controls p{margin:0}.reader-dialog .chip{border-color:var(--line);color:var(--muted)}.reader-dialog .full-body{margin-top:16px}
 .reader-preview{margin-top:18px}.reader-preview h3{font-size:15px;margin:0 0 9px}
 .reader-material{width:fit-content;max-width:100%;overflow-wrap:anywhere}.reader-material summary{display:grid;gap:4px;cursor:pointer;font-size:12px;color:var(--muted)}
 .reader-file-type{display:grid;place-items:center;width:142px;max-width:100%;height:100px;border-radius:7px;background:#260909;color:var(--gold);font-size:24px}
+/* Capture's reader-overlay → reader-sheet structure, adapted to a native dialog. */
+#asset-page{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:45px 20px;border:0;background:transparent;color:#fff;overflow:auto}
+#asset-page[open]{display:flex;align-items:flex-start;justify-content:center}#asset-page::backdrop{background:#0007;backdrop-filter:blur(1px)}
+.reader-sheet{width:min(820px,100%);min-width:0;padding:20px 30px 35px;border:1px solid var(--line);border-top:4px solid #000;border-radius:10px;background:var(--panel);box-shadow:0 8px 25px #0004}
+.reader-sheet .reader-controls{justify-content:flex-end;gap:5px}.reader-sheet #close-asset{width:38px;min-height:38px;border-radius:50%;padding:0;font-size:20px}
+.reader-sheet #reader-title{font-size:25px;line-height:1.4;margin:8px 0 16px;overflow-wrap:anywhere;outline:none}.reader-sheet #reader-context{margin:0 0 5px;font-size:12px;color:var(--muted)}
+.reader-sheet #reader-tags{margin-bottom:20px}.reader-sheet #reader-tags .tag-chip{color:var(--muted)}.reader-sheet .article{font-size:16px;line-height:1.8;margin-top:25px;white-space:pre-wrap;overflow-wrap:anywhere}
+.reader-sheet .reader-preview{margin-top:0}.reader-sheet .reader-preview h2{font-size:15px;margin:0 0 10px}
+@media(max-width:650px){#asset-page{padding:15px 10px}.reader-sheet{padding:12px 16px 25px}}
 @media(max-width:650px){.reader-dialog{width:calc(100% - 20px);max-height:calc(100% - 30px);margin:15px auto auto;padding:12px 18px 25px}}
 @media(max-width:650px){#source-links{width:100%}nav button.tag-filter,nav button.add-library{width:auto;min-height:40px;padding:7px 10px;border-radius:4px;font-size:12px;gap:4px}nav button.tag-filter[aria-pressed=true]{box-shadow:inset 0 -2px var(--gold)}.result-tools{width:100%}.result-tools .search-label{min-width:0}.result-tools select{width:auto}.sidebar-foot{padding-top:0}.entry-panel .intro{margin-bottom:12px}}
   </style>
@@ -104,11 +114,13 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   </div>
   </div>
   <dialog id="new-tag-dialog" class="reader-dialog" aria-labelledby="new-tag-heading"><h2 id="new-tag-heading">建立空 tag</h2><form id="create-form"><div class="create-row"><label for="collection-name">tag 名稱</label><input id="collection-name" maxlength="36" autocomplete="off" required><button class="primary" type="submit">建立並開啟</button><button id="cancel-tag" type="button">取消</button></div><p id="name-error" role="alert"></p></form></dialog>
-  <dialog id="asset-page" class="reader-dialog" aria-labelledby="reader-title">
-    <div class="reader-controls"><p id="reader-context" class="eyebrow"></p><button id="close-asset" type="button" aria-label="關閉資產" title="關閉資產">×</button></div>
-    <h2 id="reader-title" tabindex="-1"></h2><div class="chips" id="reader-tags"></div>
-    <section id="reader-preview" class="reader-preview" aria-labelledby="reader-preview-title"><h3 id="reader-preview-title">檔案預覽（1）</h3><details id="reader-material" class="reader-material"><summary><span id="reader-file-type" class="reader-file-type" aria-hidden="true"></span><span id="reader-material-name"></span></summary><p class="hint">合成素材的登記資料。</p></details></section>
-    <article id="reader-body" class="full-body"></article>
+  <dialog id="asset-page" class="reader-overlay" aria-labelledby="reader-title">
+    <div class="reader-sheet">
+      <div class="reader-controls"><button id="close-asset" type="button" aria-label="關閉資產" title="關閉資產">×</button></div>
+      <p id="reader-context"></p><h1 id="reader-title" tabindex="-1"></h1><div class="chips" id="reader-tags"></div>
+      <section id="reader-preview" class="reader-preview" aria-labelledby="reader-preview-title"><h2 id="reader-preview-title">檔案預覽（1）</h2><details id="reader-material" class="reader-material"><summary><span id="reader-file-type" class="reader-file-type" aria-hidden="true"></span><span id="reader-material-name"></span></summary><p class="hint">合成素材的登記資料。</p></details></section>
+      <article id="reader-body" class="article"></article>
+    </div>
   </dialog>
   <script>
   'use strict';
@@ -208,7 +220,7 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
     const rows=opinions(asset),source=rows.find(({tag})=>tag.id===origin);
     $('reader-context').textContent=source?`${source.tag.name} · 來源資產`:'多庫總覽 · 資產內容';
     $('reader-title').textContent=source?.value||displayTitle(asset);
-    $('reader-tags').innerHTML=memberTags(asset.id).map(tag=>`<span class="chip">${esc(tag.name)}</span>`).join('');
+    $('reader-tags').innerHTML=memberTags(asset.id).map(tag=>`<button class="tag-chip" type="button" data-action="open-tag" data-id="${tag.id}">${esc(tag.name)}</button>`).join('');
     $('reader-body').textContent=rows.length?asset.body:'目前無法讀取這筆資產的來源內容。';
     $('reader-preview').hidden=!rows.length||!asset.material;
     $('reader-material').open=false;
@@ -265,10 +277,16 @@ nav button.tag-filter[aria-pressed=true]{background:#8a2828;box-shadow:inset 3px
   }
   document.addEventListener('click',event=>{
     const button=event.target.closest('button[data-action]');
-    if(!button||button.disabled)return;
+    if(!button){
+      const card=event.target.closest('.asset-card');
+      if(card&&!event.target.closest('button,a,input,label,details')&&!String(window.getSelection()))card.querySelector('.asset-open').click();
+      if(event.target===$('asset-page'))$('asset-page').close();
+      return;
+    }
+    if(button.disabled)return;
     const {action,id,tag,mode}=button.dataset;
     if(action==='filter')setFilter(id);
-    if(action==='open-tag')openTag(id);
+    if(action==='open-tag'){if($('asset-page').open)$('asset-page').close();openTag(id);}
     if(action==='member')toggleMember(tagById(tag),assets.find(asset=>asset.id===id),mode);
     if(action==='open-asset')openAsset(assets.find(asset=>asset.id===id),tag);
   });
